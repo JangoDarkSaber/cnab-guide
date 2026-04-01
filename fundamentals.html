@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNAB Study Guide — Fundamentals & Theory</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
+  :root{--bg:#080c10;--panel:#0d1117;--border:#1c2a3a;--accent:#00e5ff;--accent2:#39ff14;--accent3:#ff6b35;--warn:#ffcc00;--text:#c9d1d9;--dim:#586069;--glow:0 0 8px rgba(0,229,255,0.4);--glow2:0 0 8px rgba(57,255,20,0.4);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9999;}
+  header{border-bottom:1px solid var(--border);padding:2rem 2.5rem 1.5rem;position:relative;overflow:hidden;}
+  header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:scan-h 3s ease-in-out infinite;}
+  @keyframes scan-h{0%,100%{opacity:0.3;transform:scaleX(0.5);}50%{opacity:1;transform:scaleX(1);}}
+  .header-tag{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;opacity:0.7;}
+  h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.4rem,3.5vw,2.5rem);color:#fff;letter-spacing:0.05em;line-height:1.1;}
+  h1 span{color:var(--accent);}
+  .subtitle{font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:0.5rem;letter-spacing:0.1em;}
+  .progress-bar{margin-top:1rem;height:3px;background:var(--border);border-radius:2px;overflow:hidden;max-width:400px;}
+  .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.3s ease;box-shadow:var(--glow);}
+  .progress-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);margin-top:0.3rem;}
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 46px);}
+  nav{border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto;}
+  nav::-webkit-scrollbar{width:3px;}nav::-webkit-scrollbar-track{background:transparent;}nav::-webkit-scrollbar-thumb{background:var(--border);}
+  .nav-section{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--dim);letter-spacing:0.2em;text-transform:uppercase;padding:0.4rem 1.2rem;margin-top:0.5rem;}
+  nav a{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 1.2rem;text-decoration:none;color:var(--dim);font-size:0.78rem;font-family:'Share Tech Mono',monospace;transition:all 0.15s ease;border-left:2px solid transparent;cursor:pointer;}
+  nav a:hover,nav a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(0,229,255,0.04);text-shadow:var(--glow);}
+  nav a .dot{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.15s;}
+  nav a:hover .dot,nav a.active .dot{background:var(--accent);box-shadow:var(--glow);}
+  main{padding:2rem 2.5rem;max-width:920px;}
+  .section{display:none;animation:fadeIn 0.2s ease;}
+  .section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .section-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+  .section-icon{font-size:1.5rem;width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(0,229,255,0.06);border:1px solid var(--border);border-radius:6px;}
+  .section-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;letter-spacing:0.05em;}
+  .section-meta{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;position:relative;transition:border-color 0.15s;}
+  .card:hover{border-color:rgba(0,229,255,0.25);}
+  .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:6px 0 0 6px;background:var(--accent);opacity:0;transition:opacity 0.15s;}
+  .card:hover::before{opacity:1;}
+  .card-title{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.7rem;}
+  .card p{font-size:0.85rem;line-height:1.7;color:var(--text);}
+  .code-block{background:#0a0f14;border:1px solid var(--border);border-radius:4px;padding:0.9rem 1.1rem;margin:0.8rem 0;font-family:'Share Tech Mono',monospace;font-size:0.78rem;overflow-x:auto;}
+  .code-block.no-prompt::before{content:'';}
+  .code-line{display:block;color:var(--text);line-height:1.9;}
+  .code-line .cmd{color:var(--accent2);}
+  .code-line .flag{color:var(--warn);}
+  .code-line .comment{color:var(--dim);font-style:italic;}
+  .code-line .path{color:var(--accent3);}
+  .code-line .val{color:var(--accent);}
+  .cmd-table{width:100%;border-collapse:collapse;font-size:0.8rem;margin:0.8rem 0;}
+  .cmd-table th{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);padding:0.5rem 0.8rem;border-bottom:1px solid var(--border);text-align:left;}
+  .cmd-table td{padding:0.45rem 0.8rem;border-bottom:1px solid rgba(28,42,58,0.5);vertical-align:top;font-size:0.8rem;line-height:1.5;}
+  .cmd-table tr:hover td{background:rgba(0,229,255,0.03);}
+  .cmd-table .cmd-name{font-family:'Share Tech Mono',monospace;color:var(--accent2);white-space:nowrap;font-size:0.78rem;}
+  .tag{display:inline-block;padding:0.1rem 0.45rem;border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;}
+  .tag-a{background:rgba(57,255,20,0.12);color:var(--accent2);}
+  .tag-b{background:rgba(0,229,255,0.12);color:var(--accent);}
+  .tag-c{background:rgba(255,107,53,0.12);color:var(--accent3);}
+  .tag-d{background:rgba(255,204,0,0.12);color:var(--warn);}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+  @media(max-width:700px){.two-col{grid-template-columns:1fr;}}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem;}
+  @media(max-width:800px){.three-col{grid-template-columns:1fr;}}
+  .callout{border-left:3px solid var(--warn);background:rgba(255,204,0,0.04);padding:0.8rem 1rem;border-radius:0 4px 4px 0;margin:0.8rem 0;font-size:0.82rem;line-height:1.65;}
+  .callout.info{border-left-color:var(--accent);background:rgba(0,229,255,0.04);}
+  .callout.danger{border-left-color:#ff4444;background:rgba(255,68,68,0.04);}
+  .callout.green{border-left-color:var(--accent2);background:rgba(57,255,20,0.04);}
+  .callout-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.3rem;}
+  .callout-label.warn{color:var(--warn);}
+  .callout-label.info{color:var(--accent);}
+  .callout-label.danger{color:#ff4444;}
+  .callout-label.green{color:var(--accent2);}
+  /* Conversion table special styling */
+  .conv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:0.8rem 0;font-family:'Share Tech Mono',monospace;font-size:0.78rem;}
+  .conv-grid .ch{background:rgba(0,229,255,0.07);color:var(--accent);padding:0.4rem 0.6rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+  .conv-grid .cv{padding:0.35rem 0.6rem;border-bottom:1px solid rgba(28,42,58,0.4);}
+  .conv-grid .cv:nth-child(4n+1){color:var(--accent2);}
+  .conv-grid .cv:nth-child(4n+2){color:var(--text);}
+  .conv-grid .cv:nth-child(4n+3){color:var(--accent);}
+  .conv-grid .cv:nth-child(4n+4){color:var(--accent3);}
+  /* quiz */
+  .quiz-q{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.1rem 1.3rem;margin-bottom:0.8rem;}
+  .quiz-q .question{font-size:0.85rem;font-weight:600;color:#fff;margin-bottom:0.8rem;line-height:1.5;}
+  .quiz-option{display:flex;align-items:flex-start;gap:0.6rem;padding:0.4rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.8rem;transition:background 0.1s;margin-bottom:0.2rem;}
+  .quiz-option:hover{background:rgba(0,229,255,0.05);}
+  .quiz-option input[type="radio"]{accent-color:var(--accent);margin-top:2px;flex-shrink:0;}
+  .quiz-option.correct{background:rgba(57,255,20,0.08);color:var(--accent2);}
+  .quiz-option.wrong{background:rgba(255,68,68,0.08);color:#ff6666;}
+  .quiz-btn{margin-top:0.6rem;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;padding:0.4rem 0.9rem;border-radius:4px;cursor:pointer;transition:all 0.15s;text-transform:uppercase;}
+  .quiz-btn:hover{background:rgba(0,229,255,0.08);box-shadow:var(--glow);}
+  .feedback{margin-top:0.5rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;display:none;line-height:1.6;}
+  .feedback.correct{color:var(--accent2);}
+  .feedback.wrong{color:#ff6666;}
+  /* checklist */
+  .checklist{list-style:none;}
+  .checklist li{display:flex;align-items:flex-start;gap:0.7rem;padding:0.35rem 0;font-size:0.83rem;border-bottom:1px solid rgba(28,42,58,0.5);cursor:pointer;user-select:none;}
+  .checklist li:last-child{border-bottom:none;}
+  .check-box{width:14px;height:14px;border:1px solid var(--dim);border-radius:2px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-size:0.6rem;color:transparent;}
+  .checklist li.checked .check-box{background:var(--accent2);border-color:var(--accent2);color:#000;box-shadow:var(--glow2);}
+  .checklist li.checked span{text-decoration:line-through;color:var(--dim);}
+  h3{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin:1.4rem 0 0.6rem;}
+  ul.bullets{padding-left:1.2rem;}
+  ul.bullets li{font-size:0.83rem;line-height:1.65;margin-bottom:0.35rem;color:var(--text);}
+  ul.bullets li::marker{color:var(--accent);}
+  .key-val-grid{display:grid;grid-template-columns:auto 1fr;gap:0.3rem 1rem;font-size:0.8rem;}
+  .kv-key{font-family:'Share Tech Mono',monospace;color:var(--accent3);white-space:nowrap;align-self:start;padding-top:1px;}
+  .kv-val{color:var(--text);line-height:1.55;}
+  /* memory diagram */
+  .mem-diagram{font-family:'Share Tech Mono',monospace;font-size:0.75rem;margin:0.8rem 0;}
+  .mem-row{display:flex;align-items:stretch;height:32px;border-bottom:1px solid var(--border);}
+  .mem-addr{width:90px;color:var(--dim);display:flex;align-items:center;padding:0 0.6rem;border-right:1px solid var(--border);flex-shrink:0;}
+  .mem-val{flex:1;display:flex;align-items:center;padding:0 0.8rem;color:var(--text);}
+  .mem-label{width:140px;color:var(--accent3);display:flex;align-items:center;padding:0 0.6rem;border-left:1px solid var(--border);font-size:0.68rem;flex-shrink:0;}
+  .mem-row.hl .mem-val{background:rgba(0,229,255,0.07);color:var(--accent);}
+  .mem-row.hl2 .mem-val{background:rgba(255,107,53,0.07);color:var(--accent3);}
+  .mem-row.hl3 .mem-val{background:rgba(57,255,20,0.07);color:var(--accent2);}
+  .mem-hdr{background:rgba(0,229,255,0.05);}
+  .mem-hdr .mem-addr,.mem-hdr .mem-val,.mem-hdr .mem-label{color:var(--accent);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;}
+
+  /* ─── SITE NAV ─── */
+  .site-nav{position:fixed;top:0;left:0;right:0;height:46px;background:rgba(8,12,16,0.97);border-bottom:1px solid #1c2a3a;backdrop-filter:blur(12px);display:flex;align-items:center;padding:0 1.5rem;z-index:9000;gap:0;}
+  .site-nav::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.4;}
+  .sn-brand{font-family:'Orbitron',sans-serif;font-weight:900;font-size:0.72rem;color:var(--accent);letter-spacing:0.2em;white-space:nowrap;margin-right:1.5rem;text-decoration:none;}
+  .sn-divider{width:1px;height:20px;background:#1c2a3a;margin-right:0;flex-shrink:0;}
+  .sn-links{display:flex;overflow-x:auto;flex:1;}
+  .sn-links::-webkit-scrollbar{display:none;}
+  .sn-link{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:#586069;padding:0 1.1rem;height:46px;display:flex;align-items:center;text-decoration:none;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap;letter-spacing:0.05em;flex-shrink:0;}
+  .sn-link:hover{color:#c9d1d9;border-bottom-color:#1c2a3a;}
+  .sn-link.sn-active{color:var(--accent);border-bottom-color:var(--accent);}
+  .sn-link .sn-num{font-size:0.55rem;opacity:0.5;margin-right:0.35rem;}
+  .sn-quiz-btn{margin-left:auto;flex-shrink:0;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.6rem;letter-spacing:0.12em;color:#080c10;background:var(--accent);border:none;padding:0.3rem 0.9rem;border-radius:4px;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-decoration:none;display:flex;align-items:center;}
+  .sn-quiz-btn:hover{box-shadow:0 0 12px rgba(0,229,255,0.5);}
+  body{padding-top:46px;}
+  header{padding-top:2rem;}
+
+
+  /* ─── MOBILE RESPONSIVE ─── */
+  .sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    color: #080c10;
+    font-size: 1.1rem;
+    cursor: pointer;
+    z-index: 500;
+    box-shadow: 0 4px 16px rgba(0,229,255,0.4);
+    align-items: center;
+    justify-content: center;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 400;
+    backdrop-filter: blur(2px);
+  }
+  .overlay.active { display: block; }
+
+  @media (max-width: 768px) {
+    body { padding-top: 46px; }
+    header { padding: 1.2rem 1rem 1rem; }
+    h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
+    .subtitle { font-size: 0.65rem; }
+
+    /* Sidebar becomes a slide-in drawer */
+    .layout { grid-template-columns: 1fr; }
+    nav {
+      position: fixed;
+      left: -260px;
+      top: 46px;
+      width: 240px;
+      height: calc(100vh - 46px);
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      z-index: 450;
+      transition: left 0.25s ease;
+      overflow-y: auto;
+      padding: 1rem 0;
+    }
+    nav.open { left: 0; box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
+    nav a { padding: 0.6rem 1.2rem; font-size: 0.82rem; min-height: 44px; }
+
+    .sidebar-toggle { display: flex; }
+    main { padding: 1rem; }
+    .section-header { flex-direction: column; gap: 0.6rem; }
+    .section-title { font-size: 0.9rem; }
+
+    /* Cards and grids */
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .card { padding: 0.9rem 1rem; }
+    .card-title { font-size: 0.7rem; }
+    .card p, .card li, ul.bullets li { font-size: 0.82rem; line-height: 1.7; }
+
+    /* Tables — horizontal scroll */
+    .cmd-table { font-size: 0.72rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .cmd-table th, .cmd-table td { padding: 0.4rem 0.6rem; white-space: nowrap; }
+    .cmd-table td:last-child { white-space: normal; min-width: 160px; }
+
+    /* Code blocks */
+    .code-block { font-size: 0.72rem; padding: 0.7rem 0.8rem; }
+    .code-line { font-size: 0.72rem; }
+
+    /* Tags */
+    .tag { font-size: 0.55rem; }
+
+    /* Key-val grid */
+    .key-val-grid { grid-template-columns: 1fr; gap: 0; }
+    .kv-key { padding-bottom: 0.1rem; }
+    .kv-val { padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); margin-bottom: 0.3rem; }
+
+    /* Section header icon */
+    .section-icon { width: 36px; height: 36px; font-size: 1.1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .sn-link { padding: 0 0.7rem; font-size: 0.62rem; }
+    .sn-quiz-btn { padding: 0.3rem 0.6rem; font-size: 0.55rem; }
+    h3 { font-size: 0.68rem; }
+    .cmd-table th { font-size: 0.58rem; }
+    .cmd-table td { font-size: 0.68rem; }
+  }
+
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a class="sn-brand" href="fundamentals.html">CNAB//SG</a>
+  <div class="sn-divider"></div>
+  <div class="sn-links">
+    <a class="sn-link sn-active" href="fundamentals.html"><span class="sn-num">01</span>Fundamentals</a><a class="sn-link" href="networking.html"><span class="sn-num">02</span>Networking</a><a class="sn-link" href="os-study-guide.html"><span class="sn-num">03</span>Operating Systems</a><a class="sn-link" href="security.html"><span class="sn-num">04</span>Security</a>
+  </div>
+  <a class="sn-quiz-btn" href="cnab-quiz.html">▶ MASTER QUIZ</a>
+</nav>
+
+<header>
+  <div class="header-tag">// CNAB Study Guide — Module 1: Fundamentals & Theory</div>
+  <h1>FUNDAMENTALS &amp; <span>THEORY</span> OF COMPUTING</h1>
+  <div class="subtitle">number_systems · cpu_architecture · memory · storage · kernel_vs_userspace</div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 20 topics mastered</div>
+</header>
+
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="layout">
+  <nav>
+    <div class="nav-section">// Number Systems</div>
+    <a onclick="show('numbersys')" id="nav-numbersys" class="active"><span class="dot"></span>Base Systems</a>
+    <a onclick="show('conversions')" id="nav-conversions"><span class="dot"></span>Conversions</a>
+    <a onclick="show('boollogic')" id="nav-boollogic"><span class="dot"></span>Boolean Logic</a>
+    <div class="nav-section">// Computer Concepts</div>
+    <a onclick="show('cpu')" id="nav-cpu"><span class="dot"></span>CPU Architecture</a>
+    <a onclick="show('arch-detail')" id="nav-arch-detail"><span class="dot"></span>CPU Arch Detail</a>
+    <a onclick="show('endianness')" id="nav-endianness"><span class="dot"></span>Endianness</a>
+    <a onclick="show('virt')" id="nav-virt"><span class="dot"></span>Virtualization</a>
+    <div class="nav-section">// Memory & Storage</div>
+    <a onclick="show('memory')" id="nav-memory"><span class="dot"></span>Memory Layout</a>
+    <a onclick="show('mem-hierarchy')" id="nav-mem-hierarchy"><span class="dot"></span>Memory Hierarchy</a>
+    <a onclick="show('storage')" id="nav-storage"><span class="dot"></span>Storage Concepts</a>
+    <div class="nav-section">// Programs & Execution</div>
+    <a onclick="show('compiled-interp')" id="nav-compiled-interp"><span class="dot"></span>Compiled vs Interpreted</a>
+    <a onclick="show('stack-heap')" id="nav-stack-heap"><span class="dot"></span>Stack vs Heap</a>
+    <div class="nav-section">// OS Concepts</div>
+    <a onclick="show('kerneluser')" id="nav-kerneluser"><span class="dot"></span>Kernel vs User Space</a>
+    <div class="nav-section">// Practice</div>
+    <a onclick="show('quiz')" id="nav-quiz"><span class="dot"></span>Quiz (15 Qs)</a>
+    <a onclick="show('checklist')" id="nav-checklist"><span class="dot"></span>Mastery Checklist</a>
+  </nav>
+
+  <main>
+
+<!-- ============================================================ NUMBER SYSTEMS -->
+<div class="section active" id="numbersys">
+  <div class="section-header">
+    <div class="section-icon">🔢</div>
+    <div><div class="section-title">Math Numbering Systems</div><div class="section-meta">binary · decimal · hexadecimal · octal · base arithmetic</div></div>
+  </div>
+
+  <h3>Base System Overview</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Name</th><th>Base</th><th>Digits Used</th><th>Prefix</th><th>Common Use</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Binary</td><td>2</td><td>0, 1</td><td>0b</td><td>CPU operations, bit flags, networking masks, memory addresses</td></tr>
+      <tr><td class="cmd-name">Octal</td><td>8</td><td>0–7</td><td>0 (leading zero)</td><td>Unix file permissions (chmod 755), historical minicomputer use</td></tr>
+      <tr><td class="cmd-name">Decimal</td><td>10</td><td>0–9</td><td>(none)</td><td>Human-readable numbers, IP addresses as written</td></tr>
+      <tr><td class="cmd-name">Hexadecimal</td><td>16</td><td>0–9, A–F</td><td>0x</td><td>Memory addresses, color codes, byte representation, shellcode</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Place Values</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Binary Place Values (powers of 2)</div>
+      <div class="conv-grid" style="grid-template-columns:repeat(8,1fr);">
+        <div class="ch">Bit 7</div><div class="ch">Bit 6</div><div class="ch">Bit 5</div><div class="ch">Bit 4</div><div class="ch">Bit 3</div><div class="ch">Bit 2</div><div class="ch">Bit 1</div><div class="ch">Bit 0</div>
+        <div class="cv" style="color:var(--accent)">128</div>
+        <div class="cv" style="color:var(--accent)">64</div>
+        <div class="cv" style="color:var(--accent)">32</div>
+        <div class="cv" style="color:var(--accent)">16</div>
+        <div class="cv" style="color:var(--accent)">8</div>
+        <div class="cv" style="color:var(--accent)">4</div>
+        <div class="cv" style="color:var(--accent)">2</div>
+        <div class="cv" style="color:var(--accent)">1</div>
+      </div>
+      <p style="font-size:0.8rem;margin-top:0.5rem;">1 byte = 8 bits. Max value = 255 (0xFF). Signed byte range: -128 to +127 (two's complement).</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Hex Place Values (powers of 16)</div>
+      <div class="conv-grid" style="grid-template-columns:repeat(4,1fr);">
+        <div class="ch">Pos 3</div><div class="ch">Pos 2</div><div class="ch">Pos 1</div><div class="ch">Pos 0</div>
+        <div class="cv" style="color:var(--accent)">4096</div>
+        <div class="cv" style="color:var(--accent)">256</div>
+        <div class="cv" style="color:var(--accent)">16</div>
+        <div class="cv" style="color:var(--accent)">1</div>
+      </div>
+      <p style="font-size:0.8rem;margin-top:0.5rem;">1 hex digit = 4 bits (nibble). 2 hex digits = 1 byte. 0xFF = 255. 0xDEAD = 57,005.</p>
+    </div>
+  </div>
+
+  <h3>Reference Conversion Table</h3>
+  <div class="conv-grid">
+    <div class="ch">Decimal</div><div class="ch">Binary</div><div class="ch">Hex</div><div class="ch">Octal</div>
+    <div class="cv">0</div><div class="cv">0000</div><div class="cv">0x0</div><div class="cv">0</div>
+    <div class="cv">1</div><div class="cv">0001</div><div class="cv">0x1</div><div class="cv">1</div>
+    <div class="cv">2</div><div class="cv">0010</div><div class="cv">0x2</div><div class="cv">2</div>
+    <div class="cv">3</div><div class="cv">0011</div><div class="cv">0x3</div><div class="cv">3</div>
+    <div class="cv">4</div><div class="cv">0100</div><div class="cv">0x4</div><div class="cv">4</div>
+    <div class="cv">5</div><div class="cv">0101</div><div class="cv">0x5</div><div class="cv">5</div>
+    <div class="cv">6</div><div class="cv">0110</div><div class="cv">0x6</div><div class="cv">6</div>
+    <div class="cv">7</div><div class="cv">0111</div><div class="cv">0x7</div><div class="cv">7</div>
+    <div class="cv">8</div><div class="cv">1000</div><div class="cv">0x8</div><div class="cv">10</div>
+    <div class="cv">9</div><div class="cv">1001</div><div class="cv">0x9</div><div class="cv">11</div>
+    <div class="cv">10</div><div class="cv">1010</div><div class="cv">0xA</div><div class="cv">12</div>
+    <div class="cv">11</div><div class="cv">1011</div><div class="cv">0xB</div><div class="cv">13</div>
+    <div class="cv">12</div><div class="cv">1100</div><div class="cv">0xC</div><div class="cv">14</div>
+    <div class="cv">13</div><div class="cv">1101</div><div class="cv">0xD</div><div class="cv">15</div>
+    <div class="cv">14</div><div class="cv">1110</div><div class="cv">0xE</div><div class="cv">16</div>
+    <div class="cv">15</div><div class="cv">1111</div><div class="cv">0xF</div><div class="cv">17</div>
+    <div class="cv">16</div><div class="cv">0001 0000</div><div class="cv">0x10</div><div class="cv">20</div>
+    <div class="cv">32</div><div class="cv">0010 0000</div><div class="cv">0x20</div><div class="cv">40</div>
+    <div class="cv">64</div><div class="cv">0100 0000</div><div class="cv">0x40</div><div class="cv">100</div>
+    <div class="cv">128</div><div class="cv">1000 0000</div><div class="cv">0x80</div><div class="cv">200</div>
+    <div class="cv">255</div><div class="cv">1111 1111</div><div class="cv">0xFF</div><div class="cv">377</div>
+    <div class="cv">256</div><div class="cv">0001 0000 0000</div><div class="cv">0x100</div><div class="cv">400</div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label info">// Why hex?</div>
+    One hex digit represents exactly 4 bits, and two hex digits represent exactly one byte. This makes hex the natural representation for memory addresses, color values (#FF8800), byte sequences, and shellcode. <strong>0xDEADBEEF</strong> and <strong>0xCAFEBABE</strong> are well-known magic numbers used as sentinels/magic values in software.
+  </div>
+</div>
+
+<!-- ============================================================ CONVERSIONS -->
+<div class="section" id="conversions">
+  <div class="section-header">
+    <div class="section-icon">🔄</div>
+    <div><div class="section-title">Number Base Conversions</div><div class="section-meta">decimal↔binary↔hex · worked examples · two's complement</div></div>
+  </div>
+
+  <h3>Decimal → Binary (Repeated Division by 2)</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Convert 173 to binary</span></span>
+    <span class="code-line">173 ÷ 2 = 86  remainder <span class="val">1</span>   ← LSB (least significant bit)</span>
+    <span class="code-line"> 86 ÷ 2 = 43  remainder <span class="val">0</span></span>
+    <span class="code-line"> 43 ÷ 2 = 21  remainder <span class="val">1</span></span>
+    <span class="code-line"> 21 ÷ 2 = 10  remainder <span class="val">1</span></span>
+    <span class="code-line"> 10 ÷ 2 =  5  remainder <span class="val">0</span></span>
+    <span class="code-line">  5 ÷ 2 =  2  remainder <span class="val">1</span></span>
+    <span class="code-line">  2 ÷ 2 =  1  remainder <span class="val">0</span></span>
+    <span class="code-line">  1 ÷ 2 =  0  remainder <span class="val">1</span>   ← MSB (most significant bit)</span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Read remainders bottom-to-top: 1010 1101 = 0xAD</span></span>
+    <span class="code-line"><span class="comment"># Verify: 128+32+8+4+1 = 173 ✓</span></span>
+  </div>
+
+  <h3>Binary → Decimal (Sum Place Values)</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Convert 1011 0110 to decimal</span></span>
+    <span class="code-line">Bit positions: <span class="val">1</span>  <span class="val">0</span>  <span class="val">1</span>  <span class="val">1</span>  <span class="val">0</span>  <span class="val">1</span>  <span class="val">1</span>  <span class="val">0</span></span>
+    <span class="code-line">Place values: 128  64  32  16  8   4   2   1</span>
+    <span class="code-line">              128 + 0 + 32 + 16 + 0 + 4 + 2 + 0 = <span class="val">182</span></span>
+  </div>
+
+  <h3>Decimal → Hex (Repeated Division by 16)</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Convert 1337 to hex</span></span>
+    <span class="code-line">1337 ÷ 16 = 83  remainder <span class="val">9</span>   ← '9'</span>
+    <span class="code-line">  83 ÷ 16 =  5  remainder <span class="val">3</span>   ← '3'</span>
+    <span class="code-line">   5 ÷ 16 =  0  remainder <span class="val">5</span>   ← '5'</span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Read bottom-to-top: 0x539</span></span>
+    <span class="code-line"><span class="comment"># Verify: 5×256 + 3×16 + 9×1 = 1280+48+9 = 1337 ✓</span></span>
+  </div>
+
+  <h3>Hex → Binary (Each Hex Digit = 4 Bits)</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Convert 0xB4 to binary</span></span>
+    <span class="code-line"><span class="val">B</span> = 11 = <span class="cmd">1011</span></span>
+    <span class="code-line"><span class="val">4</span> =  4 = <span class="cmd">0100</span></span>
+    <span class="code-line">0xB4 = <span class="cmd">1011 0100</span> = 180 decimal</span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Convert 0xDEAD to binary</span></span>
+    <span class="code-line"><span class="val">D</span>=1101  <span class="val">E</span>=1110  <span class="val">A</span>=1010  <span class="val">D</span>=1101</span>
+    <span class="code-line">= <span class="cmd">1101 1110 1010 1101</span></span>
+  </div>
+
+  <h3>Two's Complement (Signed Integers)</h3>
+  <div class="card">
+    <div class="card-title">Representing Negative Numbers</div>
+    <p>Two's complement is the standard representation for signed integers on virtually all modern processors. To negate a number: (1) invert all bits (one's complement), then (2) add 1.</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># Represent -5 in 8-bit two's complement</span></span>
+      <span class="code-line">Step 1: +5 in binary  = <span class="val">0000 0101</span></span>
+      <span class="code-line">Step 2: Invert bits   = <span class="flag">1111 1010</span>  (one's complement)</span>
+      <span class="code-line">Step 3: Add 1         = <span class="cmd">1111 1011</span>  = -5</span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="comment"># Key property: MSB=1 means negative in signed interpretation</span></span>
+      <span class="code-line"><span class="comment"># 0xFF = 255 (unsigned) OR -1 (signed 8-bit)</span></span>
+      <span class="code-line"><span class="comment"># 0x80 = 128 (unsigned) OR -128 (signed 8-bit)</span></span>
+      <span class="code-line"><span class="comment"># 0x7F = 127 = max positive signed 8-bit value</span></span>
+    </div>
+  </div>
+
+  <h3>Bit Masking & Bitwise Operations</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># AND (&) — keeps only bits that are 1 in BOTH operands</span></span>
+    <span class="code-line">  <span class="val">1010 1100</span>  (0xAC = 172)</span>
+    <span class="code-line">& <span class="val">1111 0000</span>  (0xF0 = mask: keep upper nibble)</span>
+    <span class="code-line">= <span class="cmd">1010 0000</span>  (0xA0 = 160) ← IP subnet masking works this way</span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># OR (|) — sets bit if 1 in EITHER operand</span></span>
+    <span class="code-line">  <span class="val">0100 0000</span></span>
+    <span class="code-line">| <span class="val">0000 0001</span></span>
+    <span class="code-line">= <span class="cmd">0100 0001</span>  ← set multiple flags at once</span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># XOR (^) — 1 only if bits DIFFER</span></span>
+    <span class="code-line">  <span class="val">1100</span> XOR <span class="val">1010</span> = <span class="cmd">0110</span>   ← XOR same value twice = original (encryption)</span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Left shift (<<) = multiply by 2^n</span></span>
+    <span class="code-line">  <span class="val">0000 0001</span> &lt;&lt; 3 = <span class="cmd">0000 1000</span>  (1 → 8)</span>
+    <span class="code-line"><span class="comment"># Right shift (>>) = divide by 2^n</span></span>
+    <span class="code-line">  <span class="val">0001 0000</span> &gt;&gt; 2 = <span class="cmd">0000 0100</span>  (16 → 4)</span>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label warn">// Exam Tip: Subnet Masking is Bitwise AND</div>
+    192.168.1.74 AND 255.255.255.0 = 192.168.1.0 (the network address). ANDing an IP with its subnet mask zeros out the host portion, revealing the network portion. This is how routers determine if a destination is local or remote.
+  </div>
+</div>
+
+<!-- ============================================================ BOOLEAN LOGIC -->
+<div class="section" id="boollogic">
+  <div class="section-header">
+    <div class="section-icon">⚡</div>
+    <div><div class="section-title">Boolean Logic & Logic Gates</div><div class="section-meta">AND · OR · NOT · XOR · NAND · NOR · truth tables · simplification</div></div>
+  </div>
+
+  <h3>Basic Gates & Truth Tables</h3>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title">AND (·)</div>
+      <div class="conv-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <div class="ch">A</div><div class="ch">B</div><div class="ch">A·B</div>
+        <div class="cv">0</div><div class="cv">0</div><div class="cv" style="color:var(--dim)">0</div>
+        <div class="cv">0</div><div class="cv">1</div><div class="cv" style="color:var(--dim)">0</div>
+        <div class="cv">1</div><div class="cv">0</div><div class="cv" style="color:var(--dim)">0</div>
+        <div class="cv">1</div><div class="cv">1</div><div class="cv" style="color:var(--accent2)">1</div>
+      </div>
+      <p style="font-size:0.78rem;margin-top:0.5rem;">Output 1 only if BOTH inputs are 1.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">OR (+)</div>
+      <div class="conv-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <div class="ch">A</div><div class="ch">B</div><div class="ch">A+B</div>
+        <div class="cv">0</div><div class="cv">0</div><div class="cv" style="color:var(--dim)">0</div>
+        <div class="cv">0</div><div class="cv">1</div><div class="cv" style="color:var(--accent2)">1</div>
+        <div class="cv">1</div><div class="cv">0</div><div class="cv" style="color:var(--accent2)">1</div>
+        <div class="cv">1</div><div class="cv">1</div><div class="cv" style="color:var(--accent2)">1</div>
+      </div>
+      <p style="font-size:0.78rem;margin-top:0.5rem;">Output 1 if EITHER input is 1.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">XOR (⊕)</div>
+      <div class="conv-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <div class="ch">A</div><div class="ch">B</div><div class="ch">A⊕B</div>
+        <div class="cv">0</div><div class="cv">0</div><div class="cv" style="color:var(--dim)">0</div>
+        <div class="cv">0</div><div class="cv">1</div><div class="cv" style="color:var(--accent2)">1</div>
+        <div class="cv">1</div><div class="cv">0</div><div class="cv" style="color:var(--accent2)">1</div>
+        <div class="cv">1</div><div class="cv">1</div><div class="cv" style="color:var(--dim)">0</div>
+      </div>
+      <p style="font-size:0.78rem;margin-top:0.5rem;">Output 1 if inputs DIFFER. Used in encryption, parity.</p>
+    </div>
+  </div>
+
+  <h3>Boolean Algebra Laws (for simplification)</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Identity & Complement Laws</div>
+      <div class="code-block no-prompt">
+        <span class="code-line">A · 1 = A          <span class="comment"># AND with 1 = no change</span></span>
+        <span class="code-line">A · 0 = 0          <span class="comment"># AND with 0 = always 0</span></span>
+        <span class="code-line">A + 0 = A          <span class="comment"># OR with 0 = no change</span></span>
+        <span class="code-line">A + 1 = 1          <span class="comment"># OR with 1 = always 1</span></span>
+        <span class="code-line">A · !A = 0         <span class="comment"># A AND NOT-A = always 0</span></span>
+        <span class="code-line">A + !A = 1         <span class="comment"># A OR NOT-A = always 1</span></span>
+        <span class="code-line">!!A = A            <span class="comment"># Double negation = identity</span></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Distributive & De Morgan's Laws</div>
+      <div class="code-block no-prompt">
+        <span class="code-line">A·(B+C) = A·B + A·C   <span class="comment"># Distribute AND over OR</span></span>
+        <span class="code-line">A+(B·C) = (A+B)·(A+C) <span class="comment"># Distribute OR over AND</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="comment"># De Morgan's Theorems:</span></span>
+        <span class="code-line">!(A·B) = !A + !B   <span class="comment"># NOT AND = OR of NOTs</span></span>
+        <span class="code-line">!(A+B) = !A · !B   <span class="comment"># NOT OR = AND of NOTs</span></span>
+        <span class="code-line"></span>
+        <span class="code-line"><span class="comment"># Absorption:</span></span>
+        <span class="code-line">A + A·B = A        <span class="comment"># A absorbs A·B</span></span>
+        <span class="code-line">A · (A+B) = A</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Worked Example (CNT Practice Test Style)</h3>
+  <div class="card">
+    <div class="card-title">Simplify: ((A OR B) AND (!A OR C)) AND !C</div>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># Step 1: Expand (A+B)·(!A+C) using distribution</span></span>
+      <span class="code-line">= A·!A + A·C + B·!A + B·C</span>
+      <span class="code-line">= <span class="flag">0</span> + A·C + !A·B + B·C      <span class="comment"># A·!A = 0, drop it</span></span>
+      <span class="code-line">= A·C + !A·B + B·C</span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="comment"># Step 2: AND the result with !C</span></span>
+      <span class="code-line">= A·C·!C + !A·B·!C + B·C·!C</span>
+      <span class="code-line">= <span class="flag">0</span> + !A·B·!C + <span class="flag">0</span>              <span class="comment"># C·!C = 0, drop both</span></span>
+      <span class="code-line">= <span class="val">!A · B · !C</span>                 <span class="comment"># ← Final answer (option C)</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ CPU ARCHITECTURE -->
+<div class="section" id="cpu">
+  <div class="section-header">
+    <div class="section-icon">🧠</div>
+    <div><div class="section-title">CPU Architecture</div><div class="section-meta">CISC · RISC · x86 · ARM · registers · instruction cycle · cache</div></div>
+  </div>
+
+  <h3>ISA Families</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">CISC — Complex Instruction Set Computer</div>
+      <ul class="bullets">
+        <li><strong>Philosophy</strong>: Single instructions can do complex multi-step operations (load + compute + store)</li>
+        <li><strong>Examples</strong>: x86, x86-64 (AMD64), IBM mainframe</li>
+        <li><strong>Characteristics</strong>: Variable-length instructions, many addressing modes, microcode translates to micro-ops internally</li>
+        <li><strong>Trade-off</strong>: Complex decoder hardware; powerful individual instructions</li>
+        <li><strong>Use case</strong>: Desktops, servers, laptops — general-purpose computing</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">RISC — Reduced Instruction Set Computer</div>
+      <ul class="bullets">
+        <li><strong>Philosophy</strong>: Simple, uniform instructions executed in one clock cycle</li>
+        <li><strong>Examples</strong>: ARM (mobile/IoT), MIPS (routers/embedded), RISC-V (open), PowerPC</li>
+        <li><strong>Characteristics</strong>: Fixed-length instructions, load/store architecture (only load/store access memory), more general-purpose registers</li>
+        <li><strong>Trade-off</strong>: More instructions needed per task; simpler, faster decoder</li>
+        <li><strong>Use case</strong>: Mobile (ARM in every smartphone), embedded systems, IoT devices</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>x86-64 Registers</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>64-bit</th><th>32-bit</th><th>16-bit</th><th>8-bit</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">RAX</td><td>EAX</td><td>AX</td><td>AL/AH</td><td>Accumulator — function return values, arithmetic</td></tr>
+      <tr><td class="cmd-name">RBX</td><td>EBX</td><td>BX</td><td>BL/BH</td><td>Base register — general purpose, callee-saved</td></tr>
+      <tr><td class="cmd-name">RCX</td><td>ECX</td><td>CX</td><td>CL/CH</td><td>Counter — loop counter, 4th argument (Linux)</td></tr>
+      <tr><td class="cmd-name">RDX</td><td>EDX</td><td>DX</td><td>DL/DH</td><td>Data — I/O, 3rd argument, high part of 128-bit mul</td></tr>
+      <tr><td class="cmd-name">RSI</td><td>ESI</td><td>SI</td><td>SIL</td><td>Source Index — 2nd argument (Linux), string source</td></tr>
+      <tr><td class="cmd-name">RDI</td><td>EDI</td><td>DI</td><td>DIL</td><td>Destination Index — 1st argument (Linux)</td></tr>
+      <tr><td class="cmd-name">RSP</td><td>ESP</td><td>SP</td><td>SPL</td><td>Stack Pointer — top of current stack frame</td></tr>
+      <tr><td class="cmd-name">RBP</td><td>EBP</td><td>BP</td><td>BPL</td><td>Base Pointer — bottom of current stack frame</td></tr>
+      <tr><td class="cmd-name">RIP</td><td>EIP</td><td>IP</td><td>—</td><td>Instruction Pointer — address of NEXT instruction</td></tr>
+      <tr><td class="cmd-name">RFLAGS</td><td>EFLAGS</td><td>FLAGS</td><td>—</td><td>Status flags: ZF (zero), CF (carry), SF (sign), OF (overflow)</td></tr>
+      <tr><td class="cmd-name">R8–R15</td><td>R8D–R15D</td><td>R8W–R15W</td><td>R8B–R15B</td><td>Extra general-purpose registers added in x86-64</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Fetch-Decode-Execute Cycle</h3>
+  <div class="card">
+    <div class="card-title">The Instruction Cycle</div>
+    <ul class="bullets">
+      <li><strong>Fetch</strong>: CPU reads the instruction at the address in RIP/EIP from memory into the Instruction Register (IR). RIP increments to the next instruction.</li>
+      <li><strong>Decode</strong>: Control unit decodes the instruction — determines opcode, operands, addressing mode</li>
+      <li><strong>Execute</strong>: ALU (Arithmetic Logic Unit) performs the operation. May involve reading/writing registers or memory (memory access stage)</li>
+      <li><strong>Write-back</strong>: Result written to destination register or memory location. Flags updated.</li>
+      <li>Modern CPUs pipeline these stages — multiple instructions in flight simultaneously, out-of-order execution</li>
+    </ul>
+  </div>
+
+  <h3>CPU Cache Hierarchy</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Level</th><th>Size</th><th>Speed</th><th>Location</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">L1 Cache</td><td>32–64 KB</td><td>~1 ns (4 cycles)</td><td>Per core, on-die</td><td>Separate I-cache (instructions) and D-cache (data). Fastest.</td></tr>
+      <tr><td class="cmd-name">L2 Cache</td><td>256 KB – 1 MB</td><td>~4 ns (12 cycles)</td><td>Per core, on-die</td><td>Unified. Miss here goes to L3.</td></tr>
+      <tr><td class="cmd-name">L3 Cache</td><td>4–64 MB</td><td>~10-30 ns (40+ cycles)</td><td>Shared across cores</td><td>Also called LLC (Last Level Cache). Shared by all cores.</td></tr>
+      <tr><td class="cmd-name">RAM</td><td>GBs</td><td>~60-100 ns</td><td>DIMM slots</td><td>~100× slower than L1. Cache miss penalty is severe.</td></tr>
+      <tr><td class="cmd-name">Disk</td><td>TBs</td><td>µs – ms</td><td>Storage device</td><td>SSD ~100µs, HDD ~10ms — millions of times slower than L1.</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ============================================================ ENDIANNESS -->
+<div class="section" id="endianness">
+  <div class="section-header">
+    <div class="section-icon">↔️</div>
+    <div><div class="section-title">Endianness</div><div class="section-meta">big-endian · little-endian · network byte order · why it matters</div></div>
+  </div>
+
+  <h3>Definition</h3>
+  <div class="card">
+    <div class="card-title">What Is Endianness?</div>
+    <p>Endianness describes the byte order in which multi-byte values are stored in memory. For the 32-bit value <strong>0x0A0B0C0D</strong>, the question is which byte goes at the lowest memory address. The two main orderings are <em>big-endian</em> (most significant byte first) and <em>little-endian</em> (least significant byte first).</p>
+  </div>
+
+  <h3>Visual Comparison — Storing 0x0A0B0C0D at address 0x1000</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Big-Endian</div>
+      <div class="mem-diagram">
+        <div class="mem-row mem-hdr"><div class="mem-addr">Addr</div><div class="mem-val">Byte</div><div class="mem-label">Significance</div></div>
+        <div class="mem-row hl"><div class="mem-addr">0x1000</div><div class="mem-val">0x0A</div><div class="mem-label">Most significant</div></div>
+        <div class="mem-row"><div class="mem-addr">0x1001</div><div class="mem-val">0x0B</div><div class="mem-label"></div></div>
+        <div class="mem-row"><div class="mem-addr">0x1002</div><div class="mem-val">0x0C</div><div class="mem-label"></div></div>
+        <div class="mem-row hl2"><div class="mem-addr">0x1003</div><div class="mem-val">0x0D</div><div class="mem-label">Least significant</div></div>
+      </div>
+      <p style="font-size:0.78rem;margin-top:0.5rem;">MSB at lowest address. "Natural" human reading order. Used by: network protocols (IP, TCP), SPARC, PowerPC, MIPS (configurable), most network equipment.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Little-Endian</div>
+      <div class="mem-diagram">
+        <div class="mem-row mem-hdr"><div class="mem-addr">Addr</div><div class="mem-val">Byte</div><div class="mem-label">Significance</div></div>
+        <div class="mem-row hl2"><div class="mem-addr">0x1000</div><div class="mem-val">0x0D</div><div class="mem-label">Least significant</div></div>
+        <div class="mem-row"><div class="mem-addr">0x1001</div><div class="mem-val">0x0C</div><div class="mem-label"></div></div>
+        <div class="mem-row"><div class="mem-addr">0x1002</div><div class="mem-val">0x0B</div><div class="mem-label"></div></div>
+        <div class="mem-row hl"><div class="mem-addr">0x1003</div><div class="mem-val">0x0A</div><div class="mem-label">Most significant</div></div>
+      </div>
+      <p style="font-size:0.78rem;margin-top:0.5rem;">LSB at lowest address. Used by: x86/x86-64 (Intel/AMD — virtually all PCs), ARM (default LE), most modern consumer hardware.</p>
+    </div>
+  </div>
+
+  <h3>Why It Matters</h3>
+  <ul class="bullets">
+    <li><strong>Network byte order</strong> is big-endian. Network stack functions like <code>htons()</code> (host to network short) and <code>htonl()</code> convert between host byte order and network order. On x86 (LE), this swaps bytes; on BE systems, it's a no-op.</li>
+    <li><strong>Packet analysis</strong>: In Wireshark/tcpdump, multi-byte fields in IP/TCP headers are displayed in big-endian (as-transmitted) order. If you read a raw hex dump of a packet, multi-byte values appear MSB-first.</li>
+    <li><strong>Exploit development</strong>: When writing 32/64-bit addresses in shellcode targeting x86, addresses must be written in little-endian (LSB first). 0xDEADBEEF = <code>\xEF\xBE\xAD\xDE</code> in memory.</li>
+    <li><strong>File format parsing</strong>: ELF binaries specify endianness in the header (EI_DATA field: 1=LE, 2=BE). PE (Windows) is always little-endian.</li>
+  </ul>
+
+  <div class="callout info">
+    <div class="callout-label info">// Bi-Endian Systems</div>
+    ARM, MIPS, and PowerPC support both endianness modes via a configuration bit. They're called <strong>bi-endian</strong>. In practice, ARM is usually configured as little-endian in modern devices. MIPS-based routers are often big-endian, which matters when writing exploits for router firmware.
+  </div>
+</div>
+
+<!-- ============================================================ VIRTUALIZATION -->
+<div class="section" id="virt">
+  <div class="section-header">
+    <div class="section-icon">📦</div>
+    <div><div class="section-title">Virtualization</div><div class="section-meta">hypervisors · type 1 vs type 2 · containers · VMs · security</div></div>
+  </div>
+
+  <h3>Virtualization Types</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Type 1 Hypervisor (Bare Metal)</div>
+      <p>Runs directly on hardware — no host OS underneath. The hypervisor IS the OS for the hardware. VMs run on top of it. Provides best performance and isolation since there's no host OS overhead.</p>
+      <ul class="bullets" style="margin-top:0.6rem">
+        <li>VMware ESXi / vSphere</li>
+        <li>Microsoft Hyper-V (when run as Windows role on bare metal)</li>
+        <li>Xen (used by AWS EC2)</li>
+        <li>KVM (Linux kernel built-in; technically hybrid)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Type 2 Hypervisor (Hosted)</div>
+      <p>Runs as an application on top of a host OS. Host OS manages hardware; hypervisor manages guest VMs as processes. More overhead but easier to set up on existing machines.</p>
+      <ul class="bullets" style="margin-top:0.6rem">
+        <li>VMware Workstation / Fusion</li>
+        <li>Oracle VirtualBox</li>
+        <li>Parallels Desktop (macOS)</li>
+        <li>QEMU (user mode)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>VMs vs Containers</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Property</th><th>Virtual Machine</th><th>Container (Docker/LXC)</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Isolation</td><td>Full hardware virtualization — separate kernel</td><td>Shares host kernel — namespace + cgroup isolation</td></tr>
+      <tr><td class="cmd-name">Overhead</td><td>High — full OS per VM (GBs RAM, slow boot)</td><td>Low — seconds to start, MBs of overhead</td></tr>
+      <tr><td class="cmd-name">Security</td><td>Stronger — VM escape is rare and difficult</td><td>Weaker — kernel sharing means kernel vuln affects all</td></tr>
+      <tr><td class="cmd-name">Use Case</td><td>Run different OS, strong isolation, legacy apps</td><td>Microservices, CI/CD, portability, density</td></tr>
+      <tr><td class="cmd-name">Portability</td><td>VM images are large and hypervisor-dependent</td><td>Images are small and run on any Docker host</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>CPU Virtualization Extensions</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Intel VT-x / AMD-V</div>
+      <p>Hardware-assisted CPU virtualization. Adds VMX (Virtual Machine Extensions) instructions. Enables a <strong>VMX root mode</strong> (Ring -1) for the hypervisor that is more privileged than Ring 0. Guest OSes run in non-root mode (Ring 0 for guest kernel, Ring 3 for guest apps). Without VT-x, hypervisors needed software-based binary translation (slow). Required to run 64-bit guests and nested virtualization.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">SLAT (Second Level Address Translation)</div>
+      <p>Intel EPT (Extended Page Tables) / AMD RVI (Rapid Virtualization Indexing). Hardware-assisted memory virtualization. Maps guest physical addresses → host physical addresses in hardware, without hypervisor intervention on every memory access. Dramatically reduces VM memory overhead. Required for Hyper-V core functionality in Windows.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label warn">// VM Detection (Security Relevance)</div>
+    Malware often detects virtualized environments to avoid analysis. Detection methods: check for VMware registry keys, CPUID hypervisor bit (leaf 0x1, ECX bit 31), timing differences (RDTSC instruction), presence of VM guest additions, MAC address prefixes (VMware=00:0C:29, VBox=08:00:27), and small physical RAM size.
+  </div>
+</div>
+
+<!-- ============================================================ MEMORY -->
+<div class="section" id="memory">
+  <div class="section-header">
+    <div class="section-icon">💾</div>
+    <div><div class="section-title">Memory Organization & Layout</div><div class="section-meta">virtual memory · process layout · stack · heap · offsets · paging</div></div>
+  </div>
+
+  <h3>Types of Memory</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Type</th><th>Technology</th><th>Volatile</th><th>Characteristics</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Registers</td><td>Flip-flops in CPU</td><td>Yes</td><td>Fastest storage; 8–16 bytes per register; directly operated on by ALU</td></tr>
+      <tr><td class="cmd-name">CPU Cache</td><td>SRAM</td><td>Yes</td><td>L1/L2/L3; automatic management by CPU; transparent to software</td></tr>
+      <tr><td class="cmd-name">RAM</td><td>DRAM (DDR4/DDR5)</td><td>Yes</td><td>Main working memory; ~ns access; contents lost on power off</td></tr>
+      <tr><td class="cmd-name">ROM/Flash</td><td>Flash (NAND/NOR)</td><td>No</td><td>BIOS/UEFI firmware, USB drives, SSDs. Non-volatile.</td></tr>
+      <tr><td class="cmd-name">Virtual Memory</td><td>RAM + Swap on disk</td><td>Yes</td><td>OS abstraction — process sees contiguous address space larger than physical RAM</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Virtual Address Space Layout (x86-64 Linux)</h3>
+  <div class="mem-diagram">
+    <div class="mem-row mem-hdr"><div class="mem-addr">Address</div><div class="mem-val">Region</div><div class="mem-label">Notes</div></div>
+    <div class="mem-row"><div class="mem-addr">0xFFFF…</div><div class="mem-val" style="color:var(--warn)">Kernel Space</div><div class="mem-label">Ring 0 only</div></div>
+    <div class="mem-row"><div class="mem-addr">↓</div><div class="mem-val" style="color:var(--dim)">– – – –</div><div class="mem-label">Kernel/User boundary</div></div>
+    <div class="mem-row hl3"><div class="mem-addr">High</div><div class="mem-val">Stack ↓</div><div class="mem-label">Grows downward</div></div>
+    <div class="mem-row"><div class="mem-addr"></div><div class="mem-val" style="color:var(--dim)">(gap / ASLR)</div><div class="mem-label">Randomized</div></div>
+    <div class="mem-row hl2"><div class="mem-addr">Mid-high</div><div class="mem-val">Heap ↑</div><div class="mem-label">Grows upward</div></div>
+    <div class="mem-row"><div class="mem-addr">Mid</div><div class="mem-val">.bss segment</div><div class="mem-label">Uninit globals</div></div>
+    <div class="mem-row"><div class="mem-addr">Mid-low</div><div class="mem-val">.data segment</div><div class="mem-label">Init globals/statics</div></div>
+    <div class="mem-row hl"><div class="mem-addr">Low</div><div class="mem-val">.text segment</div><div class="mem-label">Executable code</div></div>
+    <div class="mem-row"><div class="mem-addr">0x0000…</div><div class="mem-val" style="color:var(--dim)">NULL (unmapped)</div><div class="mem-label">NULL dereference trap</div></div>
+  </div>
+
+  <h3>Stack Frame Anatomy</h3>
+  <div class="card">
+    <div class="card-title">How the Stack Works</div>
+    <p>The stack is a LIFO (Last In, First Out) region used for function calls. The stack pointer (RSP) always points to the top (lowest address on x86). When a function is called:</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># Call convention (System V AMD64 ABI — Linux)</span></span>
+      <span class="code-line">1. Arguments 1-6 in RDI, RSI, RDX, RCX, R8, R9</span>
+      <span class="code-line">2. CALL pushes return address onto stack (RSP -= 8)</span>
+      <span class="code-line">3. Callee pushes RBP, sets RBP = RSP (prologue)</span>
+      <span class="code-line">4. Local variables allocated by RSP -= N</span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="comment"># Stack frame layout (top = lower addresses)</span></span>
+      <span class="code-line"><span class="val">RSP →</span>  [local variables]        ← grows here</span>
+      <span class="code-line">        [saved RBP]               ← frame pointer</span>
+      <span class="code-line"><span class="val">RBP →</span>  [return address]          ← where to go after RET</span>
+      <span class="code-line">        [caller's frame]</span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="comment"># Stack overflow: overwrite return address → control flow hijack</span></span>
+    </div>
+  </div>
+
+  <h3>Offsets and Lengths</h3>
+  <div class="card">
+    <div class="card-title">Working with Memory Offsets</div>
+    <p>An <strong>offset</strong> is a byte count from a base address to locate a field or element. Used everywhere in protocols, file formats, and binary exploitation.</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># Example: IPv4 header offsets</span></span>
+      <span class="code-line">Offset 0:   Version + IHL    (1 byte)</span>
+      <span class="code-line">Offset 1:   DSCP + ECN       (1 byte)</span>
+      <span class="code-line">Offset 2:   Total Length     (2 bytes)</span>
+      <span class="code-line">Offset 4:   Identification   (2 bytes)</span>
+      <span class="code-line">Offset 6:   Flags + Frag Off (2 bytes)</span>
+      <span class="code-line">Offset 8:   TTL              (1 byte)</span>
+      <span class="code-line">Offset 9:   Protocol         (1 byte)  ← 6=TCP 17=UDP 1=ICMP</span>
+      <span class="code-line">Offset 10:  Header Checksum  (2 bytes)</span>
+      <span class="code-line">Offset 12:  Source IP        (4 bytes)</span>
+      <span class="code-line">Offset 16:  Destination IP   (4 bytes)</span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="comment"># Address calculation: base_addr + offset = field_addr</span></span>
+      <span class="code-line"><span class="comment"># struct foo { int a; char b[4]; int c; }</span></span>
+      <span class="code-line"><span class="comment"># c is at offset 8 (4 bytes for a + 4 bytes for b)</span></span>
+    </div>
+  </div>
+
+  <h3>Paging & Virtual Memory</h3>
+  <ul class="bullets">
+    <li><strong>Page</strong>: Fixed-size block of virtual memory, typically 4 KB (4096 bytes). Memory is allocated in page units.</li>
+    <li><strong>Page Table</strong>: OS-maintained mapping from virtual page numbers to physical page frames. CPU's MMU (Memory Management Unit) uses it for every memory access.</li>
+    <li><strong>TLB (Translation Lookaside Buffer)</strong>: Cache of recent virtual→physical translations. A TLB miss forces a costly page table walk.</li>
+    <li><strong>Page Fault</strong>: CPU raises exception when accessing an unmapped or protected page. OS handles it: map more memory, load from swap, or kill process (segfault).</li>
+    <li><strong>ASLR (Address Space Layout Randomization)</strong>: Security mitigation — randomizes base addresses of stack, heap, and libraries at each run, making buffer overflow exploitation harder.</li>
+    <li><strong>DEP/NX (Data Execution Prevention / No-Execute)</strong>: CPU bit marking pages as non-executable. Stack and heap pages marked NX prevent shellcode execution on the stack.</li>
+  </ul>
+</div>
+
+<!-- ============================================================ STORAGE -->
+<div class="section" id="storage">
+  <div class="section-header">
+    <div class="section-icon">🗄️</div>
+    <div><div class="section-title">Storage Concepts</div><div class="section-meta">HDD · SSD · NVMe · RAID · interfaces · forensics</div></div>
+  </div>
+
+  <h3>HDD vs SSD Comparison</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Property</th><th>HDD (Hard Disk Drive)</th><th>SSD (Solid State Drive)</th><th>NVMe SSD</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Technology</td><td>Spinning magnetic platters + read/write heads</td><td>NAND flash chips (no moving parts)</td><td>NAND flash via PCIe directly to CPU</td></tr>
+      <tr><td class="cmd-name">Speed (Read)</td><td>100–200 MB/s</td><td>500–600 MB/s (SATA limit)</td><td>3,500–7,000 MB/s</td></tr>
+      <tr><td class="cmd-name">Latency</td><td>5–10 ms (seek + rotational)</td><td>~0.1 ms</td><td>~0.02 ms (20 µs)</td></tr>
+      <tr><td class="cmd-name">Interface</td><td>SATA, SAS</td><td>SATA (2.5" or M.2)</td><td>PCIe (M.2 or U.2)</td></tr>
+      <tr><td class="cmd-name">Durability</td><td>Vulnerable to shock (moving parts)</td><td>Resistant to physical shock</td><td>Resistant to physical shock</td></tr>
+      <tr><td class="cmd-name">Forensics</td><td>Deleted data recoverable until overwritten</td><td>TRIM command immediately zeros deleted blocks — recovery harder</td><td>Same TRIM behavior as SSD</td></tr>
+      <tr><td class="cmd-name">Price/GB</td><td>Cheapest (~$0.02/GB)</td><td>Mid (~$0.07/GB)</td><td>Premium (~$0.10/GB)</td></tr>
+      <tr><td class="cmd-name">Wear</td><td>Mechanical wear on heads/platters</td><td>Flash cells have limited write cycles (P/E cycles)</td><td>Same flash wear limitations</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>RAID Levels</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>RAID</th><th>Min Disks</th><th>Redundancy</th><th>Performance</th><th>Use Case</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">RAID 0</td><td>2</td><td>None — 1 disk failure = total loss</td><td>Best read+write (striping)</td><td>Speed only; scratch disks; NOT for valuable data</td></tr>
+      <tr><td class="cmd-name">RAID 1</td><td>2</td><td>Survives all-but-1 disk failure (mirror)</td><td>Fast reads, normal writes (mirroring)</td><td>Simple redundancy; OS drives; critical data</td></tr>
+      <tr><td class="cmd-name">RAID 5</td><td>3</td><td>Survives 1 disk failure (parity)</td><td>Good reads; write penalty for parity calculation</td><td>Most common server storage — good balance</td></tr>
+      <tr><td class="cmd-name">RAID 6</td><td>4</td><td>Survives 2 disk failures (dual parity)</td><td>Slightly worse than RAID 5</td><td>Large arrays where RAID 5 rebuild risk is high</td></tr>
+      <tr><td class="cmd-name">RAID 10</td><td>4</td><td>Survives 1+ failure (mirrored stripes)</td><td>Excellent read+write</td><td>Databases; high-I/O workloads; expensive</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Storage Interfaces</h3>
+  <div class="key-val-grid">
+    <div class="kv-key">SATA</div><div class="kv-val">Serial ATA. Max 600 MB/s (SATA III). Standard for HDDs and 2.5" SSDs. Simple point-to-point.</div>
+    <div class="kv-key">SAS</div><div class="kv-val">Serial Attached SCSI. Enterprise drives. Up to 22.5 Gb/s. Better error handling than SATA. Server/datacenter use.</div>
+    <div class="kv-key">NVMe</div><div class="kv-val">Non-Volatile Memory Express. Protocol designed for SSDs over PCIe. Eliminates SATA bottleneck. 1M+ IOPS capability.</div>
+    <div class="kv-key">M.2</div><div class="kv-val">Form factor (not interface). Can use SATA or NVMe (PCIe). Check keying: M-key = NVMe capable; B-key = SATA only.</div>
+    <div class="kv-key">iSCSI</div><div class="kv-val">SCSI over IP network. Used for network-attached storage (SAN). Allows remote disk access over Ethernet.</div>
+    <div class="kv-key">Fibre Channel</div><div class="kv-val">Enterprise SAN protocol. Dedicated fabric network for storage. High speed, low latency, expensive.</div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label info">// SSD TRIM & Forensics</div>
+    When you delete a file on an SSD with TRIM enabled, the OS sends a TRIM command telling the SSD controller those blocks are free — the controller may immediately zero them as part of garbage collection. Unlike HDDs where deleted data persists until overwritten, SSD TRIM makes file recovery much harder or impossible. This is critical knowledge for digital forensics — image SSD evidence IMMEDIATELY; every passing second may destroy deleted file artifacts.
+  </div>
+</div>
+
+<!-- ============================================================ KERNEL VS USER SPACE -->
+<div class="section" id="kerneluser">
+  <div class="section-header">
+    <div class="section-icon">🔒</div>
+    <div><div class="section-title">Kernel Space vs User Space</div><div class="section-meta">privilege rings · syscalls · context switching · security boundary</div></div>
+  </div>
+
+  <h3>The Fundamental Separation</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Kernel Space (Ring 0)</div>
+      <ul class="bullets">
+        <li>Highest privilege — direct hardware access</li>
+        <li>OS kernel, device drivers, kernel modules run here</li>
+        <li>Can execute any CPU instruction (including privileged ones: IN, OUT, HLT, LGDT)</li>
+        <li>Can access any physical memory address</li>
+        <li>A bug here can crash or compromise the entire system</li>
+        <li>Context: kernel tasks, interrupt handlers, system call handlers</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">User Space (Ring 3)</div>
+      <ul class="bullets">
+        <li>Restricted privilege — cannot directly access hardware</li>
+        <li>All user applications, daemons, and libraries run here</li>
+        <li>Cannot execute privileged CPU instructions</li>
+        <li>Can only access its own virtual memory pages (MMU enforced)</li>
+        <li>A crash only affects the process, not the OS</li>
+        <li>Must request kernel services via <strong>system calls</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>System Call Interface</h3>
+  <div class="card">
+    <div class="card-title">How User Space Talks to the Kernel</div>
+    <p>When a user-space program needs a kernel service (open a file, create a socket, allocate memory), it executes a <strong>system call</strong>. The CPU switches privilege level from Ring 3 → Ring 0, the kernel handles the request, and control returns to user space.</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># Linux system call mechanism (x86-64)</span></span>
+      <span class="code-line">1. Put syscall number in RAX (e.g., 0=read 1=write 2=open)</span>
+      <span class="code-line">2. Put arguments in RDI, RSI, RDX, R10, R8, R9</span>
+      <span class="code-line">3. Execute SYSCALL instruction → Ring 0</span>
+      <span class="code-line">4. Kernel validates args, performs operation, returns result in RAX</span>
+      <span class="code-line">5. SYSRET → back to Ring 3</span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="comment"># Common Linux syscall numbers</span></span>
+      <span class="code-line"><span class="val"> 0</span> = read        <span class="val"> 1</span> = write       <span class="val"> 2</span> = open</span>
+      <span class="code-line"><span class="val"> 3</span> = close       <span class="val">57</span> = fork        <span class="val">59</span> = execve</span>
+      <span class="code-line"><span class="val">60</span> = exit        <span class="val">41</span> = socket      <span class="val">42</span> = connect</span>
+    </div>
+  </div>
+
+  <h3>Context Switching</h3>
+  <div class="card">
+    <div class="card-title">What Happens During a Context Switch</div>
+    <p>When the OS scheduler switches from one process to another (or from user to kernel), a <strong>context switch</strong> occurs: the current CPU state (all registers, instruction pointer, flags, memory mappings) is saved to the process's PCB (Process Control Block), and the next process's saved state is loaded. Context switches are expensive (~1–10 µs) because they may invalidate caches (TLB flush) and require saving/restoring many registers. High context-switch rates can seriously degrade performance.</p>
+  </div>
+
+  <h3>Security Implications of the Boundary</h3>
+  <ul class="bullets">
+    <li><strong>Privilege escalation attacks</strong> target vulnerabilities that allow a user-space process to gain kernel-level (Ring 0) execution — e.g., kernel exploits, driver bugs</li>
+    <li><strong>Sandbox escapes</strong>: browsers run renderer processes in restricted user-space sandboxes; escaping the sandbox then escaping user space entirely requires chaining two vulnerabilities</li>
+    <li><strong>Rootkits</strong>: Kernel-mode rootkits live in Ring 0 and can hide files/processes from user-space security tools by patching kernel data structures or system call tables</li>
+    <li><strong>seccomp (Linux)</strong>: Restricts which system calls a process can make — reduces kernel attack surface. Used by Docker, Chrome, ssh</li>
+    <li><strong>SMEP/SMAP (Intel)</strong>: Supervisor Mode Execution/Access Prevention — prevents kernel code from executing user-space pages or accidentally dereferencing user-space pointers</li>
+  </ul>
+</div>
+
+<!-- ============================================================ CPU ARCH DETAIL -->
+<div class="section" id="arch-detail">
+  <div class="section-header">
+    <div class="section-icon">🧬</div>
+    <div><div class="section-title">CPU Architecture Detail</div><div class="section-meta">SPARC · RISC · CISC · i686 · 32-bit vs 64-bit · endianness architectures</div></div>
+  </div>
+
+  <h3>Architecture Identifiers</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Architecture</th><th>Type</th><th>Bits</th><th>Endianness</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">x86 (IA-32)</td><td>CISC</td><td>32-bit</td><td>Little-endian</td><td>Up to 4 bytes per instruction. Max 4 GB RAM. Registers: EAX, EBX, ECX, EDX. CISC uses 3-letter register names.</td></tr>
+      <tr><td class="cmd-name">x86-64 (AMD64)</td><td>CISC</td><td>64-bit</td><td>Little-endian</td><td>8 bytes per instruction. Supports &gt;4 GB RAM. Extended registers: RAX, RBX, RCX + R8–R15.</td></tr>
+      <tr><td class="cmd-name">i686</td><td>RISC-based</td><td>32-bit</td><td>Little-endian</td><td>32-bit x86 processor class. Common Linux target for 32-bit builds.</td></tr>
+      <tr><td class="cmd-name">SPARC</td><td>RISC</td><td>32/64-bit</td><td>Big-endian</td><td>Scalable Processor ARChitecture. Developed by Sun Microsystems (Solaris). Bi-endian capable but runs big-endian in practice on Oracle Solaris and Linux.</td></tr>
+      <tr><td class="cmd-name">ARM (AArch64)</td><td>RISC</td><td>64-bit</td><td>Bi-endian (LE default)</td><td>Dominant in mobile/embedded. No relevant big-endian deployments — considered little-endian in practice.</td></tr>
+      <tr><td class="cmd-name">IBM z/Architecture</td><td>CISC</td><td>64-bit</td><td>Big-endian</td><td>Mainframe. Solely big-endian.</td></tr>
+      <tr><td class="cmd-name">RISC-V</td><td>RISC</td><td>32/64/128-bit</td><td>Bi-endian (LE default)</td><td>Open-source ISA. No relevant big-endian deployments.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>RISC vs CISC Key Distinctions</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">RISC Characteristics</div>
+      <ul class="bullets">
+        <li>Instructions start with R then a number (e.g., R1, R2) — written in assembly language</li>
+        <li>One register = one action (load/store architecture)</li>
+        <li>Fixed-length instructions; simple decoder</li>
+        <li>More general-purpose registers; arithmetic only on registers</li>
+        <li>Examples: ARM, MIPS, SPARC, RISC-V, PowerPC</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">CISC Characteristics</div>
+      <ul class="bullets">
+        <li>3-letter register names used to direct the register (e.g., <span class="mini-tag">EAX</span>, <span class="mini-tag">EBX</span>, <span class="mini-tag">RDI</span>)</li>
+        <li>Single instruction can load + compute + store</li>
+        <li>Variable-length instructions; complex decoder</li>
+        <li>Microcode translates complex instructions internally</li>
+        <li>Examples: x86, x86-64 (Intel/AMD)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>32-bit vs 64-bit Architecture</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">32-bit (x86)</div>
+      <ul class="bullets">
+        <li>Processes up to <strong>4 bytes</strong> of data per instruction</li>
+        <li>Maximum addressable RAM: <strong>4 GB</strong> (2³² addresses)</li>
+        <li>Registers: EAX, EBX, ECX, EDX, ESI, EDI, ESP, EBP, EIP</li>
+        <li>Pointer size: 4 bytes</li>
+        <li>OS label: x86, i386, i686</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">64-bit (x86-64)</div>
+      <ul class="bullets">
+        <li>Processes up to <strong>8 bytes</strong> of data per instruction</li>
+        <li>Addressable RAM: <strong>theoretically 16 EB</strong> (2⁶⁴); practical hardware limit much lower</li>
+        <li>Extended registers: RAX, RBX, RCX, RDX + R8–R15</li>
+        <li>Pointer size: 8 bytes</li>
+        <li>OS label: x86_64, amd64</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Endianness — Which Architectures Use What</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Little-endian only (LSB at lowest address)</span></span>
+    <span class="code-line"><span class="val">x86, x86-64</span>  — all Intel/AMD processors</span>
+    <span class="code-line"><span class="val">Nios II, NDS32, Qualcomm Hexagon</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Big-endian only (MSB at lowest address)</span></span>
+    <span class="code-line"><span class="val">IBM z/Architecture</span> (mainframes)</span>
+    <span class="code-line"><span class="val">OpenRISC</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Bi-endian — configurable, but effectively one in practice</span></span>
+    <span class="code-line"><span class="val">ARM / AArch64</span>  — little-endian in practice (no relevant BE deployments)</span>
+    <span class="code-line"><span class="val">SPARC</span>          — big-endian in practice (Oracle Solaris + Linux = BE)</span>
+    <span class="code-line"><span class="val">Power ISA</span>      — AIX/IBM i = BE; Linux transitioned to LE by 2019</span>
+    <span class="code-line"><span class="val">RISC-V, C-Sky</span> — little-endian in practice</span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Network byte order = Big-endian (all TCP/IP headers)</span></span>
+    <span class="code-line"><span class="comment"># x86 hosts must convert with htons() / htonl() / ntohs() / ntohl()</span></span>
+  </div>
+</div>
+
+<!-- ============================================================ COMPILED VS INTERPRETED -->
+<div class="section" id="compiled-interp">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div><div class="section-title">Compiled vs Interpreted Languages</div><div class="section-meta">compilers · interpreters · runtime · error detection · examples</div></div>
+  </div>
+
+  <h3>Compiled Languages</h3>
+  <div class="card">
+    <div class="card-title">How Compilation Works</div>
+    <p>A compiler takes the <strong>whole program as input</strong> and translates it to an executable binary in several steps (preprocessing → parsing → optimization → code generation → linking). The resulting binary is platform-specific — it depends on the CPU architecture and OS.</p>
+    <ul class="bullets" style="margin-top:0.6rem">
+      <li>Compilation happens <strong>once</strong>; the binary runs as many times as needed without the compiler</li>
+      <li>Binary is <strong>not portable</strong> — compiled for a specific architecture (x86-64 binary won't run on ARM)</li>
+      <li>Compilers catch <strong>syntax and type errors</strong> before the program ever runs — compilation fails if present</li>
+      <li>Generally faster execution since translation to machine code already done</li>
+      <li><strong>Example:</strong> C, C++, Go, Rust, Swift</li>
+    </ul>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># C compile and run</span></span>
+      <span class="code-line"><span class="cmd">gcc</span> <span class="flag">-o</span> <span class="path">program</span> <span class="path">program.c</span>  <span class="comment"># Compile once → binary</span></span>
+      <span class="code-line"><span class="cmd">./program</span>                 <span class="comment"># Run directly, no compiler needed</span></span>
+    </div>
+  </div>
+
+  <h3>Interpreted Languages</h3>
+  <div class="card">
+    <div class="card-title">How Interpretation Works</div>
+    <p>An interpreter reads and executes the program <strong>instruction by instruction</strong> at runtime. Each instruction is translated to machine code and run immediately. No standalone binary is produced.</p>
+    <ul class="bullets" style="margin-top:0.6rem">
+      <li>The interpreter <strong>must be present in RAM</strong> every time the program runs</li>
+      <li>Source code is <strong>portable</strong> — run on any system with the interpreter installed</li>
+      <li>Errors are caught <strong>at runtime</strong> — a bug in a rarely-executed branch may not surface until production</li>
+      <li>Generally slower than compiled code (overhead of runtime translation)</li>
+      <li><strong>Example:</strong> Python, Ruby, JavaScript, Perl, PHP, Bash</li>
+    </ul>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># Python — interpreter required at runtime</span></span>
+      <span class="code-line"><span class="cmd">python3</span> <span class="path">program.py</span>        <span class="comment"># Interpreter reads + executes line by line</span></span>
+    </div>
+  </div>
+
+  <h3>Side-by-Side Comparison</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Property</th><th>Compiled (C)</th><th>Interpreted (Python)</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Translation</td><td>Entire program before execution</td><td>Line-by-line at runtime</td></tr>
+      <tr><td class="cmd-name">Output</td><td>Standalone executable binary</td><td>No binary — source runs via interpreter</td></tr>
+      <tr><td class="cmd-name">Portability</td><td>Architecture-specific (recompile per platform)</td><td>Portable (interpreter handles platform differences)</td></tr>
+      <tr><td class="cmd-name">Error detection</td><td>Compile-time: syntax, type errors</td><td>Runtime: all errors at execution time</td></tr>
+      <tr><td class="cmd-name">Speed</td><td>Faster execution</td><td>Slower (interpreter overhead)</td></tr>
+      <tr><td class="cmd-name">Compiler/interpreter needed at runtime?</td><td>No</td><td>Yes — interpreter must be installed</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout info">
+    <div class="callout-label info">// Java / JVM — Hybrid Approach</div>
+    Java compiles source to <strong>bytecode</strong> (.class files) — not native machine code. The JVM (Java Virtual Machine) interprets or JIT-compiles bytecode at runtime. Write once, run anywhere (any platform with a JVM). Python also uses bytecode (.pyc) internally as an optimization, but the interpreter is still required.
+  </div>
+</div>
+
+<!-- ============================================================ STACK VS HEAP -->
+<div class="section" id="stack-heap">
+  <div class="section-header">
+    <div class="section-icon">📚</div>
+    <div><div class="section-title">Stack vs Heap Memory</div><div class="section-meta">allocation · lifetime · static vs dynamic · swap · pagefile</div></div>
+  </div>
+
+  <h3>Stack vs Heap</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Stack</div>
+      <ul class="bullets">
+        <li>Instructions and local variables for a program are <strong>statically allocated by the program</strong> at compile time</li>
+        <li>LIFO (Last In, First Out) — grows downward on x86</li>
+        <li>Managed automatically by the compiler/CPU — push on call, pop on return</li>
+        <li>Fixed max size (stack overflow if exceeded)</li>
+        <li>Fast allocation: just decrement the stack pointer</li>
+        <li>Lifetime: exists only for the duration of the function call</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Heap</div>
+      <ul class="bullets">
+        <li>Instructions are <strong>dynamically assigned</strong> from the program at runtime (malloc/new)</li>
+        <li>Data is usually discarded once it has completed its use (free/delete)</li>
+        <li>Managed by the programmer (or garbage collector in managed languages)</li>
+        <li>Grows upward; size limited only by available memory</li>
+        <li>Slower allocation (memory allocator must find free block)</li>
+        <li>Lifetime: persists until explicitly freed — memory leaks occur if not freed</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Unix Swap File</h3>
+  <div class="card">
+    <div class="card-title">Virtual Memory via Swap</div>
+    <p>A swap file (or swap partition) allows the OS to use hard disk space to simulate extra memory. When RAM is full, the OS moves least-recently-used pages to disk. When that program is accessed again, it swaps back into RAM. This enables running more programs than would fit in RAM alone — but causes significant slowdown due to disk I/O speed being far below RAM speed. RAM + swap = <strong>virtual memory</strong>.</p>
+  </div>
+
+  <h3>Windows Page File (pagefile.sys)</h3>
+  <div class="card">
+    <div class="card-title">Demand Paging via pagefile.sys</div>
+    <p>Windows implements virtual memory via <strong>demand paging</strong> using pagefile.sys. The MMU (Memory Management Unit) on the CPU manages memory in <strong>page frames</strong>. When RAM fills, Windows identifies least recently used page frames and writes them to pagefile.sys on disk, freeing RAM for active processes. When the paged-out program is needed again, Windows swaps it back. This is handled transparently by the Memory Manager.</p>
+    <div class="callout">
+      <div class="callout-label warn">// Security Note</div>
+      pagefile.sys may contain sensitive data (encryption keys, passwords, credentials) from programs that have run. On decommissioned systems, it should be securely wiped.
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ MEMORY HIERARCHY -->
+<div class="section" id="mem-hierarchy">
+  <div class="section-header">
+    <div class="section-icon">🏗️</div>
+    <div><div class="section-title">Memory Architecture Hierarchy</div><div class="section-meta">volatility · speed · capacity · registers → tape</div></div>
+  </div>
+
+  <h3>Memory Hierarchy (Most Volatile/Fastest → Least Volatile/Slowest)</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Level</th><th>Name</th><th>Typical Size</th><th>Volatile?</th><th>Speed</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="cmd-name">Registers</td><td>64 bits each</td><td><span class="tag tag-warn">Yes</span></td><td>~0.3 ns</td><td>On-CPU. Fastest storage. Directly operated on by the ALU. Lost instantly on power-off.</td></tr>
+      <tr><td>2</td><td class="cmd-name">CPU Cache (L1/L2/L3)</td><td>~8 MB (LLC)</td><td><span class="tag tag-warn">Yes</span></td><td>1–30 ns</td><td>SRAM on-die. Transparent to software. Managed by CPU hardware.</td></tr>
+      <tr><td>3</td><td class="cmd-name">Primary Memory (RAM)</td><td>~16 GB typical</td><td><span class="tag tag-warn">Yes</span></td><td>~60 ns</td><td>DRAM. Contents lost on power loss. Working memory for running programs.</td></tr>
+      <tr><td>4</td><td class="cmd-name">Secondary Memory (HDD/SSD)</td><td>~5 TB typical</td><td><span class="tag tag-unix">No</span></td><td>µs–ms</td><td>Magnetic disk or NAND flash. Persists without power. OS, programs, files stored here.</td></tr>
+      <tr><td>5</td><td class="cmd-name">External Memory</td><td>~5 TB+</td><td><span class="tag tag-unix">No</span></td><td>Seconds–minutes</td><td>Optical disc, magnetic tape, USB drives. Archival/backup storage. Slowest access.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout info">
+    <div class="callout-label info">// Forensic Significance</div>
+    The volatile/non-volatile distinction is critical in digital forensics. The <strong>order of volatility</strong> dictates evidence collection order: registers/cache (lost immediately on power-off) → RAM (lost on power-off) → swap/pagefile → disk. Always capture volatile memory first.
+  </div>
+
+  <h3>Kilobyte Conversions</h3>
+  <div class="card">
+    <div class="card-title">KB Reference</div>
+    <div class="key-val-grid">
+      <div class="kv-key">1 KB</div><div class="kv-val">= 1,000 bytes (SI/decimal standard used by storage manufacturers)</div>
+      <div class="kv-key">1 KB</div><div class="kv-val">= 8,000 bits</div>
+      <div class="kv-key">1 KB</div><div class="kv-val">= 8 kilobits</div>
+      <div class="kv-key">1 KiB</div><div class="kv-val">= 1,024 bytes (IEC binary standard used by OSes — "kibibyte")</div>
+      <div class="kv-key">1 MB</div><div class="kv-val">= 1,000,000 bytes (SI) / 1,048,576 bytes (IEC MiB)</div>
+    </div>
+    <div class="callout" style="margin-top:0.8rem">
+      <div class="callout-label warn">// Why drives "appear" smaller in Windows</div>
+      A "1 TB" drive has 10¹² bytes (manufacturer, SI). Windows reports in GiB (÷1024³) = ~931 GiB, which it shows as "931 GB". The drive isn't smaller — just different units.
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ QUIZ -->
+<div class="section" id="quiz">
+  <div class="section-header">
+    <div class="section-icon">🧠</div>
+    <div><div class="section-title">Knowledge Check</div><div class="section-meta">15 questions · multiple choice</div></div>
+  </div>
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ============================================================ CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon">✅</div>
+    <div><div class="section-title">Mastery Checklist</div><div class="section-meta">click to mark learned — 20 objectives</div></div>
+  </div>
+  <ul class="checklist" id="masteryList">
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Convert numbers between binary, decimal, hex, and octal in both directions</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know binary place values (powers of 2) and hex place values (powers of 16) by heart</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Perform two's complement to represent negative numbers; identify sign from MSB</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Apply bitwise operations: AND, OR, XOR, NOT, left/right shift with examples</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Simplify Boolean expressions using De Morgan's laws, absorption, and complement laws</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Distinguish CISC vs RISC: examples of each, key characteristics</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Name x86-64 general-purpose registers and know RSP, RBP, RIP purposes</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain the fetch-decode-execute cycle</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain big-endian vs little-endian with a concrete byte-layout example</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know which architectures/protocols use which byte order (x86=LE, network=BE)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain Type 1 vs Type 2 hypervisors with examples of each</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Compare VMs vs containers: isolation level, overhead, security trade-offs</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Describe virtual address space layout: text, data, bss, heap, stack regions</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain how a stack frame works: RSP/RBP, return address, local variables</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Calculate memory offsets and field addresses from a base address</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain paging, virtual memory, ASLR, and NX/DEP protections</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Compare HDD vs SSD: speed, forensic implications of TRIM, interface types</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know RAID levels 0, 1, 5, 6, 10: min disks, redundancy, use case</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain kernel space vs user space: Ring 0 vs Ring 3, what runs in each</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain how system calls cross the user/kernel boundary and name common syscall numbers</span></li>
+  </ul>
+</div>
+
+  </main>
+</div>
+
+<script>
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById('nav-'+id).classList.add('active');}
+function toggleCheck(li){li.classList.toggle('checked');updateProgress();}
+function updateProgress(){const items=document.querySelectorAll('#masteryList li');const done=document.querySelectorAll('#masteryList li.checked').length;const pct=Math.round((done/items.length)*100);document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressLabel').textContent=done+' / '+items.length+' topics mastered';}
+
+const questions=[
+  {q:"What is 0xB6 in decimal?",opts:["182","166","186","192"],answer:0,exp:"B=11, 6=6. (11×16)+(6×1) = 176+6 = 182."},
+  {q:"Convert decimal 200 to hexadecimal.",opts:["0xC8","0xCA","0xD0","0xB8"],answer:0,exp:"200÷16=12 remainder 8. 12=C. So 0xC8. Verify: (12×16)+8 = 192+8 = 200. ✓"},
+  {q:"What is the two's complement 8-bit representation of -12?",opts:["0xF4","0xEC","0x0C","0xF3"],answer:0,exp:"+12 = 0000 1100. Invert: 1111 0011. Add 1: 1111 0100 = 0xF4 = -12."},
+  {q:"In the expression (A AND B AND !C), when is this TRUE?",opts:["When A=0, B=1, C=0","When A=1, B=1, C=0","When A=1, B=0, C=1","When A=0, B=0, C=0"],answer:1,exp:"AND requires ALL conditions: A must be 1, B must be 1, and !C requires C to be 0."},
+  {q:"Which architecture uses variable-length instructions and complex multi-step operations?",opts:["RISC","ARM Thumb","MIPS","CISC (x86)"],answer:3,exp:"CISC (x86) uses variable-length instructions where a single instruction can perform load+operate+store. RISC uses fixed-length simple instructions."},
+  {q:"Which register always holds the address of the NEXT instruction to execute on x86-64?",opts:["RSP","RBP","RIP","RAX"],answer:2,exp:"RIP = Instruction Pointer. It advances automatically after each fetch. Controlling RIP = controlling execution flow (exploits target this)."},
+  {q:"Value 0x12345678 is stored at address 0x1000 in little-endian format. What byte is at address 0x1000?",opts:["0x12 (MSB)","0x78 (LSB)","0x56","0x34"],answer:1,exp:"Little-endian: LSB at lowest address. 0x12345678 LSB = 0x78. So 0x1000=0x78, 0x1001=0x56, 0x1002=0x34, 0x1003=0x12."},
+  {q:"Network protocols use which byte order?",opts:["Little-endian","Bi-endian","Big-endian (network byte order)","Platform-dependent"],answer:2,exp:"All standard network protocols (IP, TCP, UDP) use big-endian (network byte order). x86 hosts must convert with htons()/htonl()."},
+  {q:"A Type 1 hypervisor runs:",opts:["On top of an existing host OS","Directly on the physical hardware, without a host OS","Inside a Docker container","As a user-space application"],answer:1,exp:"Type 1 = bare metal. It runs directly on hardware (VMware ESXi, Xen, Hyper-V bare metal). Type 2 (VirtualBox, VMware Workstation) runs on top of a host OS."},
+  {q:"On x86-64 Linux, which register holds the first argument to a function?",opts:["RAX","RCX","RDI","RSI"],answer:2,exp:"System V AMD64 ABI (Linux): arguments in order RDI, RSI, RDX, RCX, R8, R9. Return value in RAX. (Windows uses RCX, RDX, R8, R9.)"},
+  {q:"The heap in a process's virtual address space grows in which direction?",opts:["Downward (toward lower addresses)","Upward (toward higher addresses)","It doesn't grow — fixed size at launch","Toward the stack"],answer:1,exp:"Heap grows upward (toward higher addresses) via malloc/new. Stack grows downward (toward lower addresses). They grow toward each other."},
+  {q:"Which storage technology makes forensic file recovery significantly harder after deletion?",opts:["HDD with NTFS","HDD with FAT32","SSD with TRIM enabled","RAID 5 array"],answer:2,exp:"SSD TRIM: when files are deleted, the OS sends TRIM to the SSD controller, which may immediately zero blocks as garbage collection. Unlike HDDs where deleted data persists until overwritten."},
+  {q:"A RAID 5 array with 4 disks can survive how many simultaneous disk failures?",opts:["0","1","2","3"],answer:1,exp:"RAID 5 uses single distributed parity — tolerates exactly 1 disk failure. For 2-disk failure tolerance, use RAID 6 (dual parity)."},
+  {q:"What is the mechanism by which a user-space program requests OS kernel services?",opts:["Interrupt Request (IRQ)","Direct Memory Access (DMA)","System Call","Context Switch"],answer:2,exp:"System calls (syscall/int 0x80) are the interface between user space (Ring 3) and kernel space (Ring 0). The CPU switches privilege levels; the kernel handles the request; control returns to user space."},
+  {q:"The value 0xFF interpreted as a signed 8-bit integer using two's complement equals:",opts:["255","127","-1","-128"],answer:2,exp:"0xFF = 1111 1111. MSB=1 means negative. Two's complement: invert (0000 0000) + 1 = 0000 0001 = 1. So 0xFF = -1 (signed). As unsigned it's 255."}
+];
+
+function buildQuiz(){const c=document.getElementById('quizContainer');questions.forEach((q,i)=>{const d=document.createElement('div');d.className='quiz-q';d.id='q'+i;let opts=q.opts.map((o,j)=>`<label class="quiz-option" id="opt-${i}-${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');d.innerHTML=`<div class="question">Q${i+1}. ${q.q}</div>${opts}<button class="quiz-btn" onclick="checkAnswer(${i})">Check Answer</button><div class="feedback" id="fb-${i}"></div>`;c.appendChild(d);});}
+function checkAnswer(i){const sel=document.querySelector(`input[name="q${i}"]:checked`);const fb=document.getElementById('fb-'+i);if(!sel){fb.style.display='block';fb.className='feedback';fb.textContent='// Select an option first';return;}const val=parseInt(sel.value);const q=questions[i];document.querySelectorAll(`#q${i} .quiz-option`).forEach((opt,j)=>{if(j===q.answer)opt.classList.add('correct');else if(j===val&&val!==q.answer)opt.classList.add('wrong');});fb.style.display='block';if(val===q.answer){fb.className='feedback correct';fb.textContent='// CORRECT — '+q.exp;}else{fb.className='feedback wrong';fb.textContent='// INCORRECT — '+q.exp;}}
+buildQuiz();
+
+function toggleSidebar() {
+  const nav = document.querySelector('nav');
+  const overlay = document.getElementById('overlay');
+  nav.classList.toggle('open');
+  overlay.classList.toggle('active');
+}
+function closeSidebar() {
+  document.querySelector('nav').classList.remove('open');
+  document.getElementById('overlay').classList.remove('active');
+}
+// Close sidebar when a section link is clicked on mobile
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+
+</script>
+</body>
+</html>

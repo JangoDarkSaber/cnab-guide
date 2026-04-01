@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNAB Study Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
+  :root{--bg:#080c10;--panel:#0d1117;--border:#1c2a3a;--accent:#00e5ff;--accent2:#39ff14;--accent3:#ff6b35;--warn:#ffcc00;--text:#c9d1d9;--dim:#586069;--glow:0 0 8px rgba(0,229,255,0.4);--glow2:0 0 8px rgba(57,255,20,0.4);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column;}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9999;}
+  header{border-bottom:1px solid var(--border);padding:3rem 2.5rem 2.5rem;position:relative;overflow:hidden;text-align:center;}
+  header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:scan-h 3s ease-in-out infinite;}
+  @keyframes scan-h{0%,100%{opacity:0.3;transform:scaleX(0.5);}50%{opacity:1;transform:scaleX(1);}}
+  .header-tag{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;opacity:0.7;}
+  h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.8rem,5vw,3.2rem);color:#fff;letter-spacing:0.05em;line-height:1.1;}
+  h1 span{color:var(--accent);}
+  .subtitle{font-family:'Share Tech Mono',monospace;font-size:0.82rem;color:var(--dim);margin-top:0.75rem;letter-spacing:0.12em;}
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 2rem;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;max-width:1000px;width:100%;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.75rem 1.75rem 1.5rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:0.8rem;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.15s;}
+  .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-accent,var(--accent));opacity:0;transition:opacity 0.2s;}
+  .card:hover{border-color:rgba(0,229,255,0.3);transform:translateY(-2px);}
+  .card:hover::before{opacity:1;}
+  .card-icon{font-size:2rem;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:rgba(0,229,255,0.06);border:1px solid var(--border);border-radius:8px;}
+  .card-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.9rem;color:#fff;letter-spacing:0.06em;}
+  .card-desc{font-size:0.8rem;line-height:1.6;color:var(--dim);}
+  .card-tag{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--card-accent,var(--accent));margin-top:auto;padding-top:0.5rem;}
+  .card.green{--card-accent:var(--accent2);}
+  .card.green .card-icon{background:rgba(57,255,20,0.06);}
+  .card.green:hover{border-color:rgba(57,255,20,0.3);}
+  .card.orange{--card-accent:var(--accent3);}
+  .card.orange .card-icon{background:rgba(255,107,53,0.06);}
+  .card.orange:hover{border-color:rgba(255,107,53,0.3);}
+  .card.yellow{--card-accent:var(--warn);}
+  .card.yellow .card-icon{background:rgba(255,204,0,0.06);}
+  .card.yellow:hover{border-color:rgba(255,204,0,0.3);}
+  footer{border-top:1px solid var(--border);padding:1.25rem 2.5rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);letter-spacing:0.15em;}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-tag">// CNAB Certification Prep</div>
+  <h1>CNAB <span>Study</span> Guide</h1>
+  <p class="subtitle">Select a module to begin &mdash; CompTIA Network+ &amp; A+ Exam Prep</p>
+</header>
+
+<main>
+  <div class="grid">
+    <a class="card" href="fundamentals.html">
+      <div class="card-icon">&#x1F4BB;</div>
+      <div class="card-title">Fundamentals &amp; Theory</div>
+      <div class="card-desc">Core computing concepts, hardware components, binary &amp; hex math, and system architecture.</div>
+      <div class="card-tag">&#x25B6; Open Module</div>
+    </a>
+
+    <a class="card green" href="networking.html">
+      <div class="card-icon">&#x1F310;</div>
+      <div class="card-title">Networking</div>
+      <div class="card-desc">OSI model, TCP/IP, subnetting, protocols, routing &amp; switching, and network troubleshooting.</div>
+      <div class="card-tag">&#x25B6; Open Module</div>
+    </a>
+
+    <a class="card orange" href="security.html">
+      <div class="card-icon">&#x1F512;</div>
+      <div class="card-title">Security</div>
+      <div class="card-desc">Threats &amp; vulnerabilities, cryptography, access control, hardening, and security best practices.</div>
+      <div class="card-tag">&#x25B6; Open Module</div>
+    </a>
+
+    <a class="card yellow" href="os-study-guide.html">
+      <div class="card-icon">&#x2699;&#xFE0F;</div>
+      <div class="card-title">Operating Systems</div>
+      <div class="card-desc">Windows, Linux, macOS administration, command line, file systems, and OS troubleshooting.</div>
+      <div class="card-tag">&#x25B6; Open Module</div>
+    </a>
+
+    <a class="card" href="cnab-quiz.html" style="--card-accent:#bf5fff;">
+      <div class="card-icon" style="background:rgba(191,95,255,0.06);">&#x1F9E0;</div>
+      <div class="card-title">Practice Quiz</div>
+      <div class="card-desc">Test your knowledge with randomized questions covering all exam domains.</div>
+      <div class="card-tag">&#x25B6; Start Quiz</div>
+    </a>
+  </div>
+</main>
+
+<footer>CNAB STUDY GUIDE &nbsp;|&nbsp; EXAM PREP RESOURCE</footer>
+</body>
+</html>

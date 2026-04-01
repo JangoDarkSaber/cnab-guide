@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNAB Study Guide — Security</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
+
+  :root {
+    --bg:#080c10;--panel:#0d1117;--panel2:#111820;--border:#1c2a3a;
+    --accent:#00e5ff;--accent2:#39ff14;--accent3:#ff6b35;--warn:#ffcc00;
+    --red:#ff4444;--purple:#c792ea;--text:#c9d1d9;--dim:#586069;
+    --glow:0 0 8px rgba(0,229,255,0.4);--glow2:0 0 8px rgba(57,255,20,0.4);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;padding-top:46px;}
+
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9999;}
+
+  /* ─── SITE NAV ─── */
+  .site-nav{position:fixed;top:0;left:0;right:0;height:46px;background:rgba(8,12,16,0.97);border-bottom:1px solid #1c2a3a;backdrop-filter:blur(12px);display:flex;align-items:center;padding:0 1.5rem;z-index:9000;gap:0;}
+  .site-nav::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.4;}
+  .sn-brand{font-family:'Orbitron',sans-serif;font-weight:900;font-size:0.72rem;color:var(--accent);letter-spacing:0.2em;white-space:nowrap;margin-right:1.5rem;text-decoration:none;}
+  .sn-divider{width:1px;height:20px;background:#1c2a3a;margin-right:0;flex-shrink:0;}
+  .sn-links{display:flex;overflow-x:auto;flex:1;}
+  .sn-links::-webkit-scrollbar{display:none;}
+  .sn-link{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:#586069;padding:0 1.1rem;height:46px;display:flex;align-items:center;text-decoration:none;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap;letter-spacing:0.05em;flex-shrink:0;}
+  .sn-link:hover{color:#c9d1d9;border-bottom-color:#1c2a3a;}
+  .sn-link.sn-active{color:var(--accent);border-bottom-color:var(--accent);}
+  .sn-num{font-size:0.55rem;opacity:0.5;margin-right:0.35rem;}
+  .sn-quiz-btn{margin-left:auto;flex-shrink:0;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.6rem;letter-spacing:0.12em;color:#080c10;background:var(--accent);border:none;padding:0.3rem 0.9rem;border-radius:4px;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-decoration:none;display:flex;align-items:center;}
+  .sn-quiz-btn:hover{box-shadow:0 0 12px rgba(0,229,255,0.5);}
+
+  header{border-bottom:1px solid var(--border);padding:2rem 2.5rem 1.5rem;position:relative;overflow:hidden;}
+  header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent);animation:scan-h 3s ease-in-out infinite;}
+  @keyframes scan-h{0%,100%{opacity:0.3;transform:scaleX(0.5);}50%{opacity:1;transform:scaleX(1);}}
+
+  .header-tag{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--red);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;opacity:0.8;}
+  h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.6rem,4vw,2.8rem);color:#fff;letter-spacing:0.05em;line-height:1.1;}
+  h1 span{color:var(--red);}
+  .subtitle{font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:0.5rem;letter-spacing:0.1em;}
+  .progress-bar{margin-top:1rem;height:3px;background:var(--border);border-radius:2px;overflow:hidden;max-width:400px;}
+  .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--red),var(--accent3));transition:width 0.3s ease;box-shadow:0 0 8px rgba(255,68,68,0.4);}
+  .progress-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);margin-top:0.3rem;}
+
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 46px);}
+
+  nav{border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto;}
+  nav::-webkit-scrollbar{width:3px;}nav::-webkit-scrollbar-track{background:transparent;}nav::-webkit-scrollbar-thumb{background:var(--border);}
+
+  .nav-section{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--dim);letter-spacing:0.2em;text-transform:uppercase;padding:0.4rem 1.2rem;margin-top:0.5rem;}
+  nav a{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 1.2rem;text-decoration:none;color:var(--dim);font-size:0.78rem;font-family:'Share Tech Mono',monospace;transition:all 0.15s ease;border-left:2px solid transparent;cursor:pointer;}
+  nav a:hover,nav a.active{color:var(--red);border-left-color:var(--red);background:rgba(255,68,68,0.04);text-shadow:0 0 8px rgba(255,68,68,0.4);}
+  nav a .dot{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.15s;}
+  nav a:hover .dot,nav a.active .dot{background:var(--red);box-shadow:0 0 8px rgba(255,68,68,0.5);}
+
+  main{padding:2rem 2.5rem;max-width:920px;}
+  .section{display:none;animation:fadeIn 0.2s ease;}
+  .section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .section-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+  .section-icon{font-size:1.5rem;width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(255,68,68,0.06);border:1px solid var(--border);border-radius:6px;}
+  .section-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;letter-spacing:0.05em;}
+  .section-meta{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);}
+
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;position:relative;transition:border-color 0.15s;}
+  .card:hover{border-color:rgba(255,68,68,0.2);}
+  .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:6px 0 0 6px;background:var(--red);opacity:0;transition:opacity 0.15s;}
+  .card:hover::before{opacity:1;}
+  .card.accent-green::before{background:var(--accent2);}
+  .card.accent-cyan::before{background:var(--accent);}
+  .card.accent-orange::before{background:var(--accent3);}
+  .card.accent-purple::before{background:var(--purple);}
+  .card-title{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.7rem;}
+  .card-title.green{color:var(--accent2);}
+  .card-title.cyan{color:var(--accent);}
+  .card-title.orange{color:var(--accent3);}
+  .card-title.purple{color:var(--purple);}
+  .card p{font-size:0.85rem;line-height:1.7;color:var(--text);}
+
+  .code-block{background:#0a0f14;border:1px solid var(--border);border-radius:4px;padding:0.9rem 1.1rem;margin:0.8rem 0;font-family:'Share Tech Mono',monospace;font-size:0.78rem;overflow-x:auto;}
+  .code-block.no-prompt::before{content:'';}
+  .code-line{display:block;color:var(--text);line-height:1.9;}
+  .code-line .cmd{color:var(--accent2);}
+  .code-line .flag{color:var(--warn);}
+  .code-line .comment{color:var(--dim);font-style:italic;}
+  .code-line .path{color:var(--accent3);}
+  .code-line .val{color:var(--accent);}
+  .code-line .bad{color:var(--red);}
+
+  .cmd-table{width:100%;border-collapse:collapse;font-size:0.8rem;margin:0.8rem 0;}
+  .cmd-table th{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);padding:0.5rem 0.8rem;border-bottom:1px solid var(--border);text-align:left;}
+  .cmd-table td{padding:0.45rem 0.8rem;border-bottom:1px solid rgba(28,42,58,0.5);vertical-align:top;font-size:0.8rem;line-height:1.5;}
+  .cmd-table tr:hover td{background:rgba(255,68,68,0.03);}
+  .cmd-table .cmd-name{font-family:'Share Tech Mono',monospace;color:var(--accent2);white-space:nowrap;font-size:0.78rem;}
+
+  .tag{display:inline-block;padding:0.1rem 0.45rem;border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;}
+  .tag-red{background:rgba(255,68,68,0.14);color:var(--red);}
+  .tag-green{background:rgba(57,255,20,0.12);color:var(--accent2);}
+  .tag-cyan{background:rgba(0,229,255,0.12);color:var(--accent);}
+  .tag-warn{background:rgba(255,204,0,0.12);color:var(--warn);}
+  .tag-purple{background:rgba(199,146,234,0.14);color:var(--purple);}
+  .tag-orange{background:rgba(255,107,53,0.12);color:var(--accent3);}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem;}
+  @media(max-width:700px){.two-col,.three-col{grid-template-columns:1fr;}}
+
+  .callout{border-left:3px solid var(--warn);background:rgba(255,204,0,0.04);padding:0.8rem 1rem;border-radius:0 4px 4px 0;margin:0.8rem 0;font-size:0.82rem;line-height:1.65;}
+  .callout.info{border-left-color:var(--accent);background:rgba(0,229,255,0.04);}
+  .callout.danger{border-left-color:var(--red);background:rgba(255,68,68,0.04);}
+  .callout.green{border-left-color:var(--accent2);background:rgba(57,255,20,0.04);}
+  .callout-label{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.3rem;}
+  .callout-label.warn{color:var(--warn);}
+  .callout-label.info{color:var(--accent);}
+  .callout-label.danger{color:var(--red);}
+  .callout-label.green{color:var(--accent2);}
+
+  h3{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--red);letter-spacing:0.12em;text-transform:uppercase;margin:1.4rem 0 0.6rem;}
+  h3.cyan{color:var(--accent);}h3.green{color:var(--accent2);}h3.orange{color:var(--accent3);}
+
+  ul.bullets{padding-left:1.2rem;}
+  ul.bullets li{font-size:0.83rem;line-height:1.65;margin-bottom:0.35rem;color:var(--text);}
+  ul.bullets li::marker{color:var(--red);}
+  ul.bullets.green li::marker{color:var(--accent2);}
+  ul.bullets.cyan li::marker{color:var(--accent);}
+
+  .key-val-grid{display:grid;grid-template-columns:auto 1fr;gap:0.3rem 1rem;font-size:0.8rem;}
+  .kv-key{font-family:'Share Tech Mono',monospace;color:var(--accent3);white-space:nowrap;align-self:start;padding-top:1px;}
+  .kv-val{color:var(--text);line-height:1.55;}
+
+  /* Malware taxonomy cards */
+  .malware-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin-bottom:1rem;}
+  @media(max-width:750px){.malware-grid{grid-template-columns:1fr 1fr;}}
+  .m-card{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:1rem;position:relative;overflow:hidden;}
+  .m-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+  .m-card.virus::before{background:var(--red);}
+  .m-card.worm::before{background:var(--accent3);}
+  .m-card.trojan::before{background:var(--warn);}
+  .m-card.rootkit::before{background:var(--purple);}
+  .m-card.ransomware::before{background:var(--red);}
+  .m-card.spyware::before{background:var(--accent);}
+  .m-card.botnet::before{background:var(--accent2);}
+  .m-card.adware::before{background:var(--dim);}
+  .m-card.rat::before{background:var(--accent3);}
+  .m-name{font-family:'Orbitron',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem;}
+  .m-card.virus .m-name{color:var(--red);}
+  .m-card.worm .m-name{color:var(--accent3);}
+  .m-card.trojan .m-name{color:var(--warn);}
+  .m-card.rootkit .m-name{color:var(--purple);}
+  .m-card.ransomware .m-name{color:var(--red);}
+  .m-card.spyware .m-name{color:var(--accent);}
+  .m-card.botnet .m-name{color:var(--accent2);}
+  .m-card.adware .m-name{color:var(--dim);}
+  .m-card.rat .m-name{color:var(--accent3);}
+  .m-desc{font-size:0.76rem;line-height:1.6;color:var(--text);margin-bottom:0.5rem;}
+  .m-fingerprints{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);line-height:1.7;}
+  .m-fingerprints span{display:block;}
+
+  /* IOC table */
+  .ioc-category{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--red);text-transform:uppercase;letter-spacing:0.1em;}
+
+  /* Rootkit comparison */
+  .rk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem;margin-bottom:1rem;}
+  @media(max-width:700px){.rk-grid{grid-template-columns:1fr;}}
+
+  /* Quiz */
+  .quiz-q{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.1rem 1.3rem;margin-bottom:0.8rem;}
+  .quiz-q .question{font-size:0.85rem;font-weight:600;color:#fff;margin-bottom:0.8rem;line-height:1.5;}
+  .quiz-option{display:flex;align-items:flex-start;gap:0.6rem;padding:0.4rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.8rem;transition:background 0.1s;margin-bottom:0.2rem;}
+  .quiz-option:hover{background:rgba(255,68,68,0.05);}
+  .quiz-option input[type="radio"]{accent-color:var(--red);margin-top:2px;flex-shrink:0;}
+  .quiz-option.correct{background:rgba(57,255,20,0.08);color:var(--accent2);}
+  .quiz-option.wrong{background:rgba(255,68,68,0.08);color:var(--red);}
+  .quiz-btn{margin-top:0.6rem;background:transparent;border:1px solid var(--red);color:var(--red);font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;padding:0.4rem 0.9rem;border-radius:4px;cursor:pointer;transition:all 0.15s;text-transform:uppercase;}
+  .quiz-btn:hover{background:rgba(255,68,68,0.08);}
+  .feedback{margin-top:0.5rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;display:none;line-height:1.6;}
+  .feedback.correct{color:var(--accent2);}
+  .feedback.wrong{color:var(--red);}
+
+  /* Checklist */
+  .checklist{list-style:none;}
+  .checklist li{display:flex;align-items:flex-start;gap:0.7rem;padding:0.35rem 0;font-size:0.83rem;border-bottom:1px solid rgba(28,42,58,0.5);cursor:pointer;user-select:none;}
+  .checklist li:last-child{border-bottom:none;}
+  .check-box{width:14px;height:14px;border:1px solid var(--dim);border-radius:2px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-size:0.6rem;color:transparent;}
+  .checklist li.checked .check-box{background:var(--accent2);border-color:var(--accent2);color:#000;box-shadow:var(--glow2);}
+  .checklist li.checked span{text-decoration:line-through;color:var(--dim);}
+
+  /* ─── MOBILE RESPONSIVE ─── */
+  .sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    color: #080c10;
+    font-size: 1.1rem;
+    cursor: pointer;
+    z-index: 500;
+    box-shadow: 0 4px 16px rgba(0,229,255,0.4);
+    align-items: center;
+    justify-content: center;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 400;
+    backdrop-filter: blur(2px);
+  }
+  .overlay.active { display: block; }
+
+  @media (max-width: 768px) {
+    body { padding-top: 46px; }
+    header { padding: 1.2rem 1rem 1rem; }
+    h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
+    .subtitle { font-size: 0.65rem; }
+
+    /* Sidebar becomes a slide-in drawer */
+    .layout { grid-template-columns: 1fr; }
+    nav {
+      position: fixed;
+      left: -260px;
+      top: 46px;
+      width: 240px;
+      height: calc(100vh - 46px);
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      z-index: 450;
+      transition: left 0.25s ease;
+      overflow-y: auto;
+      padding: 1rem 0;
+    }
+    nav.open { left: 0; box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
+    nav a { padding: 0.6rem 1.2rem; font-size: 0.82rem; min-height: 44px; }
+
+    .sidebar-toggle { display: flex; }
+    main { padding: 1rem; }
+    .section-header { flex-direction: column; gap: 0.6rem; }
+    .section-title { font-size: 0.9rem; }
+
+    /* Cards and grids */
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .card { padding: 0.9rem 1rem; }
+    .card-title { font-size: 0.7rem; }
+    .card p, .card li, ul.bullets li { font-size: 0.82rem; line-height: 1.7; }
+
+    /* Tables — horizontal scroll */
+    .cmd-table { font-size: 0.72rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .cmd-table th, .cmd-table td { padding: 0.4rem 0.6rem; white-space: nowrap; }
+    .cmd-table td:last-child { white-space: normal; min-width: 160px; }
+
+    /* Code blocks */
+    .code-block { font-size: 0.72rem; padding: 0.7rem 0.8rem; }
+    .code-line { font-size: 0.72rem; }
+
+    /* Tags */
+    .tag { font-size: 0.55rem; }
+
+    /* Key-val grid */
+    .key-val-grid { grid-template-columns: 1fr; gap: 0; }
+    .kv-key { padding-bottom: 0.1rem; }
+    .kv-val { padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); margin-bottom: 0.3rem; }
+
+    /* Section header icon */
+    .section-icon { width: 36px; height: 36px; font-size: 1.1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .sn-link { padding: 0 0.7rem; font-size: 0.62rem; }
+    .sn-quiz-btn { padding: 0.3rem 0.6rem; font-size: 0.55rem; }
+    h3 { font-size: 0.68rem; }
+    .cmd-table th { font-size: 0.58rem; }
+    .cmd-table td { font-size: 0.68rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="sn-brand" href="fundamentals.html">CNAB//SG</a>
+  <div class="sn-divider"></div>
+  <div class="sn-links">
+    <a class="sn-link" href="fundamentals.html"><span class="sn-num">01</span>Fundamentals</a>
+    <a class="sn-link" href="networking.html"><span class="sn-num">02</span>Networking</a>
+    <a class="sn-link" href="os-study-guide.html"><span class="sn-num">03</span>Operating Systems</a>
+    <a class="sn-link sn-active" href="security.html"><span class="sn-num">04</span>Security</a>
+  </div>
+  <a class="sn-quiz-btn" href="cnab-quiz.html">▶ MASTER QUIZ</a>
+</nav>
+
+<header>
+  <div class="header-tag">// CNAB Study Guide — Module 4: Security</div>
+  <h1>SECURITY</h1>
+  <div class="subtitle">malware · rootkits · fingerprints · vulnerabilities · monitoring · os_defenses</div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 25 topics mastered</div>
+</header>
+
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="layout">
+  <nav>
+    <div class="nav-section">// Malware</div>
+    <a onclick="show('malware-classes')" id="nav-malware-classes" class="active"><span class="dot"></span>Malware Classes</a>
+    <a onclick="show('rootkits')" id="nav-rootkits"><span class="dot"></span>Rootkit Types</a>
+    <a onclick="show('fingerprints')" id="nav-fingerprints"><span class="dot"></span>Observable Fingerprints</a>
+    <a onclick="show('botnets')" id="nav-botnets"><span class="dot"></span>Botnets & C2</a>
+    <div class="nav-section">// Detection</div>
+    <a onclick="show('host-analysis')" id="nav-host-analysis"><span class="dot"></span>Host Analysis</a>
+    <a onclick="show('network-monitoring')" id="nav-network-monitoring"><span class="dot"></span>Network Monitoring</a>
+    <a onclick="show('security-products')" id="nav-security-products"><span class="dot"></span>Security Products</a>
+    <div class="nav-section">// Vulnerabilities</div>
+    <a onclick="show('vuln-classes')" id="nav-vuln-classes"><span class="dot"></span>Vulnerability Classes</a>
+    <a onclick="show('network-vulns')" id="nav-network-vulns"><span class="dot"></span>Network Vulnerabilities</a>
+    <div class="nav-section">// OS Defenses</div>
+    <a onclick="show('windows-defenses')" id="nav-windows-defenses"><span class="dot"></span>Windows Security</a>
+    <a onclick="show('unix-defenses')" id="nav-unix-defenses"><span class="dot"></span>Unix/Linux Security</a>
+    <div class="nav-section">// Practice</div>
+    <a onclick="show('quiz')" id="nav-quiz"><span class="dot"></span>Quiz (20 Qs)</a>
+    <a onclick="show('checklist')" id="nav-checklist"><span class="dot"></span>Mastery Checklist</a>
+  </nav>
+
+  <main>
+
+<!-- ============================================================ MALWARE CLASSES -->
+<div class="section active" id="malware-classes">
+  <div class="section-header">
+    <div class="section-icon">☣️</div>
+    <div><div class="section-title">Malware Classes & Key Features</div>
+    <div class="section-meta">virus · worm · trojan · ransomware · spyware · RAT · adware · botnet</div></div>
+  </div>
+
+  <h3>Malware Taxonomy</h3>
+  <div class="malware-grid">
+
+    <div class="m-card virus">
+      <div class="m-name">Virus</div>
+      <div class="m-desc">Attaches itself to legitimate executable files. <strong>Requires user action to spread</strong> — someone must execute the infected file. Replicates by infecting other files on the same system.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Modified file timestamps on executables</span>
+        <span>⟶ Unusual file size changes to .exe/.dll</span>
+        <span>⟶ AV alerts on known-good binaries</span>
+        <span>⟶ Degraded system performance</span>
+      </div>
+    </div>
+
+    <div class="m-card worm">
+      <div class="m-name">Worm</div>
+      <div class="m-desc"><strong>Self-replicating</strong> — spreads across networks without user action by exploiting vulnerabilities in network services. Can cause network saturation through mass self-propagation.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Sudden high outbound network traffic</span>
+        <span>⟶ Mass connection attempts to other hosts</span>
+        <span>⟶ SMB/SSH/RDP scan activity</span>
+        <span>⟶ Identical process spawning repeatedly</span>
+      </div>
+    </div>
+
+    <div class="m-card trojan">
+      <div class="m-name">Trojan</div>
+      <div class="m-desc">Disguised as legitimate/useful software. <strong>No self-replication</strong> — user installs it willingly. Payload is typically a backdoor, RAT, or downloader. Named after the Trojan horse.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Unexpected network connections after install</span>
+        <span>⟶ New listening ports post-install</span>
+        <span>⟶ Process spawned from unexpected parent</span>
+        <span>⟶ Registry persistence keys added</span>
+      </div>
+    </div>
+
+    <div class="m-card ransomware">
+      <div class="m-name">Ransomware</div>
+      <div class="m-desc">Encrypts victim files and demands payment for the decryption key. Modern variants use <strong>double extortion</strong>: steal data first, then encrypt. Payment typically in cryptocurrency.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Mass file rename/extension changes</span>
+        <span>⟶ vssadmin delete shadows (VSS deletion)</span>
+        <span>⟶ bcdedit /set recoveryenabled No</span>
+        <span>⟶ High CPU/disk I/O during encryption</span>
+        <span>⟶ Ransom note files dropped everywhere</span>
+      </div>
+    </div>
+
+    <div class="m-card spyware">
+      <div class="m-name">Spyware / Keylogger</div>
+      <div class="m-desc">Silently monitors and records user activity — keystrokes, screenshots, clipboard, credentials — and <strong>exfiltrates data</strong> to attacker. Often bundled with freeware or dropped by trojans.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Unexpected outbound HTTPS/DNS traffic</span>
+        <span>⟶ Hook on keyboard/mouse input APIs</span>
+        <span>⟶ Hidden processes with small memory footprint</span>
+        <span>⟶ Encrypted files in temp directories</span>
+      </div>
+    </div>
+
+    <div class="m-card rat">
+      <div class="m-name">RAT (Remote Access Trojan)</div>
+      <div class="m-desc">Gives attacker <strong>full remote control</strong> of the compromised host — shell access, file management, webcam/mic access, screenshot capture. Usually communicates via encrypted C2 channel.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Persistent outbound connection to C2</span>
+        <span>⟶ Beaconing traffic (regular intervals)</span>
+        <span>⟶ New user account creation</span>
+        <span>⟶ RDP/VNC enabled unexpectedly</span>
+      </div>
+    </div>
+
+    <div class="m-card rootkit">
+      <div class="m-name">Rootkit</div>
+      <div class="m-desc">Provides <strong>persistent privileged access while hiding its presence</strong>. Patches kernel or user-space to conceal files, processes, registry keys, and network connections from security tools.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Discrepancy between tool output and raw disk</span>
+        <span>⟶ SSDT/IAT/DKOM hooks detected</span>
+        <span>⟶ Hidden processes visible only via raw memory</span>
+        <span>⟶ Kernel module not in lsmod but in memory</span>
+      </div>
+    </div>
+
+    <div class="m-card botnet">
+      <div class="m-name">Botnet Agent</div>
+      <div class="m-desc">Infected host becomes a <strong>"bot"</strong> controlled by a botmaster via C2 infrastructure. Used for: DDoS, spam campaigns, credential stuffing, cryptocurrency mining, lateral movement.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Regular beaconing to hardcoded C2 IPs/domains</span>
+        <span>⟶ DGA (domain generation algorithm) DNS lookups</span>
+        <span>⟶ Unusual volume of outbound traffic</span>
+        <span>⟶ IRC/HTTP/HTTPS C2 channel traffic</span>
+      </div>
+    </div>
+
+    <div class="m-card adware">
+      <div class="m-name">Adware</div>
+      <div class="m-desc">Displays unwanted advertisements, often by injecting ads into browser sessions or replacing legitimate ads. Usually <strong>not destructive</strong> but degrades performance and may track browsing.</div>
+      <div class="m-fingerprints">
+        <span>⟶ Browser extension modifications</span>
+        <span>⟶ Homepage/search engine changed</span>
+        <span>⟶ Injected ad network requests in traffic</span>
+        <span>⟶ New startup entries in registry</span>
+      </div>
+    </div>
+
+  </div>
+
+  <h3>Malware Noise & Impact on Remote Operations</h3>
+  <div class="card">
+    <div class="card-title danger">How Malware Affects Your Ability to Operate</div>
+    <p>Malware generates "noise" — anomalous network traffic, system activity, and resource consumption — that can degrade or expose operations:</p>
+    <table class="cmd-table" style="margin-top:0.8rem">
+      <thead><tr><th>Malware Type</th><th>Noise Generated</th><th>Impact on Remote Ops</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd-name">Worm</td><td>Mass scanning, high bandwidth utilization on network segments</td><td>Saturates links; your own traffic is delayed or dropped; scanning may trigger IDS alerts exposing your position</td></tr>
+        <tr><td class="cmd-name">RAT / Botnet</td><td>Beaconing — regular HTTPS/DNS callbacks at predictable intervals</td><td>Beaconing traffic stands out in packet captures; C2 domains may be sinkholed; your traffic may be confused with malware traffic</td></tr>
+        <tr><td class="cmd-name">Ransomware</td><td>Sudden spike in disk I/O and file system activity</td><td>System becomes unresponsive during encryption; remote shells freeze; target may be taken offline by defenders responding to the attack</td></tr>
+        <tr><td class="cmd-name">Cryptominer</td><td>100% CPU utilization sustained, high power draw</td><td>Competing for CPU cycles; your processes are slow; anomalous CPU usage triggers alerts drawing defender attention to the host</td></tr>
+        <tr><td class="cmd-name">DDoS Agent</td><td>Massive outbound traffic floods</td><td>Network congestion blocks your communications; ISP may null-route the host; defenders notice and isolate the machine</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Malware Delivery Methods</h3>
+  <div class="two-col">
+    <div class="card accent-orange">
+      <div class="card-title orange">Initial Access Vectors</div>
+      <ul class="bullets cyan">
+        <li><strong>Phishing</strong> — malicious email attachments (macros in Office docs, LNK files, ISO/ZIP archives)</li>
+        <li><strong>Spear phishing</strong> — targeted phishing with personalized lures using OSINT</li>
+        <li><strong>Drive-by download</strong> — visiting a compromised website triggers exploit via browser vulnerability</li>
+        <li><strong>Malvertising</strong> — malicious ads on legitimate sites deliver exploits</li>
+        <li><strong>Supply chain</strong> — compromising software update mechanisms or build pipelines (SolarWinds)</li>
+        <li><strong>USB / physical media</strong> — autorun or social engineering to execute from removable media</li>
+        <li><strong>Exploit public-facing app</strong> — unpatched web server, VPN, or RDP vulnerability</li>
+      </ul>
+    </div>
+    <div class="card accent-cyan">
+      <div class="card-title cyan">Persistence Mechanisms</div>
+      <ul class="bullets cyan">
+        <li><strong>Registry Run keys</strong> — HKLM/HKCU\...\CurrentVersion\Run</li>
+        <li><strong>Scheduled tasks</strong> — schtasks (Windows), cron (Linux)</li>
+        <li><strong>Services</strong> — malware installs itself as a Windows service or systemd unit</li>
+        <li><strong>Startup folders</strong> — %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup</li>
+        <li><strong>DLL hijacking</strong> — plant malicious DLL in path searched before legitimate one</li>
+        <li><strong>Shell init files</strong> — ~/.bashrc, ~/.profile, /etc/rc.local injection</li>
+        <li><strong>Boot sector</strong> — MBR/UEFI infection for pre-OS persistence (bootkit)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ ROOTKITS -->
+<div class="section" id="rootkits">
+  <div class="section-header">
+    <div class="section-icon">🕳️</div>
+    <div><div class="section-title">Rootkit Types</div>
+    <div class="section-meta">kernel · user-mode · bootkit · hypervisor · infection · privilege levels · detection</div></div>
+  </div>
+
+  <h3>Rootkit Classification by Privilege Level</h3>
+  <div class="rk-grid">
+
+    <div class="card accent-red">
+      <div class="card-title">Kernel-Mode Rootkit (Ring 0)</div>
+      <p>Operates at the highest privilege level — inside the OS kernel. Can modify kernel data structures directly: the SSDT (System Service Descriptor Table), IDT (Interrupt Descriptor Table), process/module lists. All OS tools rely on the kernel for information — the kernel lies to them.</p>
+      <ul class="bullets" style="margin-top:0.6rem">
+        <li><strong>Infection method:</strong> Exploits kernel vulnerability, malicious driver (BYOVD), or disabling Driver Signature Enforcement</li>
+        <li><strong>Privilege level:</strong> Ring 0 — same as OS kernel</li>
+        <li><strong>Detection:</strong> Cross-view comparison (live kernel vs raw disk/memory), integrity checkers (chkrootkit, rkhunter), memory forensics (Volatility)</li>
+        <li><strong>Hides:</strong> Files, processes, network connections, registry keys, loaded modules</li>
+        <li><strong>Example:</strong> TDL4, Necurs, ZeroAccess</li>
+      </ul>
+    </div>
+
+    <div class="card accent-orange">
+      <div class="card-title">User-Mode Rootkit (Ring 3)</div>
+      <p>Operates in user space. Cannot modify the kernel, so hooks user-space libraries instead — patches DLLs (Windows) or LD_PRELOAD shared objects (Linux) to intercept and filter API calls before they return to the calling program.</p>
+      <ul class="bullets" style="margin-top:0.6rem">
+        <li><strong>Infection method:</strong> Trojan, exploit granting user-level execution</li>
+        <li><strong>Privilege level:</strong> Ring 3 — runs as an unprivileged or admin user</li>
+        <li><strong>Detection:</strong> Easier than kernel rootkits — kernel is trustworthy; compare API results to raw system calls directly</li>
+        <li><strong>Hides:</strong> Files and processes from the user who owns it; weaker hiding than kernel rootkit</li>
+        <li><strong>Example:</strong> Hacker Defender, various Linux LD_PRELOAD rootkits</li>
+      </ul>
+    </div>
+
+    <div class="card accent-purple">
+      <div class="card-title">Bootkit (MBR / UEFI)</div>
+      <p>Infects the Master Boot Record or UEFI firmware — loads <strong>before the operating system</strong>. Establishes control before any OS security mechanisms activate. Survives OS reinstallation (disk wipe required; UEFI variants may survive even that).</p>
+      <ul class="bullets" style="margin-top:0.6rem">
+        <li><strong>Infection method:</strong> Physical access, kernel exploit that writes to MBR, compromised firmware update</li>
+        <li><strong>Privilege level:</strong> Pre-Ring 0 — runs before kernel exists</li>
+        <li><strong>Detection:</strong> Compare MBR bytes to known-good; offline boot scanning; UEFI Secure Boot prevents unsigned bootloaders</li>
+        <li><strong>Hides:</strong> Entire malware stack — loaded before any AV or security tool</li>
+        <li><strong>Example:</strong> Stoned Bootkit, Rovnix, LoJax (UEFI), TDL4 (MBR)</li>
+      </ul>
+    </div>
+
+    <div class="card accent-cyan">
+      <div class="card-title">Hypervisor Rootkit (Ring -1)</div>
+      <p>Moves the legitimate OS into a virtual machine, placing the rootkit <strong>beneath the OS</strong> as a thin hypervisor layer. The OS has no awareness it's been virtualized. Extremely difficult to detect from within the compromised OS.</p>
+      <ul class="bullets" style="margin-top:0.6rem">
+        <li><strong>Infection method:</strong> Kernel-level compromise then installs hypervisor; or direct hardware access</li>
+        <li><strong>Privilege level:</strong> Ring -1 (VMX root mode) — more privileged than Ring 0</li>
+        <li><strong>Detection:</strong> Timing anomalies (RDTSC instruction), CPUID hypervisor bit check, hardware-based monitoring (Intel TXT)</li>
+        <li><strong>Hides:</strong> Everything — from underneath the entire OS</li>
+        <li><strong>Example:</strong> Blue Pill (proof-of-concept), SubVirt (Microsoft Research)</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <h3>Rootkit Detection Techniques</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Technique</th><th>How It Works</th><th>What It Finds</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Cross-view detection</td><td>Compare results from two sources — e.g., OS API process list vs raw kernel memory walk. Discrepancies reveal hidden objects.</td><td>Kernel-mode rootkits hiding processes/modules</td></tr>
+      <tr><td class="cmd-name">Memory forensics (Volatility)</td><td>Analyze a raw memory dump for anomalies — unlinked processes, SSDT hooks, hidden kernel modules, injected DLLs</td><td>Kernel rootkits, injected code, hidden processes</td></tr>
+      <tr><td class="cmd-name">chkrootkit / rkhunter</td><td>Scan for known rootkit signatures, suspicious file timestamps, SUID binaries, hidden files in /dev</td><td>Known user-mode and some kernel rootkits on Linux</td></tr>
+      <tr><td class="cmd-name">Offline boot scanning</td><td>Boot from clean media, mount suspect drive read-only, scan with AV. Rootkit cannot hide from external scanner.</td><td>User-mode rootkits, some kernel-mode rootkits</td></tr>
+      <tr><td class="cmd-name">MBR integrity check</td><td>Read first 512 bytes of disk and compare to known-good baseline or expected bootloader</td><td>Bootkits</td></tr>
+      <tr><td class="cmd-name">UEFI Secure Boot</td><td>Firmware verifies cryptographic signature of bootloader before executing it. Unsigned or modified bootloader is rejected.</td><td>Bootkits (prevents, not detects)</td></tr>
+      <tr><td class="cmd-name">Hardware performance counters</td><td>Intel PT (Processor Trace) or PMU events detect anomalous instruction patterns from virtualized OS</td><td>Hypervisor rootkits</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ============================================================ FINGERPRINTS -->
+<div class="section" id="fingerprints">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <div><div class="section-title">Observable Fingerprints of Malware</div>
+    <div class="section-meta">IOCs · host artifacts · network artifacts · behavioral indicators</div></div>
+  </div>
+
+  <h3>Indicators of Compromise (IOCs) — Categories</h3>
+  <div class="callout info">
+    <div class="callout-label info">// What Are IOCs?</div>
+    Indicators of Compromise are artifacts observed on a host or network that indicate a system has been compromised. They are split into host-based (what's on the machine) and network-based (what's on the wire). IOCs can be shared between organizations via STIX/TAXII formats and threat intelligence platforms.
+  </div>
+
+  <h3>Host-Based Fingerprints</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Category</th><th>Indicator</th><th>How to Check</th></tr></thead>
+    <tbody>
+      <tr><td class="ioc-category">File System</td><td>New executables in %TEMP%, %APPDATA%, C:\Windows\Temp, /tmp — especially ones without digital signatures</td><td>sigcheck -u -e (unsigned), find /tmp -newer /etc/passwd</td></tr>
+      <tr><td class="ioc-category">File System</td><td>Files with double extensions (invoice.pdf.exe) or Unicode right-to-left override in filename</td><td>dir /s, ls -la — look for disguised extensions</td></tr>
+      <tr><td class="ioc-category">File System</td><td>Prefetch entries (.pf files) for programs that no longer exist on disk</td><td>C:\Windows\Prefetch\ — proves execution even if binary deleted</td></tr>
+      <tr><td class="ioc-category">Process</td><td>Legitimate process names running from unusual directories (svchost.exe from %TEMP%, explorer.exe from system32)</td><td>tasklist /svc /v, Get-Process | Select Path</td></tr>
+      <tr><td class="ioc-category">Process</td><td>Suspicious parent-child relationships (Word.exe → cmd.exe → powershell.exe)</td><td>Process Hacker, Sysmon EventID 1, pstree</td></tr>
+      <tr><td class="ioc-category">Process</td><td>Processes with no associated binary on disk (memory-only/fileless malware)</td><td>/proc/PID/exe → "(deleted)", Volatility dlllist</td></tr>
+      <tr><td class="ioc-category">Registry</td><td>New entries under Run/RunOnce keys, Services, Winlogon, AppInit_DLLs</td><td>reg query, Autoruns (Sysinternals)</td></tr>
+      <tr><td class="ioc-category">Registry</td><td>Services with random-looking names, ImagePath pointing to temp directories</td><td>sc query type= all, Get-Service</td></tr>
+      <tr><td class="ioc-category">Scheduled Tasks</td><td>New scheduled tasks with encoded commands or running from temp directories</td><td>schtasks /query /fo LIST /v, Get-ScheduledTask</td></tr>
+      <tr><td class="ioc-category">Users/Auth</td><td>New local admin accounts, accounts with unusual last login times</td><td>net user, Get-LocalUser, /var/log/auth.log</td></tr>
+      <tr><td class="ioc-category">Memory</td><td>Injected DLLs not on disk, unsigned code in process memory, executable heap/stack regions</td><td>Volatility malfind, Process Hacker memory maps</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Network-Based Fingerprints</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Category</th><th>Indicator</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="ioc-category">C2 Beaconing</td><td>Periodic outbound connections at regular intervals (e.g., every 60 seconds) to the same external IP/domain</td><td>Regularity is the giveaway — human browsing is irregular. Check jitter (slight variation intended to evade detection).</td></tr>
+      <tr><td class="ioc-category">DNS</td><td>DNS lookups for algorithmically generated domains (DGA) — long random-looking domain names, high NXDOMAIN rate</td><td>Conficker, Mirai used DGA. Detect via entropy analysis of queried domains.</td></tr>
+      <tr><td class="ioc-category">DNS</td><td>Unusually long subdomain strings or high-frequency DNS queries to one authoritative nameserver (DNS tunneling)</td><td>DNS tunneling can exfiltrate data at ~1 KB/s. Look for TXT/NULL/CNAME records with base64 content.</td></tr>
+      <tr><td class="ioc-category">Traffic Patterns</td><td>Outbound traffic to known-bad IP addresses or domains (threat intel feeds)</td><td>Compare to IOC feeds: VirusTotal, AlienVault OTX, MISP</td></tr>
+      <tr><td class="ioc-category">Traffic Patterns</td><td>Large data transfer (exfiltration) — sustained outbound uploads to unknown destinations, especially encrypted</td><td>Baseline normal egress, alert on anomalies. Time of day matters (3 AM transfer).</td></tr>
+      <tr><td class="ioc-category">Protocol Anomaly</td><td>HTTP/S traffic with unusual User-Agent strings, non-browser TLS fingerprints (JA3 hash mismatch)</td><td>Common malware C2 frameworks have distinctive JA3 hashes even with encryption</td></tr>
+      <tr><td class="ioc-category">Lateral Movement</td><td>Internal SMB (445), WMI (135), RDP (3389) connections between workstations — lateral movement</td><td>Workstation-to-workstation traffic on these ports is unusual in most environments</td></tr>
+      <tr><td class="ioc-category">Scanning</td><td>One internal host connecting to many other internal hosts sequentially (network recon/worm spread)</td><td>Port scan pattern: sequential IP addresses, same destination port across many targets</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Malware Fingerprint by Family</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Ransomware fingerprints</span></span>
+    <span class="code-line"><span class="bad">vssadmin delete shadows /all /quiet</span>   <span class="comment"># Destroys Volume Shadow Copies</span></span>
+    <span class="code-line"><span class="bad">bcdedit /set {default} recoveryenabled No</span> <span class="comment"># Disables Windows Recovery</span></span>
+    <span class="code-line"><span class="bad">wbadmin delete catalog -quiet</span>         <span class="comment"># Deletes backup catalog</span></span>
+    <span class="code-line"><span class="bad">wmic shadowcopy delete</span>                 <span class="comment"># Another VSS deletion method</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Botnet / RAT fingerprints (process context)</span></span>
+    <span class="code-line"><span class="val">net user hacker Password123 /add</span>      <span class="comment"># New admin account creation</span></span>
+    <span class="code-line"><span class="val">net localgroup administrators hacker /add</span></span>
+    <span class="code-line"><span class="val">reg add HKLM\...\Run /v svchost32 /d "C:\Users\...\temp.exe"</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># PowerShell malware fingerprints</span></span>
+    <span class="code-line"><span class="bad">powershell -enc [base64 blob]</span>          <span class="comment"># Encoded command — common obfuscation</span></span>
+    <span class="code-line"><span class="bad">powershell -ep bypass -w hidden -c</span>   <span class="comment"># Bypass execution policy</span></span>
+    <span class="code-line"><span class="bad">IEX (New-Object Net.WebClient).DownloadString('http://...')</span></span>
+  </div>
+</div>
+
+<!-- ============================================================ BOTNETS & C2 -->
+<div class="section" id="botnets">
+  <div class="section-header">
+    <div class="section-icon">🕸️</div>
+    <div><div class="section-title">Botnets & Command and Control</div>
+    <div class="section-meta">C2 architecture · DGA · protocols · takedown · impact</div></div>
+  </div>
+
+  <h3>Botnet Architecture</h3>
+  <div class="card">
+    <div class="card-title">Key Components</div>
+    <div class="key-val-grid">
+      <div class="kv-key">Botmaster</div><div class="kv-val">The attacker who controls the botnet. Issues commands through the C2 infrastructure.</div>
+      <div class="kv-key">C2 Server</div><div class="kv-val">Command and Control server — receives check-ins from bots, issues commands, collects exfiltrated data.</div>
+      <div class="kv-key">Bot</div><div class="kv-val">An infected host running the bot agent. May be a PC, server, IoT device, or router. Receives commands and carries them out.</div>
+      <div class="kv-key">Botnet</div><div class="kv-val">The collective of all infected bots under a single botmaster's control. Ranges from hundreds to millions of devices.</div>
+    </div>
+  </div>
+
+  <h3>C2 Communication Models</h3>
+  <div class="two-col">
+    <div class="card accent-red">
+      <div class="card-title">Centralized C2</div>
+      <ul class="bullets">
+        <li>All bots connect to one (or a small cluster of) C2 servers</li>
+        <li>Simple to operate; fast command propagation</li>
+        <li><strong>Weakness:</strong> Takedown or sinkholing of the C2 server kills the entire botnet</li>
+        <li>Common protocols: HTTP/HTTPS (blends with normal traffic), IRC (legacy), custom TCP</li>
+        <li>Detection: netstat shows persistent connection to one external IP</li>
+      </ul>
+    </div>
+    <div class="card accent-orange">
+      <div class="card-title">Peer-to-Peer (P2P) C2</div>
+      <ul class="bullets">
+        <li>Bots communicate with each other; no single C2 server</li>
+        <li><strong>Resilient:</strong> Removing one node doesn't kill the botnet</li>
+        <li>Commands propagate through the peer network</li>
+        <li>Much harder to take down — requires poisoning or sinkholing the peer list</li>
+        <li>Example: Storm Worm, Zeus P2P variant, Necurs</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Domain Generation Algorithms (DGA)</h3>
+  <div class="card accent-cyan">
+    <div class="card-title cyan">Evading C2 Takedown with DGA</div>
+    <p>A DGA generates hundreds or thousands of pseudo-random domain names per day (using a seed like the current date). The botmaster only needs to register one — the bot tries all generated domains and connects to whichever one resolves. Defenders cannot easily block all generated domains in advance.</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="comment"># Simplified DGA example (seed = date)</span></span>
+      <span class="code-line"><span class="comment"># For date 2024-01-15, generate domains:</span></span>
+      <span class="code-line"><span class="val">xkzqmfvrlpwa.com</span>   <span class="comment"># bot tries this...</span></span>
+      <span class="code-line"><span class="val">bqtynvshoiez.com</span>   <span class="comment"># and this...</span></span>
+      <span class="code-line"><span class="val">wjoamdkpxcqb.net</span>   <span class="comment"># and this... (one is registered = C2)</span></span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="comment"># Detection: high NXDOMAIN rate + high-entropy domain names</span></span>
+      <span class="code-line"><span class="comment"># Mitigation: DGA domain prediction + preemptive sinkholing</span></span>
+    </div>
+  </div>
+
+  <h3>Botnet Use Cases</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Use</th><th>Description</th><th>Operational Impact</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">DDoS</td><td>Volumetric attacks — flood victim with traffic from thousands of bots</td><td>Saturates network links; makes target unreachable; can affect upstream providers</td></tr>
+      <tr><td class="cmd-name">Spam</td><td>Send billions of spam/phishing emails through bot infrastructure</td><td>Source IPs distributed — hard to block; bots take blame for spam</td></tr>
+      <tr><td class="cmd-name">Credential stuffing</td><td>Test stolen username/password pairs against web services</td><td>Distributed across bots — IP-based rate limiting ineffective</td></tr>
+      <tr><td class="cmd-name">Click fraud</td><td>Simulate ad clicks to generate revenue for attacker</td><td>Bots appear as legitimate users from diverse IPs and geographies</td></tr>
+      <tr><td class="cmd-name">Crypto mining</td><td>Use bot CPU/GPU cycles to mine cryptocurrency</td><td>Victim pays electricity; CPU exhaustion degrades performance</td></tr>
+      <tr><td class="cmd-name">Proxy / anonymization</td><td>Route attacker traffic through bots to obscure origin</td><td>Attack traffic appears to come from victim's IP addresses</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ============================================================ HOST ANALYSIS -->
+<div class="section" id="host-analysis">
+  <div class="section-header">
+    <div class="section-icon">🖥️</div>
+    <div><div class="section-title">Identification of Malicious Programs on Remote Hosts</div>
+    <div class="section-meta">triage · live response · process analysis · artifact collection</div></div>
+  </div>
+
+  <h3>Live Response Triage Sequence</h3>
+  <div class="callout info">
+    <div class="callout-label info">// Order of Volatility</div>
+    Collect volatile evidence first — it disappears when the system is powered off. CPU registers → running processes/memory → network connections → open files → disk data → backup/archive media.
+  </div>
+
+  <h3>Windows Triage Commands</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># === Running processes ===</span></span>
+    <span class="code-line"><span class="cmd">tasklist</span> <span class="flag">/svc /v</span>                <span class="comment"># All processes + hosted services + exe path</span></span>
+    <span class="code-line"><span class="cmd">wmic process get</span> <span class="val">name,processid,parentprocessid,commandline</span></span>
+    <span class="code-line"><span class="cmd">Get-Process</span> | <span class="cmd">Select</span> <span class="val">Name,Id,Path,Company</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># === Network connections ===</span></span>
+    <span class="code-line"><span class="cmd">netstat</span> <span class="flag">-ano</span>                    <span class="comment"># All connections with PID</span></span>
+    <span class="code-line"><span class="cmd">netstat</span> <span class="flag">-b</span>                     <span class="comment"># With executable names (requires admin)</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># === Persistence locations ===</span></span>
+    <span class="code-line"><span class="cmd">reg query</span> <span class="path">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span></span>
+    <span class="code-line"><span class="cmd">reg query</span> <span class="path">HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span></span>
+    <span class="code-line"><span class="cmd">schtasks</span> <span class="flag">/query /fo LIST /v</span></span>
+    <span class="code-line"><span class="cmd">sc query</span> <span class="flag">type= all state= all</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># === Users and accounts ===</span></span>
+    <span class="code-line"><span class="cmd">net user</span>                        <span class="comment"># List all local accounts</span></span>
+    <span class="code-line"><span class="cmd">net localgroup administrators</span>   <span class="comment"># Who has admin?</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># === Recent files and execution evidence ===</span></span>
+    <span class="code-line"><span class="cmd">dir</span> <span class="path">C:\Windows\Prefetch\</span> <span class="flag">/od</span>  <span class="comment"># Sorted by date — recent executions</span></span>
+    <span class="code-line"><span class="cmd">dir</span> <span class="path">%TEMP%</span> <span class="flag">/od /a</span>            <span class="comment"># Recent temp files including hidden</span></span>
+  </div>
+
+  <h3>Linux Triage Commands</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># === Running processes ===</span></span>
+    <span class="code-line"><span class="cmd">ps</span> <span class="flag">auxef</span>                       <span class="comment"># All processes with environment + forest view</span></span>
+    <span class="code-line"><span class="cmd">ls</span> <span class="flag">-la</span> <span class="path">/proc/*/exe</span> 2>/dev/null  <span class="comment"># Binaries for all running processes</span></span>
+    <span class="code-line"><span class="cmd">ls</span> <span class="flag">-la</span> <span class="path">/proc/*/exe</span> 2>/dev/null | <span class="cmd">grep</span> <span class="val">deleted</span>  <span class="comment"># Fileless malware</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># === Network connections ===</span></span>
+    <span class="code-line"><span class="cmd">ss</span> <span class="flag">-tulpn</span>                      <span class="comment"># Listening ports with PIDs</span></span>
+    <span class="code-line"><span class="cmd">ss</span> <span class="flag">-tupn</span>                       <span class="comment"># Established connections with PIDs</span></span>
+    <span class="code-line"><span class="cmd">lsof</span> <span class="flag">-i</span>                        <span class="comment"># All open network file descriptors</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># === Persistence locations ===</span></span>
+    <span class="code-line"><span class="cmd">crontab</span> <span class="flag">-l</span>                     <span class="comment"># Current user cron jobs</span></span>
+    <span class="code-line"><span class="cmd">cat</span> <span class="path">/etc/crontab</span>               <span class="comment"># System crontab</span></span>
+    <span class="code-line"><span class="cmd">ls</span> <span class="path">/etc/cron.d/ /etc/rc.d/</span>    <span class="comment"># System cron and init scripts</span></span>
+    <span class="code-line"><span class="cmd">systemctl list-units</span> <span class="flag">--type=service</span></span>
+    <span class="code-line"><span class="cmd">cat</span> <span class="path">~/.bashrc ~/.bash_profile ~/.profile</span>  <span class="comment"># Shell init file injection</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># === SUID and suspicious files ===</span></span>
+    <span class="code-line"><span class="cmd">find</span> <span class="path">/</span> <span class="flag">-perm -4000 -type f</span> 2>/dev/null  <span class="comment"># SUID binaries</span></span>
+    <span class="code-line"><span class="cmd">find</span> <span class="path">/tmp /var/tmp /dev/shm</span> <span class="flag">-type f -newer /etc/passwd</span></span>
+    <span class="code-line"><span class="cmd">last</span> <span class="flag">-a</span>                        <span class="comment"># Recent logins with IP addresses</span></span>
+    <span class="code-line"><span class="cmd">lastb</span>                          <span class="comment"># Failed login attempts</span></span>
+  </div>
+
+  <h3>Suspicious Process Indicators</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Observation</th><th>Why Suspicious</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">svchost.exe running from %TEMP% or Desktop</td><td>Legitimate svchost.exe only runs from C:\Windows\System32\. Any other path = malware masquerading.</td></tr>
+      <tr><td class="cmd-name">explorer.exe with a network connection</td><td>Explorer rarely makes network connections. Network activity from explorer = likely injected code.</td></tr>
+      <tr><td class="cmd-name">Word/Excel spawning cmd.exe or powershell.exe</td><td>Classic indicator of malicious Office macro execution. Office apps should not spawn shells.</td></tr>
+      <tr><td class="cmd-name">Process with no command line arguments in wmic output</td><td>Legitimate processes almost always have arguments visible. Empty CommandLine = hollowed process or injection.</td></tr>
+      <tr><td class="cmd-name">/proc/PID/exe → "(deleted)"</td><td>Process is running but its binary file was deleted — common fileless or self-deleting malware pattern.</td></tr>
+      <tr><td class="cmd-name">Two processes with same name, different PIDs and paths</td><td>Malware mimicking a legitimate process name but running from a different location.</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ============================================================ NETWORK MONITORING -->
+<div class="section" id="network-monitoring">
+  <div class="section-header">
+    <div class="section-icon">📡</div>
+    <div><div class="section-title">Network Monitoring Tools & Techniques</div>
+    <div class="section-meta">Wireshark · tcpdump · Snort · Zeek · SIEM · NetFlow</div></div>
+  </div>
+
+  <h3>Packet Capture Tools</h3>
+  <div class="two-col">
+    <div class="card accent-cyan">
+      <div class="card-title cyan">Wireshark</div>
+      <ul class="bullets">
+        <li>GUI-based packet analyzer — capture and dissect network traffic in real time</li>
+        <li>Supports 3000+ protocol dissectors — automatically parses HTTP, DNS, TLS, SMB, etc.</li>
+        <li>Display filters: <code>ip.addr == 10.0.0.1</code>, <code>tcp.port == 443</code>, <code>http.request</code></li>
+        <li>Follow TCP/UDP stream to reconstruct full conversations</li>
+        <li>Reads pcap/pcapng files — standard format for captured traffic</li>
+        <li>Coloring rules highlight anomalies (RST storms, malformed packets)</li>
+      </ul>
+    </div>
+    <div class="card accent-cyan">
+      <div class="card-title cyan">tcpdump</div>
+      <ul class="bullets">
+        <li>CLI packet capture — lightweight, runs on almost any Unix system</li>
+        <li>Writes pcap files readable by Wireshark</li>
+        <li>Common syntax: <code>tcpdump -i eth0 -w capture.pcap</code></li>
+        <li>Filtering: <code>tcpdump host 8.8.8.8 and port 53</code></li>
+        <li>Show ASCII content: <code>tcpdump -A -s0 port 80</code></li>
+        <li>Essential on servers without GUI — the field standard for remote capture</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Intrusion Detection / Prevention Systems</h3>
+  <div class="two-col">
+    <div class="card accent-orange">
+      <div class="card-title orange">Snort (IDS/IPS)</div>
+      <ul class="bullets">
+        <li>Open-source network IDS/IPS — the most widely deployed in the world</li>
+        <li><strong>Rule-based detection:</strong> rules match packet content, headers, payloads</li>
+        <li>Three modes: Sniffer (print packets), Packet Logger (save to disk), NIDS (apply rules and alert)</li>
+        <li>Rule format: <code>alert tcp any any -&gt; $HOME_NET 22 (msg:"SSH scan"; flags:S; threshold:type both, track by_src, count 5, seconds 60; sid:1000001;)</code></li>
+        <li>Maintained community ruleset + commercial VRT ruleset</li>
+        <li>As IPS: inline mode drops matching packets in real time</li>
+      </ul>
+    </div>
+    <div class="card accent-orange">
+      <div class="card-title orange">Zeek (formerly Bro)</div>
+      <ul class="bullets">
+        <li>Network analysis framework — not rule-based but generates structured logs</li>
+        <li>Produces high-fidelity logs: conn.log, dns.log, http.log, ssl.log, files.log</li>
+        <li>Ideal for behavioral analysis and threat hunting — not just alerting</li>
+        <li>Extracts file hashes, X.509 certificates, software versions from traffic</li>
+        <li>Scriptable in the Zeek scripting language for custom detections</li>
+        <li>Widely used in large-scale network security monitoring (NSM)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Flow-Based Monitoring</h3>
+  <div class="card accent-green">
+    <div class="card-title green">NetFlow / IPFIX / sFlow</div>
+    <p>Instead of capturing full packets (expensive at scale), flow monitoring records metadata about each conversation — source/destination IP, port, protocol, byte/packet counts, start/end time. Routers and switches export flow records to a collector. Useful for: detecting anomalous traffic volumes, tracking lateral movement, identifying heavy talkers, investigating incidents when full pcap isn't available.</p>
+    <div class="key-val-grid" style="margin-top:0.7rem">
+      <div class="kv-key">NetFlow v5/v9</div><div class="kv-val">Cisco standard. Widely supported. Router exports 5-tuple + counters.</div>
+      <div class="kv-key">IPFIX</div><div class="kv-val">IETF standard (RFC 7011). NetFlow v9 successor. Template-based, extensible.</div>
+      <div class="kv-key">sFlow</div><div class="kv-val">Statistical sampling — samples 1-in-N packets. Less precise but lower overhead at high speed links.</div>
+    </div>
+  </div>
+
+  <h3>SIEM (Security Information and Event Management)</h3>
+  <div class="card accent-purple">
+    <div class="card-title purple">What a SIEM Does</div>
+    <p>A SIEM aggregates logs and events from across the environment — firewalls, IDS, endpoints, servers, authentication systems — correlates them, and generates alerts when event combinations match known attack patterns. Core capabilities:</p>
+    <ul class="bullets" style="margin-top:0.6rem">
+      <li><strong>Log aggregation:</strong> Collects from Windows Event Log, syslog, cloud APIs, endpoint agents</li>
+      <li><strong>Normalization:</strong> Converts different log formats to a common schema</li>
+      <li><strong>Correlation:</strong> Links related events across sources — failed login + new service + outbound connection = alert</li>
+      <li><strong>Alerting:</strong> Triggers on rule matches or statistical anomalies</li>
+      <li><strong>Search/Investigation:</strong> Analysts query historical logs across all sources from one interface</li>
+      <li><strong>Retention:</strong> Long-term log storage for compliance and forensic investigation</li>
+      <li><strong>Examples:</strong> Splunk, IBM QRadar, Microsoft Sentinel, Elastic SIEM, ArcSight</li>
+    </ul>
+  </div>
+
+  <h3>Key Wireshark / tcpdump Filter Reference</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Wireshark display filters</span></span>
+    <span class="code-line"><span class="val">ip.addr == 192.168.1.5</span>         <span class="comment"># Traffic to/from this IP</span></span>
+    <span class="code-line"><span class="val">ip.src == 10.0.0.0/8</span>           <span class="comment"># From entire subnet</span></span>
+    <span class="code-line"><span class="val">tcp.flags.syn == 1 && tcp.flags.ack == 0</span>  <span class="comment"># SYN packets only (scan detection)</span></span>
+    <span class="code-line"><span class="val">dns.qry.name contains "suspicious"</span></span>
+    <span class="code-line"><span class="val">http.request.method == "POST"</span></span>
+    <span class="code-line"><span class="val">tls.handshake.type == 1</span>         <span class="comment"># ClientHello — all TLS sessions starting</span></span>
+    <span class="code-line"><span class="val">frame.len > 1400</span>               <span class="comment"># Large frames (potential exfiltration)</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># tcpdump capture filters (Berkeley Packet Filter syntax)</span></span>
+    <span class="code-line"><span class="cmd">tcpdump</span> <span class="val">host 10.10.10.1</span>         <span class="comment"># Traffic to/from host</span></span>
+    <span class="code-line"><span class="cmd">tcpdump</span> <span class="val">not port 22</span>            <span class="comment"># Exclude SSH (your own session)</span></span>
+    <span class="code-line"><span class="cmd">tcpdump</span> <span class="val">tcp and port 80 or port 443</span></span>
+    <span class="code-line"><span class="cmd">tcpdump</span> <span class="flag">-i eth0 -w</span> <span class="path">cap.pcap</span> <span class="val">port 53</span>  <span class="comment"># Capture DNS to file</span></span>
+  </div>
+</div>
+
+<!-- ============================================================ SECURITY PRODUCTS -->
+<div class="section" id="security-products">
+  <div class="section-header">
+    <div class="section-icon">🛡️</div>
+    <div><div class="section-title">Security Products & Capabilities</div>
+    <div class="section-meta">AV · EDR · NGFW · WAF · DLP · honeypot · vulnerability scanner</div></div>
+  </div>
+
+  <h3>Security Product Reference</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Product Type</th><th>What It Does</th><th>Detects / Prevents</th><th>Limitations</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">AV (Antivirus)</td><td>Scans files and processes against signature database + basic heuristics</td><td>Known malware families, common variants</td><td>Blind to zero-days, fileless malware, encrypted payloads, heavily obfuscated code</td></tr>
+      <tr><td class="cmd-name">EDR (Endpoint Detection & Response)</td><td>Continuous telemetry from endpoints — records all process creation, file writes, network connections, registry changes. Enables detection, investigation, and response.</td><td>Behavioral threats, fileless malware, lateral movement, living-off-the-land attacks</td><td>Generates massive data volume; requires skilled analysts; can be blinded if attacker has admin access</td></tr>
+      <tr><td class="cmd-name">NGFW (Next-Gen Firewall)</td><td>Stateful packet inspection + application awareness + user identity + integrated IPS + TLS inspection</td><td>Application-layer attacks, policy violations by application and user, known threat signatures</td><td>Encrypted traffic may bypass inspection if TLS decryption not configured; performance overhead at high throughput</td></tr>
+      <tr><td class="cmd-name">WAF (Web Application Firewall)</td><td>Inspects HTTP/S requests and responses for attack patterns — SQLi, XSS, CSRF, path traversal, etc.</td><td>OWASP Top 10 attacks, common web exploits</td><td>Complex apps require custom tuning; attackers can craft requests that evade generic rules</td></tr>
+      <tr><td class="cmd-name">DLP (Data Loss Prevention)</td><td>Monitors and controls movement of sensitive data — blocks upload, copy, or email of data matching patterns (SSN, credit cards, classified markings)</td><td>Accidental and intentional data exfiltration</td><td>Encrypted channels bypass inspection; false positives are high; limited effectiveness against determined insider</td></tr>
+      <tr><td class="cmd-name">Vulnerability Scanner</td><td>Identifies known vulnerabilities in network hosts by probing services, checking versions, and correlating against CVE databases</td><td>Unpatched software, misconfigured services, default credentials</td><td>Point-in-time snapshot; cannot find zero-days; authenticated scan required for full coverage</td></tr>
+      <tr><td class="cmd-name">Honeypot</td><td>Decoy system designed to attract attackers — any interaction is suspicious. Gathers attacker TTPs with low false-positive rate.</td><td>Reconnaissance, lateral movement, credential spraying targeting the fake system</td><td>Attacker may identify and avoid it; limited to attracting, not blocking attacks</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Nmap — Network Reconnaissance Tool</h3>
+  <div class="card accent-cyan">
+    <div class="card-title cyan">Nmap Essentials</div>
+    <p>Nmap (Network Mapper) is the standard tool for network discovery and security auditing. Used by defenders (asset inventory, vulnerability assessment) and attackers (reconnaissance).</p>
+    <div class="code-block no-prompt">
+      <span class="code-line"><span class="cmd">nmap</span> <span class="val">192.168.1.0/24</span>             <span class="comment"># Ping sweep — which hosts are up?</span></span>
+      <span class="code-line"><span class="cmd">nmap</span> <span class="flag">-sS</span> <span class="val">192.168.1.5</span>            <span class="comment"># SYN (stealth) scan — half-open</span></span>
+      <span class="code-line"><span class="cmd">nmap</span> <span class="flag">-sV -sC</span> <span class="val">192.168.1.5</span>        <span class="comment"># Service version + default scripts</span></span>
+      <span class="code-line"><span class="cmd">nmap</span> <span class="flag">-O</span> <span class="val">192.168.1.5</span>             <span class="comment"># OS fingerprinting</span></span>
+      <span class="code-line"><span class="cmd">nmap</span> <span class="flag">-p 1-65535</span> <span class="val">192.168.1.5</span>    <span class="comment"># All ports</span></span>
+      <span class="code-line"><span class="cmd">nmap</span> <span class="flag">-sU -p 53,161,123</span> <span class="val">target</span>  <span class="comment"># UDP scan specific ports</span></span>
+      <span class="code-line"><span class="cmd">nmap</span> <span class="flag">-A</span> <span class="val">target</span>                  <span class="comment"># Aggressive: OS + version + scripts + traceroute</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ VULNERABILITY CLASSES -->
+<div class="section" id="vuln-classes">
+  <div class="section-header">
+    <div class="section-icon">💥</div>
+    <div><div class="section-title">Vulnerability Classes</div>
+    <div class="section-meta">buffer overflow · SQLi · XSS · CSRF · CVE · CVSS</div></div>
+  </div>
+
+  <h3>Common Vulnerability Classes</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Vulnerability</th><th>How It Works</th><th>Impact</th><th>Prevention</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">Buffer Overflow</td><td>Input longer than the allocated buffer overwrites adjacent memory — can overwrite the saved return address to redirect execution</td><td>Remote code execution (RCE), privilege escalation, crash</td><td>Input validation, bounds checking, stack canaries, ASLR, NX/DEP, safe string functions (strncpy not strcpy)</td></tr>
+      <tr><td class="cmd-name">SQL Injection (SQLi)</td><td>Unsanitized user input is incorporated directly into SQL queries — attacker injects SQL syntax to manipulate the query</td><td>Database dump, authentication bypass, data deletion, RCE via xp_cmdshell (MSSQL)</td><td>Parameterized queries/prepared statements, stored procedures, input validation, least privilege DB accounts</td></tr>
+      <tr><td class="cmd-name">Cross-Site Scripting (XSS)</td><td>Attacker injects malicious JavaScript into pages served to other users — victim's browser executes attacker's script in the context of the trusted site</td><td>Cookie/session theft, credential harvesting, redirects, defacement</td><td>Input/output encoding, Content Security Policy (CSP), HTTPOnly and Secure cookie flags</td></tr>
+      <tr><td class="cmd-name">CSRF (Cross-Site Request Forgery)</td><td>Tricks an authenticated user's browser into making an unwanted request to a site they're logged into — browser automatically sends session cookies</td><td>Unauthorized actions performed as the victim (transfer funds, change email/password)</td><td>CSRF tokens (synchronizer token pattern), SameSite cookie attribute, re-authentication for sensitive actions</td></tr>
+      <tr><td class="cmd-name">Path Traversal</td><td>Using ../ sequences in filenames to escape the intended directory and access arbitrary files on the server filesystem</td><td>Read sensitive files (/etc/passwd, web.config, private keys), potential RCE if logs or config files are writable</td><td>Input validation, canonicalize paths before comparison, chroot/containerization, deny ../ sequences</td></tr>
+      <tr><td class="cmd-name">Command Injection</td><td>Unsanitized input passed to a shell command — attacker appends shell metacharacters (;, |, &&) to execute arbitrary commands</td><td>Full OS command execution as the web server user</td><td>Avoid shell invocation; use language-native APIs; strict input validation; allowlists</td></tr>
+      <tr><td class="cmd-name">Race Condition (TOCTOU)</td><td>Time-of-Check to Time-of-Use: attacker changes a file or resource in the window between when it's checked and when it's used</td><td>Privilege escalation, unauthorized file access</td><td>Atomic operations, file locking, open with O_EXCL flag, avoid predictable temp file names</td></tr>
+      <tr><td class="cmd-name">Use-After-Free</td><td>Program accesses memory after it has been freed — attacker controls what's placed in that memory location</td><td>Code execution, crash, information disclosure</td><td>Memory-safe languages, smart pointers, memory sanitizers during development (ASan)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>CVE & CVSS Scoring</h3>
+  <div class="two-col">
+    <div class="card accent-cyan">
+      <div class="card-title cyan">CVE (Common Vulnerabilities & Exposures)</div>
+      <ul class="bullets">
+        <li>Standardized identifier for publicly known vulnerabilities</li>
+        <li>Format: <strong>CVE-YEAR-NUMBER</strong> (e.g., CVE-2021-44228 = Log4Shell)</li>
+        <li>Managed by MITRE; published in the National Vulnerability Database (NVD)</li>
+        <li>Every CVE has a description, affected products, and often a CVSS score</li>
+        <li>Vendors reference CVE IDs in security advisories and patch notes</li>
+      </ul>
+    </div>
+    <div class="card accent-red">
+      <div class="card-title">CVSS (Common Vulnerability Scoring System)</div>
+      <ul class="bullets">
+        <li>Numerical score 0.0–10.0 quantifying vulnerability severity</li>
+        <li><strong>Critical:</strong> 9.0–10.0 &nbsp;|&nbsp; <strong>High:</strong> 7.0–8.9 &nbsp;|&nbsp; <strong>Medium:</strong> 4.0–6.9 &nbsp;|&nbsp; <strong>Low:</strong> 0.1–3.9</li>
+        <li>Base metrics: Attack Vector, Attack Complexity, Privileges Required, User Interaction, Scope, Confidentiality/Integrity/Availability Impact</li>
+        <li>Current version: CVSS v3.1</li>
+        <li>Not the only factor in patching priority — exploitability in the wild matters more</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ NETWORK VULNERABILITIES -->
+<div class="section" id="network-vulns">
+  <div class="section-header">
+    <div class="section-icon">🌐</div>
+    <div><div class="section-title">Network Vulnerabilities</div>
+    <div class="section-meta">protocol attacks · man-in-the-middle · DoS · scanning · enumeration</div></div>
+  </div>
+
+  <h3>Protocol-Level Attacks</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Attack</th><th>Protocol Exploited</th><th>Mechanism</th><th>Defense</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">ARP Spoofing</td><td>ARP (L2)</td><td>Attacker sends gratuitous ARP replies mapping their MAC to the gateway IP, poisoning victims' caches — MITM position</td><td>Dynamic ARP Inspection (DAI) on switches, static ARP entries for critical hosts</td></tr>
+      <tr><td class="cmd-name">SYN Flood</td><td>TCP (L4)</td><td>Flood target with SYN packets — never complete handshake. Exhausts server connection table (SYN_RECV state). DoS.</td><td>SYN cookies (stateless handshake validation), rate limiting, firewall thresholds</td></tr>
+      <tr><td class="cmd-name">DNS Cache Poisoning</td><td>DNS (L7)</td><td>Attacker wins the race to respond to a resolver's query with forged data, causing resolver to cache malicious IP for a domain</td><td>DNSSEC, source port randomization, 0x20 encoding, DNS over HTTPS/TLS</td></tr>
+      <tr><td class="cmd-name">VLAN Hopping</td><td>802.1Q (L2)</td><td>Switch spoofing (negotiate trunk via DTP) or double-tagging (nested 802.1Q tags) to access a different VLAN</td><td>Disable DTP on access ports, don't use native VLAN 1, set native VLAN to unused ID</td></tr>
+      <tr><td class="cmd-name">Smurf Attack</td><td>ICMP (L3)</td><td>Spoof victim's IP as source, broadcast ICMP echo request — all hosts on the network reply to victim simultaneously</td><td>Disable directed broadcast on routers, rate-limit ICMP</td></tr>
+      <tr><td class="cmd-name">DHCP Starvation</td><td>DHCP (L7)</td><td>Flood DHCP server with requests using spoofed MAC addresses — exhaust IP pool. Combine with rogue DHCP for MITM.</td><td>DHCP snooping, port security (limit MACs per port), rate-limiting DHCP requests</td></tr>
+      <tr><td class="cmd-name">NBNS/LLMNR Poisoning</td><td>NetBIOS/LLMNR (L7)</td><td>Respond to broadcast name resolution queries with attacker's IP — host sends NTLM authentication. Capture and crack/relay hash.</td><td>Disable LLMNR and NetBIOS-NS via GPO, use DNS exclusively</td></tr>
+      <tr><td class="cmd-name">SSL Stripping</td><td>HTTP/HTTPS (L7)</td><td>MITM downgrades HTTPS to HTTP — intercepts redirect, speaks HTTPS to server and HTTP to victim</td><td>HSTS, HSTS Preload, always redirect and enforce HTTPS</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Scanning & Enumeration Techniques</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># Port Scanning — determining which services are accessible</span></span>
+    <span class="code-line"><span class="comment"># Open port:    SYN → SYN-ACK (service is listening)</span></span>
+    <span class="code-line"><span class="comment"># Closed port:  SYN → RST-ACK (nothing listening)</span></span>
+    <span class="code-line"><span class="comment"># Filtered:     SYN → no response (firewall drops) or ICMP unreachable</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Scan types and their stealth level:</span></span>
+    <span class="code-line"><span class="val">TCP Connect  </span>  <span class="comment"># Full 3-way handshake. Logged by target. Nmap -sT</span></span>
+    <span class="code-line"><span class="val">SYN (Stealth)</span>  <span class="comment"># Half-open. Less logging. Nmap -sS (default, requires root)</span></span>
+    <span class="code-line"><span class="val">UDP Scan     </span>  <span class="comment"># No ICMP port unreachable = open/filtered. Slow. Nmap -sU</span></span>
+    <span class="code-line"><span class="val">FIN/NULL/Xmas</span>  <span class="comment"># Evade stateless firewalls. RFC793: closed=RST, open=drop</span></span>
+    <span class="code-line"><span class="val">Idle/Zombie  </span>  <span class="comment"># Use third-party host's IP ID to scan — highly stealthy</span></span>
+    <span class="code-line"></span>
+    <span class="code-line"><span class="comment"># Service enumeration — what's actually running on open ports?</span></span>
+    <span class="code-line"><span class="cmd">banner grabbing</span>: <span class="val">nc target 80</span>; then send <span class="val">HEAD / HTTP/1.0</span></span>
+    <span class="code-line"><span class="cmd">nmap -sV</span>: fingerprints service versions from probe responses</span>
+    <span class="code-line"><span class="cmd">nmap -sC</span>: runs default scripts against open ports (NSE scripts)</span>
+  </div>
+
+  <h3>Amplification / Reflection DDoS</h3>
+  <div class="card accent-red">
+    <div class="card-title">How Amplification Attacks Work</div>
+    <p>Attacker sends a small request with the <strong>victim's IP as the spoofed source</strong> to many open reflectors (DNS servers, NTP servers, memcached). Each reflector sends a much larger response to the victim. The amplification factor (response/request size ratio) determines how effective the attack is.</p>
+    <table class="cmd-table" style="margin-top:0.8rem">
+      <thead><tr><th>Protocol</th><th>Port</th><th>Amplification Factor</th></tr></thead>
+      <tbody>
+        <tr><td class="cmd-name">DNS ANY query</td><td>UDP/53</td><td>28–54×</td></tr>
+        <tr><td class="cmd-name">NTP monlist</td><td>UDP/123</td><td>Up to 556×</td></tr>
+        <tr><td class="cmd-name">Memcached</td><td>UDP/11211</td><td>Up to 51,000×</td></tr>
+        <tr><td class="cmd-name">SSDP (UPnP)</td><td>UDP/1900</td><td>30×</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:0.6rem;font-size:0.82rem;">Defense: BCP38 — ISPs should filter spoofed source IPs at their border. Rate-limiting DNS responses. Disabling NTP monlist (ntp.conf: <code>restrict default nomonlist</code>).</p>
+  </div>
+</div>
+
+<!-- ============================================================ WINDOWS DEFENSES -->
+<div class="section" id="windows-defenses">
+  <div class="section-header">
+    <div class="section-icon">🪟</div>
+    <div><div class="section-title">Built-in Windows Security Mechanisms</div>
+    <div class="section-meta">UAC · Defender · Firewall · AppLocker · Credential Guard · LSASS · BitLocker</div></div>
+  </div>
+
+  <h3>Windows Security Mechanisms Reference</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Mechanism</th><th>What It Does</th><th>Bypass / Limitation</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">UAC (User Account Control)</td><td>Even admin accounts run with limited tokens by default. Applications must request elevation — triggers consent or credential prompt. Reduces silent privilege escalation.</td><td>UAC bypass techniques (fodhelper, eventvwr, sdclt hijacks) elevate without prompt. Disabled on some enterprise builds.</td></tr>
+      <tr><td class="cmd-name">Windows Defender AV</td><td>Built-in antivirus: signature + cloud + behavioral detection. Integrates with Windows Security Center. Always-on real-time protection.</td><td>Can be disabled by SYSTEM-level processes. Bypassed by obfuscation, AMSI bypass scripts, living-off-the-land techniques.</td></tr>
+      <tr><td class="cmd-name">Windows Firewall</td><td>Host-based stateful firewall. Inbound/outbound rules per profile (Domain, Private, Public). Blocks unsolicited inbound by default.</td><td>Malware with admin access can add rules or disable it. Outbound is often permissive by default.</td></tr>
+      <tr><td class="cmd-name">AppLocker</td><td>Application whitelisting — allow/deny execution of .exe, .dll, .msi, .ps1, .vbs by path, publisher signature, or hash. Significantly raises bar for malware execution.</td><td>LOLBAS (regsvr32, mshta, wmic, rundll32) bypass path rules. Requires Enterprise/Education SKU.</td></tr>
+      <tr><td class="cmd-name">WDAC (Windows Defender Application Control)</td><td>More comprehensive than AppLocker — enforced at kernel level via code integrity policy. Blocks unsigned code even for admins.</td><td>Policy bypass requires signed trusted binaries or policy modification (needs admin). More robust than AppLocker.</td></tr>
+      <tr><td class="cmd-name">Credential Guard</td><td>Uses Hyper-V virtualization to isolate LSASS credentials in a separate Secure World VM — Mimikatz cannot access the credential material even with SYSTEM access.</td><td>Requires UEFI, Secure Boot, and compatible hardware. Does not protect against all credential attacks (e.g., pass-the-hash still works against remote services).</td></tr>
+      <tr><td class="cmd-name">DEP / NX</td><td>Marks stack, heap, and data pages as non-executable — shellcode injected into those regions cannot run. CPU hardware-enforced.</td><td>Bypassed by ROP (Return-Oriented Programming) — executes existing code, not injected shellcode.</td></tr>
+      <tr><td class="cmd-name">ASLR</td><td>Randomizes base addresses of stack, heap, and loaded modules on each execution — makes exploiting buffer overflows harder (addresses unpredictable).</td><td>Information disclosure vulnerabilities can leak addresses. Low-entropy on 32-bit systems allows brute force.</td></tr>
+      <tr><td class="cmd-name">BitLocker</td><td>Full-volume encryption for Windows drives. Protects data at rest — drive removed from machine = unreadable without key. TPM-backed key storage.</td><td>Protects against offline attacks only. No protection against live, authenticated attacks on a running system.</td></tr>
+      <tr><td class="cmd-name">Windows Event Logging / Sysmon</td><td>Built-in event log auditing (EventIDs 4624/4625/4688/etc.). Sysmon (Sysinternals) adds detailed process creation, network, registry, and file logging for detection.</td><td>Attackers with admin access can clear event logs (EventID 1102). Log forwarding to SIEM reduces this risk.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Protected Users Security Group</h3>
+  <div class="card accent-green">
+    <div class="card-title green">Hardening Privileged Accounts</div>
+    <p>Adding an account to the <strong>Protected Users</strong> security group (Windows Server 2012 R2+) applies additional restrictions: NTLM authentication is disabled for that account (Kerberos only), credentials are not cached on the workstation, DES/RC4 Kerberos encryption is disabled (AES required), Kerberos TGTs expire after 4 hours (not renewable to 10 hours). Significantly hardens against credential theft attacks.</p>
+  </div>
+</div>
+
+<!-- ============================================================ UNIX DEFENSES -->
+<div class="section" id="unix-defenses">
+  <div class="section-header">
+    <div class="section-icon">🐧</div>
+    <div><div class="section-title">Built-in Unix/Linux Security Mechanisms</div>
+    <div class="section-meta">DAC · MAC · SELinux · AppArmor · seccomp · iptables · sudo · PAM</div></div>
+  </div>
+
+  <h3>Linux Security Mechanisms Reference</h3>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
+    <thead><tr><th>Mechanism</th><th>What It Does</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="cmd-name">DAC (Discretionary Access Control)</td><td>Standard Unix permission model — owner, group, other with read/write/execute bits. Owner controls access to their files. chmod / chown.</td><td>Basis of all Unix security. Supplemented by ACLs (setfacl/getfacl) for finer control.</td></tr>
+      <tr><td class="cmd-name">MAC — SELinux</td><td>Mandatory Access Control. NSA-developed. Type enforcement: every process and file has a security context. Policy defines what types can access what. Even root is confined by policy.</td><td>Default on RHEL/CentOS/Fedora. Modes: Enforcing (blocks), Permissive (logs only), Disabled. Commands: getenforce, setenforce, sestatus, audit2allow.</td></tr>
+      <tr><td class="cmd-name">MAC — AppArmor</td><td>Path-based MAC. Profiles define which files, capabilities, and network operations a process can use. Simpler than SELinux to configure.</td><td>Default on Ubuntu/Debian. Modes: Enforce, Complain. Commands: aa-status, aa-enforce, apparmor_parser.</td></tr>
+      <tr><td class="cmd-name">seccomp</td><td>Syscall filter — restricts which system calls a process can make. Reduces kernel attack surface dramatically. Process cannot escalate even if code execution achieved.</td><td>Used by Docker, Chrome, OpenSSH. Seccomp-BPF allows fine-grained per-syscall rules with BPF programs.</td></tr>
+      <tr><td class="cmd-name">sudo</td><td>Allows specific users to execute specific commands as root (or another user). Configured in /etc/sudoers. Logs all usage. Avoids sharing the root password.</td><td>Edit with visudo only. Dangerous config: NOPASSWD: ALL. Check for misconfigs: sudo -l</td></tr>
+      <tr><td class="cmd-name">PAM (Pluggable Authentication Modules)</td><td>Modular authentication framework. Configures authentication, authorization, session setup, and password management. Allows MFA, LDAP auth, lockout policies.</td><td>Configuration: /etc/pam.d/. Modules: pam_unix (local), pam_ldap, pam_google_authenticator (MFA), pam_tally2 (lockout).</td></tr>
+      <tr><td class="cmd-name">iptables / nftables</td><td>Linux kernel packet filtering — host-based firewall. Rules in INPUT/OUTPUT/FORWARD chains. Stateful tracking via conntrack.</td><td>iptables = legacy (still widely used). nftables = modern replacement. ufw (Ubuntu) and firewalld (RHEL) are management layers on top.</td></tr>
+      <tr><td class="cmd-name">SSH key authentication</td><td>Passwordless authentication using RSA/ECDSA/Ed25519 key pairs. Private key stays on client; public key on server in ~/.ssh/authorized_keys. Immune to password brute-force.</td><td>Disable password auth: PasswordAuthentication no in sshd_config. Use AllowUsers/AllowGroups to restrict who can SSH.</td></tr>
+      <tr><td class="cmd-name">Capabilities</td><td>Divides root privileges into distinct units (capabilities). Process can be granted only the capabilities it needs (e.g., CAP_NET_BIND_SERVICE) without full root.</td><td>getcap, setcap commands. Principle of least privilege — avoids running services as full root. Misconfigured capabilities = privilege escalation path.</td></tr>
+      <tr><td class="cmd-name">chroot / namespaces / cgroups</td><td>chroot: restricts filesystem view. Namespaces: isolate PID, network, mount, user spaces. cgroups: limit resource usage. Together = basis of Linux containers.</td><td>chroot alone is weak (root can escape). Namespaces + seccomp + capabilities = container security model.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Hardening Reference: Key sshd_config Settings</h3>
+  <div class="code-block no-prompt">
+    <span class="code-line"><span class="comment"># /etc/ssh/sshd_config — critical security settings</span></span>
+    <span class="code-line"><span class="val">PermitRootLogin</span> no          <span class="comment"># Never allow direct root SSH</span></span>
+    <span class="code-line"><span class="val">PasswordAuthentication</span> no   <span class="comment"># Keys only — no brute force possible</span></span>
+    <span class="code-line"><span class="val">PermitEmptyPasswords</span> no     <span class="comment"># Reject accounts with no password</span></span>
+    <span class="code-line"><span class="val">MaxAuthTries</span> 3              <span class="comment"># Lock after 3 failed attempts</span></span>
+    <span class="code-line"><span class="val">AllowUsers</span> alice bob        <span class="comment"># Whitelist — only these users can SSH</span></span>
+    <span class="code-line"><span class="val">Protocol</span> 2                  <span class="comment"># SSHv1 is broken — never use it</span></span>
+    <span class="code-line"><span class="val">X11Forwarding</span> no            <span class="comment"># Disable GUI forwarding unless needed</span></span>
+    <span class="code-line"><span class="val">LogLevel</span> VERBOSE            <span class="comment"># Log key fingerprints for auditing</span></span>
+    <span class="code-line"><span class="comment"># After changes: systemctl reload sshd</span></span>
+  </div>
+</div>
+
+<!-- ============================================================ QUIZ -->
+<div class="section" id="quiz">
+  <div class="section-header">
+    <div class="section-icon">🧠</div>
+    <div><div class="section-title">Security Knowledge Check</div>
+    <div class="section-meta">20 questions · multiple choice · instant feedback</div></div>
+  </div>
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ============================================================ CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon">✅</div>
+    <div><div class="section-title">Mastery Checklist</div>
+    <div class="section-meta">click to mark learned — 25 objectives</div></div>
+  </div>
+  <ul class="checklist" id="masteryList">
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Name and distinguish all 9 malware classes: virus, worm, trojan, ransomware, spyware, RAT, rootkit, botnet, adware</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Identify observable fingerprints for each malware class (host artifacts and network indicators)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain how ransomware prepares a system before encrypting: VSS deletion, recovery disable</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain all 4 rootkit types: kernel-mode, user-mode, bootkit, hypervisor — privilege level, infection method, detection</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Describe cross-view detection, memory forensics (Volatility), and offline boot scanning for rootkit detection</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>List host-based IOC categories: file system artifacts, suspicious processes, registry persistence, scheduled tasks</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>List network-based IOC categories: C2 beaconing, DGA DNS patterns, protocol anomalies, exfiltration volume</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Identify 7 common malware persistence mechanisms (registry, tasks, services, startup folder, DLL hijack, bashrc, boot sector)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain botnet architecture: botmaster, C2, bot; centralized vs P2P C2; DGA evasion</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain how botnet malware noise impacts remote operations (worm scanning, beaconing, ransomware encryption, cryptomining)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know the live response triage sequence for Windows and Linux: processes, network connections, persistence, users</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Identify suspicious process indicators: svchost from wrong path, Office spawning cmd, deleted-binary processes</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know Wireshark display filter syntax and tcpdump capture filter syntax for common investigation scenarios</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain Snort (rule-based IDS/IPS) vs Zeek (log-based behavioral analysis) and their use cases</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain NetFlow and SIEM: what data each captures, how they differ from packet capture</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know security product types: AV, EDR, NGFW, WAF, DLP, vulnerability scanner, honeypot — what each detects and its limitations</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain buffer overflow, SQLi, XSS, CSRF, command injection — mechanism, impact, and prevention for each</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Understand CVE format and CVSS scoring ranges (Critical/High/Medium/Low thresholds)</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain 8 network protocol attacks: ARP spoofing, SYN flood, DNS cache poisoning, VLAN hopping, NBNS/LLMNR poisoning, SSL stripping, amplification DDoS</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know the 5 Nmap scan types and what each returns from open vs closed vs filtered ports</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know 10 Windows built-in security mechanisms: UAC, Defender, Firewall, AppLocker, WDAC, Credential Guard, DEP, ASLR, BitLocker, Sysmon</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know the bypass or limitation of each Windows security mechanism</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know Linux security mechanisms: DAC, SELinux, AppArmor, seccomp, sudo, PAM, iptables, SSH keys, capabilities, chroot/namespaces</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Know critical sshd_config hardening settings: PermitRootLogin no, PasswordAuthentication no, MaxAuthTries, AllowUsers</span></li>
+    <li onclick="toggleCheck(this)"><span class="check-box">✓</span><span>Explain the Protected Users security group in Active Directory and what credential attacks it mitigates</span></li>
+  </ul>
+</div>
+
+  </main>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const navEl = document.getElementById('nav-'+id);
+  if(navEl) navEl.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleCheck(li){
+  li.classList.toggle('checked');
+  updateProgress();
+}
+
+function updateProgress(){
+  const items=document.querySelectorAll('#masteryList li');
+  const done=document.querySelectorAll('#masteryList li.checked').length;
+  const pct=Math.round((done/items.length)*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent=done+' / '+items.length+' topics mastered';
+}
+
+const questions=[
+  {q:"A worm differs from a virus primarily in that:",
+   opts:["A worm encrypts files while a virus only copies itself","A worm self-replicates across networks without user interaction; a virus requires a user to execute an infected file","A worm only affects Linux systems while a virus targets Windows","A worm is always fileless while a virus always writes to disk"],
+   answer:1,exp:"Worm: self-propagating via network vulnerabilities (no user action needed). Virus: attaches to files and requires the infected file to be executed. WannaCry was a worm — it spread itself via EternalBlue without any user clicking anything."},
+
+  {q:"Which command is commonly executed by ransomware immediately before encrypting files?",
+   opts:["net stop windefend — to disable Windows Defender","vssadmin delete shadows /all /quiet — to destroy Volume Shadow Copies preventing recovery","cipher /e /s:C:\\ — to pre-encrypt the filesystem","attrib +h +s C:\\ — to hide all files before re-encrypting them"],
+   answer:1,exp:"Ransomware deletes Volume Shadow Copies (VSS) first so victims cannot restore previous file versions without paying. This is one of the most reliable ransomware fingerprints — vssadmin delete shadows is almost never run legitimately."},
+
+  {q:"A kernel-mode rootkit is most dangerous because:",
+   opts:["It runs faster than user-mode software and encrypts faster","It operates at Ring 0 — the same privilege as the OS kernel — and can lie to all user-space security tools by manipulating kernel data structures","It can only be installed by nation-state actors with physical access to hardware","It requires rebooting the system to activate, giving defenders a detection window"],
+   answer:1,exp:"Kernel rootkits patch the OS itself — the SSDT, process lists, module lists. When an AV or investigator calls GetProcessList, the kernel returns a filtered result hiding the malware. Since all tools rely on the kernel for information, they all see the same lie."},
+
+  {q:"What is a bootkit and what makes it particularly persistent?",
+   opts:["A bootkit is a type of adware that modifies the browser startup page and persists in the browser profile folder","A bootkit infects the MBR or UEFI firmware, loading before the OS — it survives OS reinstallation because it's below the OS on disk or in firmware","A bootkit is a kernel rootkit that automatically restarts the infected service if it is stopped","A bootkit stores itself in the RAM disk (initrd) so it cannot be removed by standard disk wiping tools"],
+   answer:1,exp:"Bootkits infect the MBR (or UEFI firmware on modern systems). Since they execute before the OS loads, they establish control before any AV, EDR, or security mechanism activates. Disk wipe removes MBR bootkits. UEFI bootkits (like LoJax) can survive even disk replacement."},
+
+  {q:"Which network traffic pattern most strongly indicates C2 beaconing?",
+   opts:["High-volume outbound traffic during business hours to CDN IP addresses","Regular outbound HTTPS connections at consistent intervals (e.g., every 60 seconds) to the same external IP or domain","Multiple failed DNS lookups for common typosquatted domain names","ARP broadcast traffic from a single host to all hosts on the local subnet"],
+   answer:1,exp:"Beaconing regularity is the key fingerprint — malware checks in with C2 on a timer. Human browsing is irregular and varied. Automated beaconing produces a periodic pattern visible in netflow or connection logs. Defenders should baseline and alert on regular-interval connections to external IPs."},
+
+  {q:"What does a DGA (Domain Generation Algorithm) allow malware to do?",
+   opts:["Dynamically generate decoy files to confuse forensic investigators","Generate hundreds of pseudo-random C2 domain names daily — the botmaster only registers one, making C2 takedown require blocking all generated domains","Create unique encryption keys for each victim so decryption requires the master key","Generate random process names to evade signature-based process name detection"],
+   answer:1,exp:"DGA: seed (e.g., date) + algorithm → hundreds of domains. Bot tries each; the registered one connects. Defenders can't pre-block unknown domains. Detection: high NXDOMAIN rate, high-entropy domain names, same algorithm pattern. Mitigation: DGA prediction and preemptive sinkholing."},
+
+  {q:"Which of these is the strongest indicator that svchost.exe on a Windows system may be malware?",
+   opts:["The process has more than 5 services hosted inside it","The svchost.exe process is running from C:\\Users\\Public\\ rather than C:\\Windows\\System32\\","The process has been running for more than 24 hours without restart","The process is listed in netstat with a LISTENING state on port 1025"],
+   answer:1,exp:"Legitimate svchost.exe ONLY runs from C:\\Windows\\System32\\. Finding it in %TEMP%, %APPDATA%, C:\\Users\\, or any other path is a definitive indicator of malware impersonating the name. This is one of the most reliable host-based IOCs — always check the full path, not just the process name."},
+
+  {q:"Wireshark display filter to show only TCP SYN packets (useful for detecting port scanning):",
+   opts:["tcp.flags == 0x02","tcp.flags.syn == 1 && tcp.flags.ack == 0","tcp.handshake.type == SYN","tcp.connect == true && tcp.ack == false"],
+   answer:1,exp:"tcp.flags.syn == 1 selects packets with SYN set; && tcp.flags.ack == 0 excludes SYN-ACK (which also has SYN set). This gives you pure SYN packets — the initiation of new connections. Many SYNs to sequential ports from one source = port scan."},
+
+  {q:"What is the key difference between Snort and Zeek as network security tools?",
+   opts:["Snort analyzes encrypted traffic; Zeek only works on cleartext","Snort is signature/rule-based and generates alerts on matching traffic; Zeek generates structured logs of all network activity for behavioral analysis and threat hunting","Snort is open-source; Zeek is commercial and requires a license","Snort works at Layer 2; Zeek works at Layer 7"],
+   answer:1,exp:"Snort: write rules that match specific traffic patterns → alert/block. Good for known signatures. Zeek: produces rich logs (conn.log, dns.log, http.log, ssl.log) of everything that happened — no rules needed. Zeek is better for hunting unknown threats and investigating incidents. Both are complementary."},
+
+  {q:"SQL injection is prevented most effectively by:",
+   opts:["Encrypting the database contents so injected queries cannot read plaintext data","Using parameterized queries (prepared statements) — user input is treated as data, never as SQL syntax regardless of what characters it contains","Limiting SQL query length to 255 characters to prevent complex injection payloads","Running the web server as a low-privilege user so it cannot access the database"],
+   answer:1,exp:"Parameterized queries: the SQL structure is fixed; user input is bound as a parameter. The database treats input as a literal value — not executable SQL. No amount of SQL metacharacters in the input can escape or alter the query structure. Input validation is additional defense-in-depth but parameterized queries are the primary fix."},
+
+  {q:"What does Cross-Site Scripting (XSS) allow an attacker to do?",
+   opts:["Submit malicious SQL queries through a web form to dump the backend database","Inject malicious JavaScript into web pages served to other users — when victims load the page, the attacker's script runs in their browser with access to their session and cookies","Forge HTTP requests on behalf of an authenticated user to perform unauthorized actions","Intercept traffic between the user's browser and the web server to modify responses"],
+   answer:1,exp:"XSS: attacker gets their script into the page (stored, reflected, or DOM-based). Victim's browser downloads and executes it in the context of the trusted site — full access to cookies (HTTPOnly mitigates this), DOM, local storage. Common payloads: document.cookie theft, credential harvesting forms, keyloggers in the browser."},
+
+  {q:"CVSS scores are used to:",
+   opts:["Track which CVEs have been exploited in the wild and assign risk ratings based on observed attacks","Provide a standardized numerical severity rating (0.0–10.0) for vulnerabilities based on characteristics like attack vector, complexity, and impact","Assign monetary values to vulnerabilities for bug bounty programs","Certify that a vulnerability has been independently verified by a third party"],
+   answer:1,exp:"CVSS (Common Vulnerability Scoring System): base score from attack vector (network/adjacent/local/physical), complexity (low/high), privileges required, user interaction, scope, and CIA impact. Critical=9.0-10.0, High=7.0-8.9, Medium=4.0-6.9, Low=0.1-3.9. Used to prioritize patching — but in-the-wild exploitation should override pure CVSS scoring."},
+
+  {q:"ARP spoofing enables a man-in-the-middle attack because:",
+   opts:["ARP packets can carry malicious payloads that execute when processed by the target's network stack","ARP has no authentication — an attacker can send unsolicited ARP replies mapping their MAC to the gateway's IP, poisoning the victim's ARP cache so traffic intended for the gateway goes to the attacker","ARP uses UDP which can be easily spoofed at the transport layer","ARP requests are sent to the attacker's IP first by default before trying the actual gateway"],
+   answer:1,exp:"ARP has no authentication mechanism. Any host can send a gratuitous ARP reply claiming any IP→MAC mapping. The receiving host updates its ARP cache without question. Attacker maps their MAC to the gateway IP — all victim traffic to the internet now passes through the attacker. Defense: Dynamic ARP Inspection (DAI) on managed switches validates ARP against DHCP snooping table."},
+
+  {q:"Which Windows security mechanism prevents Mimikatz from extracting credentials from LSASS memory even with SYSTEM-level access?",
+   opts:["BitLocker — encrypts the LSASS process memory so credential material cannot be read","Credential Guard — uses Hyper-V virtualization to isolate LSASS credentials in a separate Secure World VM inaccessible even to SYSTEM","Windows Defender — real-time protection blocks Mimikatz execution by signature detection","AppLocker — prevents unauthorized executables from running, including Mimikatz"],
+   answer:1,exp:"Credential Guard: runs LSASS in an isolated VM (VSM — Virtual Secure Mode) backed by the Hyper-V hypervisor. Even SYSTEM cannot access Secure World memory. Mimikatz's sekurlsa::logonpasswords returns empty or hashes only. Requires UEFI + Secure Boot + compatible hardware. Does not prevent all attacks (pass-the-hash to remote services still works)."},
+
+  {q:"SELinux operates differently from standard Unix DAC permissions because:",
+   opts:["SELinux replaces user/group permissions entirely with a simpler read/write/execute model","SELinux enforces Mandatory Access Control using security contexts and type enforcement — even root cannot access resources if the SELinux policy prohibits it, regardless of file permissions","SELinux only applies to network traffic, not to file system access","SELinux is a firewall mechanism that controls which processes can make network connections"],
+   answer:1,exp:"DAC (standard Unix permissions): resource owner decides who can access it. Can be bypassed by root. SELinux MAC: policy defines what types of processes can access what types of resources — independent of DAC. Even if root tries to access a file that SELinux policy forbids, the access is denied. Enforcing mode blocks; Permissive mode logs."},
+
+  {q:"A SIEM differs from an IDS in that:",
+   opts:["A SIEM only monitors network traffic while an IDS monitors host activity","A SIEM aggregates and correlates logs from across the entire environment (not just network traffic) and provides investigation and long-term retention capabilities; an IDS focuses on detecting threats in real-time network traffic via signatures or anomalies","A SIEM blocks threats automatically while an IDS only alerts","An IDS is more expensive and requires dedicated hardware while a SIEM is purely software"],
+   answer:1,exp:"IDS: analyzes network packets (or host events via HIDS) and alerts on matching signatures or anomalies — real-time, narrow focus. SIEM: ingests logs from firewalls, endpoints, applications, authentication systems, IDS — correlates across all sources, enables investigation, provides historical search, supports compliance reporting. IDS output often feeds into the SIEM."},
+
+  {q:"What is the purpose of seccomp on Linux?",
+   opts:["A filesystem encryption mechanism that encrypts individual files based on user identity","A syscall filtering mechanism that restricts which system calls a process can make, reducing the kernel attack surface even if code execution is achieved","A network access control mechanism similar to iptables but applied per-process","A mandatory access control system that replaces DAC permissions for containerized workloads"],
+   answer:1,exp:"seccomp (Secure Computing Mode): process installs a BPF filter that the kernel checks before every syscall. If the syscall isn't allowed, the kernel kills the process or returns an error. Even if an attacker achieves code execution, they cannot call fork(), execve(), or other dangerous syscalls. Docker, Chrome, and OpenSSH all use seccomp."},
+
+  {q:"NBNS and LLMNR poisoning attacks capture:",
+   opts:["TLS session keys by intercepting the key exchange during HTTPS handshake","NTLM authentication hashes when poisoned name resolution causes victims to authenticate to the attacker's machine","Kerberos TGTs by intercepting traffic between the client and the KDC","Cleartext passwords by intercepting DNS queries and replacing responses with attacker IPs"],
+   answer:1,exp:"NBNS/LLMNR: Windows broadcasts these name resolution protocols when DNS fails. Attacker (Responder tool) responds to all queries claiming to be the requested host. Victim's machine tries to authenticate — sends NTLM challenge response (hash). Attacker captures the NTLMv2 hash for offline cracking or relaying. Defense: disable LLMNR and NBNS via GPO."},
+
+  {q:"What does a honeypot provide that other security controls don't?",
+   opts:["A honeypot provides active deception by generating fake threat intelligence to misdirect attackers","Any interaction with a honeypot is by definition suspicious — it provides very high-fidelity detection of reconnaissance and lateral movement with extremely low false-positive rates","A honeypot prevents attackers from accessing real systems by absorbing all attack traffic","A honeypot automatically patches vulnerabilities on production systems after observing how they are exploited"],
+   answer:1,exp:"A honeypot is a decoy with no legitimate business purpose. No authorized user should ever touch it. Any connection to it — port scan, login attempt, file access — is a high-confidence indicator of malicious activity. Unlike IDS with many false positives, honeypot alerts are almost always real. Great for detecting lateral movement inside the network."},
+
+  {q:"NTP amplification DDoS is effective because:",
+   opts:["NTP servers have poor rate-limiting by default and can be easily crashed with malformed packets","Small UDP requests with a spoofed source IP cause NTP servers to send large responses (up to 556x amplification) to the victim IP — the attacker uses many reflectors to overwhelm the target","NTP traffic bypasses most firewalls because port 123 is whitelisted for time synchronization","NTP servers can be compromised to join a botnet and generate attack traffic on command"],
+   answer:1,exp:"Amplification attack: small query (e.g., monlist request = ~8 bytes) → large response (up to 4800 bytes via many peers, 556× amplification). Attacker sends from spoofed source IP = victim. Many reflectors × high amplification = massive traffic flood at victim. Defense: BCP38 source address validation at ISPs; disable NTP monlist (restrict nomonlist in ntp.conf)."}
+];
+
+function buildQuiz(){
+  const c=document.getElementById('quizContainer');
+  questions.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz-q';
+    const letters=['A','B','C','D'];
+    let opts=q.opts.map((o,j)=>`<label class="quiz-option" id="opt-${i}-${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+    d.innerHTML=`<div class="question">Q${i+1}. ${q.q}</div>${opts}<button class="quiz-btn" onclick="checkAnswer(${i})">Check Answer</button><div class="feedback" id="fb-${i}"></div>`;
+    c.appendChild(d);
+  });
+}
+
+function checkAnswer(i){
+  const sel=document.querySelector(`input[name="q${i}"]:checked`);
+  const fb=document.getElementById('fb-'+i);
+  if(!sel){fb.style.display='block';fb.className='feedback';fb.textContent='Select an option first';return;}
+  const val=parseInt(sel.value);
+  const q=questions[i];
+  document.querySelectorAll(`#q${i-0} .quiz-option`).forEach((opt,j)=>{
+    opt.querySelector('input').disabled=true;
+    if(j===q.answer)opt.classList.add('correct');
+    else if(j===val&&val!==q.answer)opt.classList.add('wrong');
+  });
+  fb.style.display='block';
+  if(val===q.answer){fb.className='feedback correct';fb.textContent='// CORRECT — '+q.exp;}
+  else{fb.className='feedback wrong';fb.textContent='// INCORRECT — '+q.exp;}
+}
+
+buildQuiz();
+
+function toggleSidebar() {
+  const nav = document.querySelector('nav');
+  const overlay = document.getElementById('overlay');
+  nav.classList.toggle('open');
+  overlay.classList.toggle('active');
+}
+function closeSidebar() {
+  document.querySelector('nav').classList.remove('open');
+  document.getElementById('overlay').classList.remove('active');
+}
+// Close sidebar when a section link is clicked on mobile
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+
+</script>
+</body>
+</html>
