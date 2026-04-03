@@ -2914,7 +2914,7 @@ const state = {
 
 /* ── Count questions per module ── */
 function initHome() {
-  const counts = { fund:0, net:0, os:0 };
+  const counts = { fund:0, net:0, os:0, sec:0 };
   QUESTIONS.forEach(q => counts[q.module]++);
   document.getElementById('count-fund').textContent = counts.fund + ' questions';
   document.getElementById('count-net').textContent  = counts.net  + ' questions';
