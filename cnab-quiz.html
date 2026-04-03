@@ -3485,7 +3485,9 @@ function autoTimeout(correct, q) {
   });
   showExplanation(false, q);
   state.answers.push({ q: q, chosen: -1, correct: false });
-  document.getElementById('nextBtn').classList.add('visible');
+  const nb = document.getElementById('nextBtn');
+  nb.disabled = false;
+  nb.classList.add('visible');
 }
 
 function selectAnswer(displayIdx, correctIdx, q) {
@@ -3504,7 +3506,9 @@ function selectAnswer(displayIdx, correctIdx, q) {
 
   showExplanation(isCorrect, q);
   state.answers.push({ q, chosen: displayIdx, correct: isCorrect });
-  document.getElementById('nextBtn').classList.add('visible');
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.disabled = false;
+  nextBtn.classList.add('visible');
 
   // Update live score
   const correct = state.answers.filter(a => a.correct).length;
@@ -3524,6 +3528,8 @@ function showExplanation(isCorrect, q) {
 }
 
 function nextQuestion() {
+  const btn = document.getElementById('nextBtn');
+  btn.disabled = true;
   state.current++;
   if (state.current >= state.pool.length) {
     showResults();
