@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command ':*)",
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \"c:\\\\Users\\\\Matt\\\\Downloads\\\\CNAB_Guide\\\\_insert.ps1\")",
+      "Bash(wc -l /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -n \"button\\\\|<button\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -n \"<button\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -n \"aria-label\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -n '<table' /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -c \"aria-label\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep \"addEventListener\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -n \"removeEventListener\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -o \"\\\\.card[^{]*{\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -n \"\\\\.card:hover{border-color\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)",
+      "Bash(grep -n \"show\\(\" /c/Users/Matt/Downloads/CNAB_Guide/*.html)"
+    ]
+  }
+}

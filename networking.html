@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CNAB Study Guide — Networking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
   :root{--bg:#080c10;--panel:#0d1117;--border:#1c2a3a;--accent:#00e5ff;--accent2:#39ff14;--accent3:#ff6b35;--warn:#ffcc00;--text:#c9d1d9;--dim:#586069;--glow:0 0 8px rgba(0,229,255,0.4);--glow2:0 0 8px rgba(57,255,20,0.4);}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;padding-top:46px;}
@@ -37,7 +39,7 @@
   .section-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;letter-spacing:0.05em;}
   .section-meta{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);}
   .card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;position:relative;transition:border-color 0.15s;}
-  .card:hover{border-color:rgba(0,229,255,0.25);}
+  .card:hover{border-color:rgba(0,229,255,0.25);transform:translateY(-2px);}
   .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:6px 0 0 6px;background:var(--accent);opacity:0;transition:opacity 0.15s;}
   .card:hover::before{opacity:1;}
   .card-title{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.7rem;}
@@ -344,7 +346,7 @@
 
   <h3>What Changes at Each Hop (L2–L4)</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Header Field</th><th>Changes at Each Router?</th><th>Why</th></tr></thead>
+    <thead><tr><th scope="col">Header Field</th><th scope="col">Changes at Each Router?</th><th scope="col">Why</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">L2 Source MAC</td><td><span class="tag tag-l2">YES — every hop</span></td><td>Replaced with the outgoing interface's MAC address</td></tr>
       <tr><td class="cmd-name">L2 Destination MAC</td><td><span class="tag tag-l2">YES — every hop</span></td><td>Replaced with the next-hop router's MAC (via ARP lookup)</td></tr>
@@ -388,7 +390,7 @@
 
   <h3>IPv4 Address Classes (Legacy)</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Class</th><th>First Octet Range</th><th>Default Mask</th><th>Networks / Hosts</th><th>Use</th></tr></thead>
+    <thead><tr><th scope="col">Class</th><th scope="col">First Octet Range</th><th scope="col">Default Mask</th><th scope="col">Networks / Hosts</th><th scope="col">Use</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">A</td><td>1–126</td><td>255.0.0.0 (/8)</td><td>126 networks / 16,777,214 hosts</td><td>Large orgs, ISPs</td></tr>
       <tr><td class="cmd-name">B</td><td>128–191</td><td>255.255.0.0 (/16)</td><td>16,384 networks / 65,534 hosts</td><td>Mid-size orgs</td></tr>
@@ -413,7 +415,7 @@
 
   <h3>CIDR Subnet Reference Table</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>CIDR</th><th>Subnet Mask</th><th>Total IPs</th><th>Usable Hosts</th><th>Network Bits</th></tr></thead>
+    <thead><tr><th scope="col">CIDR</th><th scope="col">Subnet Mask</th><th scope="col">Total IPs</th><th scope="col">Usable Hosts</th><th scope="col">Network Bits</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">/30</td><td>255.255.255.252</td><td>4</td><td>2</td><td>Point-to-point links</td></tr>
       <tr><td class="cmd-name">/29</td><td>255.255.255.248</td><td>8</td><td>6</td><td>Small segments</td></tr>
@@ -573,7 +575,7 @@
 
   <h3>Administrative Distance Values</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Route Source</th><th>Admin Distance</th><th>Notes</th></tr></thead>
+    <thead><tr><th scope="col">Route Source</th><th scope="col">Admin Distance</th><th scope="col">Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Connected</td><td>0</td><td>Directly attached network — most trusted</td></tr>
       <tr><td class="cmd-name">Static</td><td>1</td><td>Manually configured by admin</td></tr>
@@ -639,7 +641,7 @@
 
   <h3>TCP vs UDP Comparison</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Property</th><th>TCP</th><th>UDP</th></tr></thead>
+    <thead><tr><th scope="col">Property</th><th scope="col">TCP</th><th scope="col">UDP</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Connection</td><td>Connection-oriented (3-way handshake required)</td><td>Connectionless — fire and forget</td></tr>
       <tr><td class="cmd-name">Reliability</td><td>Guaranteed delivery — ACK, retransmit on loss</td><td>No acknowledgment — packets may be lost</td></tr>
@@ -672,7 +674,7 @@
 
   <h3>TCP Flags</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Flag</th><th>Name</th><th>Purpose</th><th>Security Note</th></tr></thead>
+    <thead><tr><th scope="col">Flag</th><th scope="col">Name</th><th scope="col">Purpose</th><th scope="col">Security Note</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">SYN</td><td>Synchronize</td><td>Initiates connection; carries initial sequence number</td><td>SYN flood: send many SYNs without completing handshake (DoS)</td></tr>
       <tr><td class="cmd-name">ACK</td><td>Acknowledge</td><td>Confirms receipt of data; ack number = next expected seq</td><td>Present in all packets after handshake initiation</td></tr>
@@ -686,7 +688,7 @@
 
   <h3>Open vs Closed Ports — Scan Behavior</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Probe</th><th>Open Port Response</th><th>Closed Port Response</th><th>Filtered Port</th></tr></thead>
+    <thead><tr><th scope="col">Probe</th><th scope="col">Open Port Response</th><th scope="col">Closed Port Response</th><th scope="col">Filtered Port</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">TCP SYN</td><td>SYN-ACK → we send RST</td><td>RST-ACK</td><td>No response (timeout) or ICMP unreachable</td></tr>
       <tr><td class="cmd-name">TCP Connect</td><td>SYN-ACK → ACK → connected</td><td>RST-ACK</td><td>Timeout</td></tr>
@@ -713,7 +715,7 @@
 
   <h3>Physical Topologies</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Topology</th><th>Description</th><th>Pros</th><th>Cons</th></tr></thead>
+    <thead><tr><th scope="col">Topology</th><th scope="col">Description</th><th scope="col">Pros</th><th scope="col">Cons</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Bus</td><td>All devices on single cable</td><td>Simple, cheap</td><td>Single point of failure; collisions; legacy</td></tr>
       <tr><td class="cmd-name">Star</td><td>All devices connect to central switch/hub</td><td>Easy troubleshoot; failure isolated to one device</td><td>Central device = single point of failure</td></tr>
@@ -774,7 +776,7 @@
 
   <h3>Device Summary</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Device</th><th>OSI Layer</th><th>Function</th><th>Forwarding Basis</th></tr></thead>
+    <thead><tr><th scope="col">Device</th><th scope="col">OSI Layer</th><th scope="col">Function</th><th scope="col">Forwarding Basis</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Hub</td><td><span class="tag tag-l2">L1</span></td><td>Repeats signal to ALL ports (electrical amplifier). Creates one collision domain.</td><td>None — blindly repeats bits</td></tr>
       <tr><td class="cmd-name">Switch</td><td><span class="tag tag-l2">L2</span></td><td>Forwards frames to specific port based on MAC. Each port = collision domain. Maintains MAC table (CAM table).</td><td>Destination MAC address</td></tr>
@@ -811,7 +813,7 @@
 
   <h3>Essential Protocol & Port Reference</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Protocol</th><th>Port(s)</th><th>Transport</th><th>Description & Notes</th></tr></thead>
+    <thead><tr><th scope="col">Protocol</th><th scope="col">Port(s)</th><th scope="col">Transport</th><th scope="col">Description & Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">FTP</td><td>20 (data), 21 (control)</td><td>TCP</td><td>File Transfer Protocol. Cleartext. Active mode: server initiates data conn to client:20. Passive mode: client initiates data conn to server (firewall-friendly). Use SFTP or FTPS instead.</td></tr>
       <tr><td class="cmd-name">SSH</td><td>22</td><td>TCP</td><td>Secure Shell. Encrypted remote access, tunneling, SCP/SFTP file transfer. Replaced Telnet and rlogin. Key-based auth preferred over password.</td></tr>
@@ -848,7 +850,7 @@
 
   <h3>DNS Record Types</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Record</th><th>Purpose</th><th>Example</th></tr></thead>
+    <thead><tr><th scope="col">Record</th><th scope="col">Purpose</th><th scope="col">Example</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">A</td><td>Hostname → IPv4 address</td><td>example.com → 93.184.216.34</td></tr>
       <tr><td class="cmd-name">AAAA</td><td>Hostname → IPv6 address</td><td>example.com → 2606:2800:220:1:248:1893:25c8:1946</td></tr>
@@ -986,7 +988,7 @@
     <div class="card-title">One Key for Both Operations</div>
     <p>Both encryption and decryption use the same secret key. The key must be shared securely between parties beforehand (the "key distribution problem"). Fast — suitable for bulk data encryption.</p>
     <table class="cmd-table" style="margin-top:0.6rem">
-      <thead><tr><th>Algorithm</th><th>Key Size</th><th>Block Size</th><th>Status</th></tr></thead>
+      <thead><tr><th scope="col">Algorithm</th><th scope="col">Key Size</th><th scope="col">Block Size</th><th scope="col">Status</th></tr></thead>
       <tbody>
         <tr><td class="cmd-name">DES</td><td>56-bit</td><td>64-bit</td><td>Broken — brute-forceable in hours</td></tr>
         <tr><td class="cmd-name">3DES</td><td>112/168-bit</td><td>64-bit</td><td>Deprecated — Sweet32 attack, slow</td></tr>
@@ -1130,7 +1132,7 @@
 
   <h3>Routing Technique Glossary</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Protocol / Term</th><th>AD</th><th>Type</th><th>Description</th></tr></thead>
+    <thead><tr><th scope="col">Protocol / Term</th><th scope="col">AD</th><th scope="col">Type</th><th scope="col">Description</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Static Route</td><td>1</td><td>Manual</td><td>Admin manually enters routes. Recommended for high-bandwidth or simple topologies. No protocol overhead.</td></tr>
       <tr><td class="cmd-name">Default Route</td><td>—</td><td>Catch-all</td><td>0.0.0.0/0 — gives router a path for destinations not in the routing table. Points to upstream gateway.</td></tr>
@@ -1268,7 +1270,7 @@
 
   <h3>Common TCP/IP Protocols and Ports</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Protocol</th><th>Transport</th><th>Port(s)</th><th>Description</th></tr></thead>
+    <thead><tr><th scope="col">Protocol</th><th scope="col">Transport</th><th scope="col">Port(s)</th><th scope="col">Description</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">FTP</td><td>TCP</td><td>20/21</td><td>File Transfer. Control on 21; data on 20 (active) or dynamic (passive). Cleartext — use SFTP or FTPS instead.</td></tr>
       <tr><td class="cmd-name">SSH</td><td>TCP</td><td>22</td><td>Secure Shell. Primary method for secure network device management at the command level. Encrypted alternative to Telnet.</td></tr>
@@ -1464,7 +1466,9 @@ function toggleSidebar() {
   overlay.classList.toggle('active');
 }
 function closeSidebar() {
-  document.querySelector('nav').classList.remove('open');
+  const nav = document.querySelector('nav');
+  if (!nav.classList.contains('open')) return;
+  nav.classList.remove('open');
   document.getElementById('overlay').classList.remove('active');
 }
 // Close sidebar when a section link is clicked on mobile

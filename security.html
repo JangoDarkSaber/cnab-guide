@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CNAB Study Guide — Security</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
 
   :root {
     --bg:#080c10;--panel:#0d1117;--panel2:#111820;--border:#1c2a3a;
@@ -293,7 +295,8 @@
     nav { width: 280px; }
     main { max-width: 1280px; }
   }
-
+  .mt-sm { margin-top: 0.6rem; }
+  .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 </style>
 </head>
 <body>
@@ -463,7 +466,7 @@
     <div class="card-title danger">How Malware Affects Your Ability to Operate</div>
     <p>Malware generates "noise" — anomalous network traffic, system activity, and resource consumption — that can degrade or expose operations:</p>
     <table class="cmd-table" style="margin-top:0.8rem">
-      <thead><tr><th>Malware Type</th><th>Noise Generated</th><th>Impact on Remote Ops</th></tr></thead>
+      <thead><tr><th scope="col">Malware Type</th><th scope="col">Noise Generated</th><th scope="col">Impact on Remote Ops</th></tr></thead>
       <tbody>
         <tr><td class="cmd-name">Worm</td><td>Mass scanning, high bandwidth utilization on network segments</td><td>Saturates links; your own traffic is delayed or dropped; scanning may trigger IDS alerts exposing your position</td></tr>
         <tr><td class="cmd-name">RAT / Botnet</td><td>Beaconing — regular HTTPS/DNS callbacks at predictable intervals</td><td>Beaconing traffic stands out in packet captures; C2 domains may be sinkholed; your traffic may be confused with malware traffic</td></tr>
@@ -517,7 +520,7 @@
     <div class="card accent-red">
       <div class="card-title">Kernel-Mode Rootkit (Ring 0)</div>
       <p>Operates at the highest privilege level — inside the OS kernel. Can modify kernel data structures directly: the SSDT (System Service Descriptor Table), IDT (Interrupt Descriptor Table), process/module lists. All OS tools rely on the kernel for information — the kernel lies to them.</p>
-      <ul class="bullets" style="margin-top:0.6rem">
+      <ul class="bullets mt-sm">
         <li><strong>Infection method:</strong> Exploits kernel vulnerability, malicious driver (BYOVD), or disabling Driver Signature Enforcement</li>
         <li><strong>Privilege level:</strong> Ring 0 — same as OS kernel</li>
         <li><strong>Detection:</strong> Cross-view comparison (live kernel vs raw disk/memory), integrity checkers (chkrootkit, rkhunter), memory forensics (Volatility)</li>
@@ -529,7 +532,7 @@
     <div class="card accent-orange">
       <div class="card-title">User-Mode Rootkit (Ring 3)</div>
       <p>Operates in user space. Cannot modify the kernel, so hooks user-space libraries instead — patches DLLs (Windows) or LD_PRELOAD shared objects (Linux) to intercept and filter API calls before they return to the calling program.</p>
-      <ul class="bullets" style="margin-top:0.6rem">
+      <ul class="bullets mt-sm">
         <li><strong>Infection method:</strong> Trojan, exploit granting user-level execution</li>
         <li><strong>Privilege level:</strong> Ring 3 — runs as an unprivileged or admin user</li>
         <li><strong>Detection:</strong> Easier than kernel rootkits — kernel is trustworthy; compare API results to raw system calls directly</li>
@@ -541,7 +544,7 @@
     <div class="card accent-purple">
       <div class="card-title">Bootkit (MBR / UEFI)</div>
       <p>Infects the Master Boot Record or UEFI firmware — loads <strong>before the operating system</strong>. Establishes control before any OS security mechanisms activate. Survives OS reinstallation (disk wipe required; UEFI variants may survive even that).</p>
-      <ul class="bullets" style="margin-top:0.6rem">
+      <ul class="bullets mt-sm">
         <li><strong>Infection method:</strong> Physical access, kernel exploit that writes to MBR, compromised firmware update</li>
         <li><strong>Privilege level:</strong> Pre-Ring 0 — runs before kernel exists</li>
         <li><strong>Detection:</strong> Compare MBR bytes to known-good; offline boot scanning; UEFI Secure Boot prevents unsigned bootloaders</li>
@@ -553,7 +556,7 @@
     <div class="card accent-cyan">
       <div class="card-title">Hypervisor Rootkit (Ring -1)</div>
       <p>Moves the legitimate OS into a virtual machine, placing the rootkit <strong>beneath the OS</strong> as a thin hypervisor layer. The OS has no awareness it's been virtualized. Extremely difficult to detect from within the compromised OS.</p>
-      <ul class="bullets" style="margin-top:0.6rem">
+      <ul class="bullets mt-sm">
         <li><strong>Infection method:</strong> Kernel-level compromise then installs hypervisor; or direct hardware access</li>
         <li><strong>Privilege level:</strong> Ring -1 (VMX root mode) — more privileged than Ring 0</li>
         <li><strong>Detection:</strong> Timing anomalies (RDTSC instruction), CPUID hypervisor bit check, hardware-based monitoring (Intel TXT)</li>
@@ -565,8 +568,8 @@
   </div>
 
   <h3>Rootkit Detection Techniques</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Technique</th><th>How It Works</th><th>What It Finds</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Technique</th><th scope="col">How It Works</th><th scope="col">What It Finds</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Cross-view detection</td><td>Compare results from two sources — e.g., OS API process list vs raw kernel memory walk. Discrepancies reveal hidden objects.</td><td>Kernel-mode rootkits hiding processes/modules</td></tr>
       <tr><td class="cmd-name">Memory forensics (Volatility)</td><td>Analyze a raw memory dump for anomalies — unlinked processes, SSDT hooks, hidden kernel modules, injected DLLs</td><td>Kernel rootkits, injected code, hidden processes</td></tr>
@@ -594,8 +597,8 @@
   </div>
 
   <h3>Host-Based Fingerprints</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Category</th><th>Indicator</th><th>How to Check</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Category</th><th scope="col">Indicator</th><th scope="col">How to Check</th></tr></thead>
     <tbody>
       <tr><td class="ioc-category">File System</td><td>New executables in %TEMP%, %APPDATA%, C:\Windows\Temp, /tmp — especially ones without digital signatures</td><td>sigcheck -u -e (unsigned), find /tmp -newer /etc/passwd</td></tr>
       <tr><td class="ioc-category">File System</td><td>Files with double extensions (invoice.pdf.exe) or Unicode right-to-left override in filename</td><td>dir /s, ls -la — look for disguised extensions</td></tr>
@@ -612,8 +615,8 @@
   </table></div>
 
   <h3>Network-Based Fingerprints</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Category</th><th>Indicator</th><th>Notes</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Category</th><th scope="col">Indicator</th><th scope="col">Notes</th></tr></thead>
     <tbody>
       <tr><td class="ioc-category">C2 Beaconing</td><td>Periodic outbound connections at regular intervals (e.g., every 60 seconds) to the same external IP/domain</td><td>Regularity is the giveaway — human browsing is irregular. Check jitter (slight variation intended to evade detection).</td></tr>
       <tr><td class="ioc-category">DNS</td><td>DNS lookups for algorithmically generated domains (DGA) — long random-looking domain names, high NXDOMAIN rate</td><td>Conficker, Mirai used DGA. Detect via entropy analysis of queried domains.</td></tr>
@@ -706,8 +709,8 @@
   </div>
 
   <h3>Botnet Use Cases</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Use</th><th>Description</th><th>Operational Impact</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Use</th><th scope="col">Description</th><th scope="col">Operational Impact</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">DDoS</td><td>Volumetric attacks — flood victim with traffic from thousands of bots</td><td>Saturates network links; makes target unreachable; can affect upstream providers</td></tr>
       <tr><td class="cmd-name">Spam</td><td>Send billions of spam/phishing emails through bot infrastructure</td><td>Source IPs distributed — hard to block; bots take blame for spam</td></tr>
@@ -786,8 +789,8 @@
   </div>
 
   <h3>Suspicious Process Indicators</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Observation</th><th>Why Suspicious</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Observation</th><th scope="col">Why Suspicious</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">svchost.exe running from %TEMP% or Desktop</td><td>Legitimate svchost.exe only runs from C:\Windows\System32\. Any other path = malware masquerading.</td></tr>
       <tr><td class="cmd-name">explorer.exe with a network connection</td><td>Explorer rarely makes network connections. Network activity from explorer = likely injected code.</td></tr>
@@ -874,7 +877,7 @@
   <div class="card accent-purple">
     <div class="card-title purple">What a SIEM Does</div>
     <p>A SIEM aggregates logs and events from across the environment — firewalls, IDS, endpoints, servers, authentication systems — correlates them, and generates alerts when event combinations match known attack patterns. Core capabilities:</p>
-    <ul class="bullets" style="margin-top:0.6rem">
+    <ul class="bullets mt-sm">
       <li><strong>Log aggregation:</strong> Collects from Windows Event Log, syslog, cloud APIs, endpoint agents</li>
       <li><strong>Normalization:</strong> Converts different log formats to a common schema</li>
       <li><strong>Correlation:</strong> Links related events across sources — failed login + new service + outbound connection = alert</li>
@@ -913,8 +916,8 @@
   </div>
 
   <h3>Security Product Reference</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Product Type</th><th>What It Does</th><th>Detects / Prevents</th><th>Limitations</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Product Type</th><th scope="col">What It Does</th><th scope="col">Detects / Prevents</th><th scope="col">Limitations</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">AV (Antivirus)</td><td>Scans files and processes against signature database + basic heuristics</td><td>Known malware families, common variants</td><td>Blind to zero-days, fileless malware, encrypted payloads, heavily obfuscated code</td></tr>
       <tr><td class="cmd-name">EDR (Endpoint Detection & Response)</td><td>Continuous telemetry from endpoints — records all process creation, file writes, network connections, registry changes. Enables detection, investigation, and response.</td><td>Behavioral threats, fileless malware, lateral movement, living-off-the-land attacks</td><td>Generates massive data volume; requires skilled analysts; can be blinded if attacker has admin access</td></tr>
@@ -951,8 +954,8 @@
   </div>
 
   <h3>Common Vulnerability Classes</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Vulnerability</th><th>How It Works</th><th>Impact</th><th>Prevention</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Vulnerability</th><th scope="col">How It Works</th><th scope="col">Impact</th><th scope="col">Prevention</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Buffer Overflow</td><td>Input longer than the allocated buffer overwrites adjacent memory — can overwrite the saved return address to redirect execution</td><td>Remote code execution (RCE), privilege escalation, crash</td><td>Input validation, bounds checking, stack canaries, ASLR, NX/DEP, safe string functions (strncpy not strcpy)</td></tr>
       <tr><td class="cmd-name">SQL Injection (SQLi)</td><td>Unsanitized user input is incorporated directly into SQL queries — attacker injects SQL syntax to manipulate the query</td><td>Database dump, authentication bypass, data deletion, RCE via xp_cmdshell (MSSQL)</td><td>Parameterized queries/prepared statements, stored procedures, input validation, least privilege DB accounts</td></tr>
@@ -999,8 +1002,8 @@
   </div>
 
   <h3>Protocol-Level Attacks</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Attack</th><th>Protocol Exploited</th><th>Mechanism</th><th>Defense</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Attack</th><th scope="col">Protocol Exploited</th><th scope="col">Mechanism</th><th scope="col">Defense</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">ARP Spoofing</td><td>ARP (L2)</td><td>Attacker sends gratuitous ARP replies mapping their MAC to the gateway IP, poisoning victims' caches — MITM position</td><td>Dynamic ARP Inspection (DAI) on switches, static ARP entries for critical hosts</td></tr>
       <tr><td class="cmd-name">SYN Flood</td><td>TCP (L4)</td><td>Flood target with SYN packets — never complete handshake. Exhausts server connection table (SYN_RECV state). DoS.</td><td>SYN cookies (stateless handshake validation), rate limiting, firewall thresholds</td></tr>
@@ -1038,7 +1041,7 @@
     <div class="card-title">How Amplification Attacks Work</div>
     <p>Attacker sends a small request with the <strong>victim's IP as the spoofed source</strong> to many open reflectors (DNS servers, NTP servers, memcached). Each reflector sends a much larger response to the victim. The amplification factor (response/request size ratio) determines how effective the attack is.</p>
     <table class="cmd-table" style="margin-top:0.8rem">
-      <thead><tr><th>Protocol</th><th>Port</th><th>Amplification Factor</th></tr></thead>
+      <thead><tr><th scope="col">Protocol</th><th scope="col">Port</th><th scope="col">Amplification Factor</th></tr></thead>
       <tbody>
         <tr><td class="cmd-name">DNS ANY query</td><td>UDP/53</td><td>28–54×</td></tr>
         <tr><td class="cmd-name">NTP monlist</td><td>UDP/123</td><td>Up to 556×</td></tr>
@@ -1059,8 +1062,8 @@
   </div>
 
   <h3>Windows Security Mechanisms Reference</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Mechanism</th><th>What It Does</th><th>Bypass / Limitation</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Mechanism</th><th scope="col">What It Does</th><th scope="col">Bypass / Limitation</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">UAC (User Account Control)</td><td>Even admin accounts run with limited tokens by default. Applications must request elevation — triggers consent or credential prompt. Reduces silent privilege escalation.</td><td>UAC bypass techniques (fodhelper, eventvwr, sdclt hijacks) elevate without prompt. Disabled on some enterprise builds.</td></tr>
       <tr><td class="cmd-name">Windows Defender AV</td><td>Built-in antivirus: signature + cloud + behavioral detection. Integrates with Windows Security Center. Always-on real-time protection.</td><td>Can be disabled by SYSTEM-level processes. Bypassed by obfuscation, AMSI bypass scripts, living-off-the-land techniques.</td></tr>
@@ -1091,8 +1094,8 @@
   </div>
 
   <h3>Linux Security Mechanisms Reference</h3>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Mechanism</th><th>What It Does</th><th>Notes</th></tr></thead>
+  <div class="tbl-scroll"><table class="cmd-table">
+    <thead><tr><th scope="col">Mechanism</th><th scope="col">What It Does</th><th scope="col">Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">DAC (Discretionary Access Control)</td><td>Standard Unix permission model — owner, group, other with read/write/execute bits. Owner controls access to their files. chmod / chown.</td><td>Basis of all Unix security. Supplemented by ACLs (setfacl/getfacl) for finer control.</td></tr>
       <tr><td class="cmd-name">MAC — SELinux</td><td>Mandatory Access Control. NSA-developed. Type enforcement: every process and file has a security context. Policy defines what types can access what. Even root is confined by policy.</td><td>Default on RHEL/CentOS/Fedora. Modes: Enforcing (blocks), Permissive (logs only), Disabled. Commands: getenforce, setenforce, sestatus, audit2allow.</td></tr>
@@ -1313,7 +1316,9 @@ function toggleSidebar() {
   overlay.classList.toggle('active');
 }
 function closeSidebar() {
-  document.querySelector('nav').classList.remove('open');
+  const nav = document.querySelector('nav');
+  if (!nav.classList.contains('open')) return;
+  nav.classList.remove('open');
   document.getElementById('overlay').classList.remove('active');
 }
 // Close sidebar when a section link is clicked on mobile

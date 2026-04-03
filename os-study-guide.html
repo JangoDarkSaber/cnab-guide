@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CNAB Study Guide — Operating Systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
   :root {
     --bg:#080c10;--panel:#0d1117;--border:#1c2a3a;--accent:#00e5ff;--accent2:#39ff14;--accent3:#ff6b35;--warn:#ffcc00;--text:#c9d1d9;--dim:#586069;
     --glow:0 0 8px rgba(0,229,255,0.4);--glow2:0 0 8px rgba(57,255,20,0.4);
@@ -40,7 +42,7 @@
   .section-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;letter-spacing:0.05em;}
   .section-meta{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);}
   .card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;position:relative;transition:border-color 0.15s;}
-  .card:hover{border-color:rgba(0,229,255,0.25);}
+  .card:hover{border-color:rgba(0,229,255,0.25);transform:translateY(-2px);}
   .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:6px 0 0 6px;background:var(--accent);opacity:0;transition:opacity 0.15s;}
   .card:hover::before{opacity:1;}
   .card-title{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.7rem;}
@@ -289,7 +291,7 @@
 
   <h3>Process Commands</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Command</th><th>Platform</th><th>Purpose & Key Flags</th></tr></thead>
+    <thead><tr><th scope="col">Command</th><th scope="col">Platform</th><th scope="col">Purpose & Key Flags</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">ps aux</td><td><span class="tag tag-unix">Unix</span></td><td>All processes, all users. Columns: USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</td></tr>
       <tr><td class="cmd-name">ps -ef</td><td><span class="tag tag-unix">Unix</span></td><td>Full-format listing showing PPID (parent PID). Good for tracing process trees</td></tr>
@@ -320,7 +322,7 @@
 
   <h3>Network Commands</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Command</th><th>Platform</th><th>Purpose & Output Notes</th></tr></thead>
+    <thead><tr><th scope="col">Command</th><th scope="col">Platform</th><th scope="col">Purpose & Output Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">netstat -an</td><td><span class="tag tag-both">Both</span></td><td>All connections, no DNS resolution. Shows TCP/UDP state machine states</td></tr>
       <tr><td class="cmd-name">netstat -tulpn</td><td><span class="tag tag-unix">Unix</span></td><td>TCP+UDP listening ports with PID/program name (requires root for all PIDs)</td></tr>
@@ -388,7 +390,7 @@
 
   <h3>Shell Overview</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Shell</th><th>Platform</th><th>Key Characteristics</th></tr></thead>
+    <thead><tr><th scope="col">Shell</th><th scope="col">Platform</th><th scope="col">Key Characteristics</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">bash</td><td><span class="tag tag-unix">Unix</span></td><td>Bourne Again Shell. Default on most Linux. Scripting standard. RC file: ~/.bashrc (interactive) ~/.bash_profile (login)</td></tr>
       <tr><td class="cmd-name">sh</td><td><span class="tag tag-unix">Unix</span></td><td>POSIX-compliant minimal shell. Scripts written for sh are maximally portable. No arrays, no [[, no $(())</td></tr>
@@ -583,7 +585,7 @@
 
   <h3>Filesystem Hierarchy Standard (FHS)</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Path</th><th>Purpose</th><th>Security Note</th></tr></thead>
+    <thead><tr><th scope="col">Path</th><th scope="col">Purpose</th><th scope="col">Security Note</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">/</td><td>Root — everything is under here</td><td>Only root should own; never world-writable</td></tr>
       <tr><td class="cmd-name">/bin</td><td>Essential user binaries (ls, cp, cat, bash)</td><td>Critical for system boot; often read-only mount</td></tr>
@@ -686,7 +688,7 @@
 
   <h3>Key System Directory Paths</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Path</th><th>Contents & Notes</th></tr></thead>
+    <thead><tr><th scope="col">Path</th><th scope="col">Contents & Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">C:\Windows\System32</td><td>Core 64-bit system executables and DLLs. cmd.exe, notepad.exe, svchost.exe, ntdll.dll</td></tr>
       <tr><td class="cmd-name">C:\Windows\SysWOW64</td><td>32-bit binaries on 64-bit Windows (WOW64 subsystem). Confusingly named — WOW64 = Windows on Windows 64</td></tr>
@@ -775,7 +777,7 @@
 
   <h3>Registry Hive Structure</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Hive (Full)</th><th>Abbrev</th><th>Backing File on Disk</th><th>Contents</th></tr></thead>
+    <thead><tr><th scope="col">Hive (Full)</th><th scope="col">Abbrev</th><th scope="col">Backing File on Disk</th><th scope="col">Contents</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">HKEY_LOCAL_MACHINE</td><td><span class="tag tag-both">HKLM</span></td><td>SYSTEM, SOFTWARE, SAM, SECURITY in C:\Windows\System32\config\</td><td>Hardware, installed software, services, security policy — applies to ALL users</td></tr>
       <tr><td class="cmd-name">HKEY_CURRENT_USER</td><td><span class="tag tag-both">HKCU</span></td><td>C:\Users\&lt;user&gt;\NTUSER.DAT</td><td>Current user preferences, desktop, associations — loaded at logon</td></tr>
@@ -787,7 +789,7 @@
 
   <h3>Registry Value Types</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Type</th><th>Description</th><th>Example Use</th></tr></thead>
+    <thead><tr><th scope="col">Type</th><th scope="col">Description</th><th scope="col">Example Use</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">REG_SZ</td><td>Null-terminated Unicode string</td><td>Path strings, display names</td></tr>
       <tr><td class="cmd-name">REG_EXPAND_SZ</td><td>String with unexpanded env vars like %SystemRoot%</td><td>Service ImagePath values</td></tr>
@@ -822,7 +824,7 @@
 
   <h3>Security-Critical Registry Locations</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Key Path</th><th>Security Significance</th></tr></thead>
+    <thead><tr><th scope="col">Key Path</th><th scope="col">Security Significance</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</td><td>Runs for ALL users at login — common malware persistence</td></tr>
       <tr><td class="cmd-name">HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</td><td>Runs for CURRENT user — persistence per-user, lower privilege needed</td></tr>
@@ -863,7 +865,7 @@
   </div>
 
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Algorithm</th><th>Output Size</th><th>Status</th><th>Use Cases</th></tr></thead>
+    <thead><tr><th scope="col">Algorithm</th><th scope="col">Output Size</th><th scope="col">Status</th><th scope="col">Use Cases</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">MD5</td><td>128-bit (32 hex)</td><td><span class="tag tag-warn">BROKEN</span></td><td>Legacy checksums only. Collision attacks demonstrated. Not secure for cryptographic purposes</td></tr>
       <tr><td class="cmd-name">SHA-1</td><td>160-bit (40 hex)</td><td><span class="tag tag-warn">DEPRECATED</span></td><td>SHAttered attack (2017) demonstrated collision. Phased out of TLS/code signing</td></tr>
@@ -891,7 +893,7 @@
 
   <h3>Encryption Types</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Type</th><th>Keys</th><th>Speed</th><th>Use Cases</th><th>Algorithms</th></tr></thead>
+    <thead><tr><th scope="col">Type</th><th scope="col">Keys</th><th scope="col">Speed</th><th scope="col">Use Cases</th><th scope="col">Algorithms</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Symmetric</td><td>Same key encrypt &amp; decrypt</td><td>Fast</td><td>Bulk data encryption, disk encryption, session data</td><td>AES-128/256, 3DES (deprecated), ChaCha20</td></tr>
       <tr><td class="cmd-name">Asymmetric</td><td>Public key encrypts; private key decrypts</td><td>Slow (1000x)</td><td>Key exchange, digital signatures, TLS handshake</td><td>RSA, ECDSA, Ed25519, Diffie-Hellman</td></tr>
@@ -932,7 +934,7 @@
 
   <h3>Detection Methods Comparison</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Method</th><th>How It Works</th><th>Detects</th><th>Weakness</th></tr></thead>
+    <thead><tr><th scope="col">Method</th><th scope="col">How It Works</th><th scope="col">Detects</th><th scope="col">Weakness</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Signature-Based</td><td>Matches file/traffic bytes against database of known malware fingerprints (byte sequences, file hashes)</td><td>Known malware exactly</td><td>Blind to unknown/zero-day; bypassed by simple obfuscation, packing, or polymorphism</td></tr>
       <tr><td class="cmd-name">Static Heuristics</td><td>Analyzes code structure without executing — looks for suspicious patterns (API calls, strings, PE sections)</td><td>Unknown variants of known families</td><td>Higher false positive rate; sophisticated malware evades static analysis</td></tr>
@@ -1106,7 +1108,7 @@
 
   <h3>Certificate Types for Signing</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Type</th><th>Validation Level</th><th>SmartScreen Reputation</th></tr></thead>
+    <thead><tr><th scope="col">Type</th><th scope="col">Validation Level</th><th scope="col">SmartScreen Reputation</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">DV (Domain Validated)</td><td>Proves domain control only. Not typical for code signing.</td><td>Weak — minimal trust</td></tr>
       <tr><td class="cmd-name">OV (Organization Validated)</td><td>CA verifies legal entity exists. Standard code signing cert.</td><td>Builds reputation over time</td></tr>
@@ -1166,7 +1168,7 @@
   <h3>Version Reference Table</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
   <table class="cmd-table">
-    <thead><tr><th>NT Version</th><th>Product Name</th><th>Year</th><th>Key Security Changes</th></tr></thead>
+    <thead><tr><th scope="col">NT Version</th><th scope="col">Product Name</th><th scope="col">Year</th><th scope="col">Key Security Changes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">NT 3.1</td><td>Windows NT 3.1</td><td>1993</td><td>First NT release. Microkernel-inspired design. No consumer adoption.</td></tr>
       <tr><td class="cmd-name">NT 3.5 / 3.51</td><td>Windows NT 3.5 / 3.51</td><td>1994–95</td><td>Stability improvements. Server focus. Still no consumer market.</td></tr>
@@ -1222,7 +1224,7 @@
     <p style="font-size:0.83rem;line-height:1.7;margin-bottom:0.7rem">NT 6.0 (Vista) was the most significant security architecture shift in Windows history, driven by the <strong>Security Development Lifecycle (SDL)</strong> Microsoft adopted after the 2003 Trustworthy Computing initiative. Nearly every modern Windows exploit mitigation was introduced or matured in NT 6.x:</p>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
     <table class="cmd-table">
-      <thead><tr><th>Mitigation</th><th>Introduced</th><th>What It Does</th></tr></thead>
+      <thead><tr><th scope="col">Mitigation</th><th scope="col">Introduced</th><th scope="col">What It Does</th></tr></thead>
       <tbody>
         <tr><td class="cmd-name">ASLR</td><td>NT 6.0 (Vista)</td><td>Randomizes load addresses of stack, heap, and DLLs. Makes hardcoded addresses in exploits fail.</td></tr>
         <tr><td class="cmd-name">UAC</td><td>NT 6.0 (Vista)</td><td>Split admin token. Even admins run as standard user by default. Elevation requires explicit prompt.</td></tr>
@@ -1244,7 +1246,7 @@
     <p style="font-size:0.83rem;line-height:1.7;margin-bottom:0.7rem">NT 10 introduced <strong>Virtualization-Based Security (VBS)</strong> — using the Hyper-V hypervisor to create an isolated memory region (Secure World / Virtual Secure Mode) that even a compromised kernel cannot access. This is architecturally different from anything in NT 5 or NT 6:</p>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
     <table class="cmd-table">
-      <thead><tr><th>Feature</th><th>Build</th><th>What It Does</th></tr></thead>
+      <thead><tr><th scope="col">Feature</th><th scope="col">Build</th><th scope="col">What It Does</th></tr></thead>
       <tbody>
         <tr><td class="cmd-name">Credential Guard</td><td>10 (1507)</td><td>LSASS credentials stored in Isolated User Mode (VSM). Even SYSTEM cannot read them. Defeats Mimikatz sekurlsa.</td></tr>
         <tr><td class="cmd-name">Device Guard / WDAC</td><td>10 (1507)</td><td>Kernel-enforced code integrity policy. Only signed, whitelisted code runs — even as admin. More robust than AppLocker.</td></tr>
@@ -1457,7 +1459,7 @@
 
   <h3>Windows Executable Types</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Extension</th><th>Type</th><th>Security Notes</th></tr></thead>
+    <thead><tr><th scope="col">Extension</th><th scope="col">Type</th><th scope="col">Security Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">.exe</td><td>PE (Portable Executable). Standard Windows binary.</td><td>Requires code signing on modern Windows for SmartScreen trust</td></tr>
       <tr><td class="cmd-name">.dll</td><td>Dynamic Link Library. PE format. Shared code loaded into other processes.</td><td>DLL hijacking: place malicious DLL in higher-priority search path</td></tr>
@@ -1475,7 +1477,7 @@
 
   <h3>Unix/Linux Executable Types</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Type</th><th>Description</th><th>Identification</th></tr></thead>
+    <thead><tr><th scope="col">Type</th><th scope="col">Description</th><th scope="col">Identification</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">ELF Binary</td><td>Executable and Linkable Format. Standard format for Linux/Unix executables, shared libraries, core dumps, and kernel modules.</td><td>Magic bytes: <code>7f 45 4c 46</code> (\x7fELF). No extension required.</td></tr>
       <tr><td class="cmd-name">Shell Scripts</td><td>Text files with shebang line and execute bit. Interpreted by specified shell.</td><td>First line: <code>#!/bin/bash</code>, <code>#!/usr/bin/env python3</code></td></tr>
@@ -1500,7 +1502,7 @@
 
   <h3>Identifying Executables by Magic Bytes</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Magic Bytes (hex)</th><th>File Type</th><th>Command</th></tr></thead>
+    <thead><tr><th scope="col">Magic Bytes (hex)</th><th scope="col">File Type</th><th scope="col">Command</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">4D 5A (MZ)</td><td>Windows PE (exe/dll/sys)</td><td><code>file malware.bin</code></td></tr>
       <tr><td class="cmd-name">7F 45 4C 46 (\x7fELF)</td><td>Linux ELF binary</td><td><code>file binary</code> → "ELF 64-bit LSB executable"</td></tr>
@@ -1558,7 +1560,7 @@
 
   <h3>Filesystem Types Compared</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Filesystem</th><th>Platform</th><th>Max File Size</th><th>Key Features</th></tr></thead>
+    <thead><tr><th scope="col">Filesystem</th><th scope="col">Platform</th><th scope="col">Max File Size</th><th scope="col">Key Features</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">NTFS</td><td><span class="tag tag-win">Windows</span></td><td>16 EB</td><td>Journaling, ACLs, ADS, compression, encryption (EFS), sparse files, symbolic links, USN journal</td></tr>
       <tr><td class="cmd-name">FAT32</td><td><span class="tag tag-both">Cross-platform</span></td><td>4 GB</td><td>Maximum compatibility. No ACLs, no journaling. Common for USB/SD cards, EFI system partition</td></tr>
@@ -1632,7 +1634,7 @@
 
   <h3>The Counterintuitive Folder Names</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Folder</th><th>Bitness</th><th>Description</th></tr></thead>
+    <thead><tr><th scope="col">Folder</th><th scope="col">Bitness</th><th scope="col">Description</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">C:\Windows\System32</td><td><span class="tag tag-win">64-bit</span></td><td>Primary Windows system folder — holds 64-bit .dll and .exe files. Despite the name "32", this is the 64-bit system directory on 64-bit Windows.</td></tr>
       <tr><td class="cmd-name">C:\Windows\SysWOW64</td><td><span class="tag tag-both">32-bit</span></td><td>Holds 32-bit .dll and .exe files. WOW64 = "Windows 32-bit On Windows 64-bit". Despite the name "64", this is the 32-bit compatibility folder.</td></tr>
@@ -1669,7 +1671,7 @@
 
   <h3>Hard Drive Physical Structure</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Component</th><th>Description</th></tr></thead>
+    <thead><tr><th scope="col">Component</th><th scope="col">Description</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Platters</td><td>Physical magnetic disks inside the HDD. Each platter provides top and bottom recording surfaces. A drive may have one or several platters, each with its own read/write head pair.</td></tr>
       <tr><td class="cmd-name">Tracks</td><td>Concentric circular rings on a platter surface. Data is organized into tracks.</td></tr>
@@ -1792,7 +1794,7 @@
   <h3>Linux Runlevels</h3>
   <p style="font-size:0.82rem;color:var(--dim);margin-bottom:0.8rem;">Defined in <code>/etc/inittab</code> which contains descriptions of the different run states the system can assume.</p>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Runlevel</th><th>Description</th></tr></thead>
+    <thead><tr><th scope="col">Runlevel</th><th scope="col">Description</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">0</td><td>Halt the system</td></tr>
       <tr><td class="cmd-name">1</td><td>Single-user mode (for special administration — no network, maintenance)</td></tr>
@@ -1831,7 +1833,7 @@
 
   <h3>Windows Log Locations</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Log / File</th><th>Location</th><th>Contents</th></tr></thead>
+    <thead><tr><th scope="col">Log / File</th><th scope="col">Location</th><th scope="col">Contents</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Event Logs</td><td>C:\WINDOWS\system32\config\</td><td>Binary .evtx files. Categorized by circumstance: Event, Error, Warning, Information</td></tr>
       <tr><td class="cmd-name">Modern .evtx Logs</td><td>C:\Windows\System32\winevt\Logs\</td><td>Security.evtx (auditing), System.evtx (OS/drivers), Application.evtx</td></tr>
@@ -1843,7 +1845,7 @@
 
   <h3>Unix/Linux Log Locations</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>File</th><th>Contents</th></tr></thead>
+    <thead><tr><th scope="col">File</th><th scope="col">Contents</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">/var/log/</td><td>Primary log directory for all system and application logs</td></tr>
       <tr><td class="cmd-name">/var/log/messages</td><td>General messages and system-related info</td></tr>
@@ -1913,7 +1915,7 @@
 
   <h3>TTL Values by Operating System</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>OS / Device</th><th>Default TTL</th><th>Notes</th></tr></thead>
+    <thead><tr><th scope="col">OS / Device</th><th scope="col">Default TTL</th><th scope="col">Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Linux</td><td>64</td><td>Common default. Each hop decrements by 1.</td></tr>
       <tr><td class="cmd-name">Windows</td><td>128</td><td>Higher default than Linux.</td></tr>
@@ -1929,7 +1931,7 @@
 
   <h3>Windows SID Reference</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>SID Schema</th><th>Account / Description</th></tr></thead>
+    <thead><tr><th scope="col">SID Schema</th><th scope="col">Account / Description</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">S-1-5-21-[domain]-500</td><td>Local Administrator (built-in admin account, RID 500)</td></tr>
       <tr><td class="cmd-name">S-1-5-21-[domain]-501</td><td>Local Guest (built-in guest account, RID 501)</td></tr>
@@ -1944,7 +1946,7 @@
 
   <h3>Hardware vs Software vs Firmware</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Type</th><th>Definition</th><th>Examples</th></tr></thead>
+    <thead><tr><th scope="col">Type</th><th scope="col">Definition</th><th scope="col">Examples</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Hardware</td><td>The physical machines, wiring, and electronic components of a computer system</td><td>CPU, RAM, NIC, HDD, keyboard, monitor</td></tr>
       <tr><td class="cmd-name">Software</td><td>A set of instructions, data, or programs used to operate computers and execute specific tasks</td><td>Windows, Linux, Microsoft Office, Firefox</td></tr>
@@ -2023,7 +2025,8 @@ function show(id) {
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  document.getElementById('nav-'+id).classList.add('active');
+  const navEl = document.getElementById('nav-'+id);
+  if (navEl) navEl.classList.add('active');
 }
 
 function toggleCheck(li) {
@@ -2097,7 +2100,9 @@ function toggleSidebar() {
   overlay.classList.toggle('active');
 }
 function closeSidebar() {
-  document.querySelector('nav').classList.remove('open');
+  const nav = document.querySelector('nav');
+  if (!nav.classList.contains('open')) return;
+  nav.classList.remove('open');
   document.getElementById('overlay').classList.remove('active');
 }
 // Close sidebar when a section link is clicked on mobile

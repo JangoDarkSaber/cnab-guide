@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CNAB Study Guide — Master Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
 
   :root {
     --bg: #080c10;
@@ -21,7 +23,6 @@
     --dim: #586069;
     --glow: 0 0 12px rgba(0,229,255,0.5);
     --glow2: 0 0 12px rgba(57,255,20,0.5);
-    --glow-red: 0 0 12px rgba(255,68,68,0.5);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -613,7 +614,7 @@
   .grade-a { background: rgba(0,229,255,0.12); color: var(--accent); border: 1px solid var(--accent); box-shadow: var(--glow); }
   .grade-b { background: rgba(255,204,0,0.12); color: var(--warn); border: 1px solid var(--warn); }
   .grade-c { background: rgba(255,107,53,0.12); color: var(--accent3); border: 1px solid var(--accent3); }
-  .grade-f { background: rgba(255,68,68,0.12); color: var(--red); border: 1px solid var(--red); box-shadow: var(--glow-red); }
+  .grade-f { background: rgba(255,68,68,0.12); color: var(--red); border: 1px solid var(--red); box-shadow: 0 0 12px rgba(255,68,68,0.5); }
 
   .breakdown-grid {
     display: grid;
@@ -856,14 +857,14 @@
   <div class="nav-brand">CNAB//SG</div>
   <div class="nav-sep"></div>
   <div class="nav-links">
-    <button class="nav-link active" id="navHome" onclick="navTo('home')"><span class="nl-dot"></span>Home</button>
-    <button class="nav-link" id="navFund" onclick="navToSection('fund')"><span class="nl-dot"></span>Fundamentals</button>
-    <button class="nav-link" id="navNet" onclick="navToSection('net')"><span class="nl-dot"></span>Networking</button>
-    <button class="nav-link" id="navOS" onclick="navToSection('os')"><span class="nl-dot"></span>Operating Systems</button>
-    <button class="nav-link" id="navAll" onclick="navToSection('all')"><span class="nl-dot"></span>All Topics</button>
+    <button type="button" class="nav-link active" id="navHome" onclick="navTo('home')"><span class="nl-dot"></span>Home</button>
+    <button type="button" class="nav-link" id="navFund" onclick="navToSection('fund')"><span class="nl-dot"></span>Fundamentals</button>
+    <button type="button" class="nav-link" id="navNet" onclick="navToSection('net')"><span class="nl-dot"></span>Networking</button>
+    <button type="button" class="nav-link" id="navOS" onclick="navToSection('os')"><span class="nl-dot"></span>Operating Systems</button>
+    <button type="button" class="nav-link" id="navAll" onclick="navToSection('all')"><span class="nl-dot"></span>All Topics</button>
   </div>
   <div class="nav-right">
-    <button class="nav-quiz-btn" onclick="navTo('home')">▶ Start Quiz</button>
+    <button type="button" class="nav-quiz-btn" onclick="navTo('home')">▶ Start Quiz</button>
   </div>
 </nav>
 
@@ -923,15 +924,15 @@
     </div>
     <div class="setting-group">
       <span class="setting-label">Shuffle</span>
-      <button class="toggle-btn on" id="shuffleBtn" onclick="toggleShuffle()">ON</button>
+      <button type="button" class="toggle-btn on" id="shuffleBtn" onclick="toggleShuffle()">ON</button>
     </div>
     <div class="setting-group">
       <span class="setting-label">Show Hints</span>
-      <button class="toggle-btn on" id="hintsBtn" onclick="toggleHints()">ON</button>
+      <button type="button" class="toggle-btn on" id="hintsBtn" onclick="toggleHints()">ON</button>
     </div>
   </div>
 
-  <button class="start-btn" id="startBtn" onclick="startQuiz()">Initialize Quiz</button>
+  <button type="button" class="start-btn" id="startBtn" onclick="startQuiz()">Initialize Quiz</button>
   <p style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);margin-top:1rem;" id="totalCount"></p>
 </div>
 
@@ -949,7 +950,7 @@
     </div>
     <div class="timer-display" id="timerDisplay"></div>
     <div class="quiz-module-tag" id="currentModuleTag"></div>
-    <button class="quit-btn" onclick="confirmQuit()">Quit</button>
+    <button type="button" class="quit-btn" onclick="confirmQuit()">Quit</button>
   </div>
 
   <div class="quiz-body">
@@ -966,7 +967,7 @@
         <div id="expText"></div>
       </div>
     </div>
-    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+    <button type="button" class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
   </div>
 </div>
 
@@ -983,11 +984,11 @@
   <div class="breakdown-grid" id="breakdownGrid"></div>
 
   <div class="results-actions">
-    <button class="action-btn primary" onclick="restartSame()">Retry Same</button>
-    <button class="action-btn secondary" onclick="goHome()">New Quiz</button>
+    <button type="button" class="action-btn primary" onclick="restartSame()">Retry Same</button>
+    <button type="button" class="action-btn secondary" onclick="goHome()">New Quiz</button>
   </div>
 
-  <button class="review-toggle" onclick="toggleReview()">▾ Review Answers</button>
+  <button type="button" class="review-toggle" onclick="toggleReview()">▾ Review Answers</button>
   <div class="review-list" id="reviewList"></div>
 </div>
 
@@ -3331,20 +3332,17 @@ function toggleModule(m) {
   updateTotalCount();
 }
 
-let shuffleOn = true, hintsOn = true;
 function toggleShuffle() {
-  shuffleOn = !shuffleOn;
-  state.shuffle = shuffleOn;
+  state.shuffle = !state.shuffle;
   const btn = document.getElementById('shuffleBtn');
-  btn.textContent = shuffleOn ? 'ON' : 'OFF';
-  btn.className = 'toggle-btn' + (shuffleOn ? ' on' : '');
+  btn.textContent = state.shuffle ? 'ON' : 'OFF';
+  btn.className = 'toggle-btn' + (state.shuffle ? ' on' : '');
 }
 function toggleHints() {
-  hintsOn = !hintsOn;
-  state.hints = hintsOn;
+  state.hints = !state.hints;
   const btn = document.getElementById('hintsBtn');
-  btn.textContent = hintsOn ? 'ON' : 'OFF';
-  btn.className = 'toggle-btn' + (hintsOn ? ' on' : '');
+  btn.textContent = state.hints ? 'ON' : 'OFF';
+  btn.className = 'toggle-btn' + (state.hints ? ' on' : '');
 }
 
 /* ── Build question pool ── */

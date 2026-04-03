@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CNAB Study Guide — Fundamentals & Theory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
   :root{--bg:#080c10;--panel:#0d1117;--border:#1c2a3a;--accent:#00e5ff;--accent2:#39ff14;--accent3:#ff6b35;--warn:#ffcc00;--text:#c9d1d9;--dim:#586069;--glow:0 0 8px rgba(0,229,255,0.4);--glow2:0 0 8px rgba(57,255,20,0.4);}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;padding-top:46px;}
@@ -37,7 +39,7 @@
   .section-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;letter-spacing:0.05em;}
   .section-meta{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--dim);}
   .card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;position:relative;transition:border-color 0.15s;}
-  .card:hover{border-color:rgba(0,229,255,0.25);}
+  .card:hover{border-color:rgba(0,229,255,0.25);transform:translateY(-2px);}
   .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:6px 0 0 6px;background:var(--accent);opacity:0;transition:opacity 0.15s;}
   .card:hover::before{opacity:1;}
   .card-title{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.7rem;}
@@ -300,7 +302,7 @@
 
   <h3>Base System Overview</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Name</th><th>Base</th><th>Digits Used</th><th>Prefix</th><th>Common Use</th></tr></thead>
+    <thead><tr><th scope="col">Name</th><th scope="col">Base</th><th scope="col">Digits Used</th><th scope="col">Prefix</th><th scope="col">Common Use</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Binary</td><td>2</td><td>0, 1</td><td>0b</td><td>CPU operations, bit flags, networking masks, memory addresses</td></tr>
       <tr><td class="cmd-name">Octal</td><td>8</td><td>0–7</td><td>0 (leading zero)</td><td>Unix file permissions (chmod 755), historical minicomputer use</td></tr>
@@ -595,7 +597,7 @@
 
   <h3>x86-64 Registers</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>64-bit</th><th>32-bit</th><th>16-bit</th><th>8-bit</th><th>Purpose</th></tr></thead>
+    <thead><tr><th scope="col">64-bit</th><th scope="col">32-bit</th><th scope="col">16-bit</th><th scope="col">8-bit</th><th scope="col">Purpose</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">RAX</td><td>EAX</td><td>AX</td><td>AL/AH</td><td>Accumulator — function return values, arithmetic</td></tr>
       <tr><td class="cmd-name">RBX</td><td>EBX</td><td>BX</td><td>BL/BH</td><td>Base register — general purpose, callee-saved</td></tr>
@@ -625,7 +627,7 @@
 
   <h3>CPU Cache Hierarchy</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Level</th><th>Size</th><th>Speed</th><th>Location</th><th>Notes</th></tr></thead>
+    <thead><tr><th scope="col">Level</th><th scope="col">Size</th><th scope="col">Speed</th><th scope="col">Location</th><th scope="col">Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">L1 Cache</td><td>32–64 KB</td><td>~1 ns (4 cycles)</td><td>Per core, on-die</td><td>Separate I-cache (instructions) and D-cache (data). Fastest.</td></tr>
       <tr><td class="cmd-name">L2 Cache</td><td>256 KB – 1 MB</td><td>~4 ns (12 cycles)</td><td>Per core, on-die</td><td>Unified. Miss here goes to L3.</td></tr>
@@ -722,7 +724,7 @@
 
   <h3>VMs vs Containers</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Property</th><th>Virtual Machine</th><th>Container (Docker/LXC)</th></tr></thead>
+    <thead><tr><th scope="col">Property</th><th scope="col">Virtual Machine</th><th scope="col">Container (Docker/LXC)</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Isolation</td><td>Full hardware virtualization — separate kernel</td><td>Shares host kernel — namespace + cgroup isolation</td></tr>
       <tr><td class="cmd-name">Overhead</td><td>High — full OS per VM (GBs RAM, slow boot)</td><td>Low — seconds to start, MBs of overhead</td></tr>
@@ -759,7 +761,7 @@
 
   <h3>Types of Memory</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Type</th><th>Technology</th><th>Volatile</th><th>Characteristics</th></tr></thead>
+    <thead><tr><th scope="col">Type</th><th scope="col">Technology</th><th scope="col">Volatile</th><th scope="col">Characteristics</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Registers</td><td>Flip-flops in CPU</td><td>Yes</td><td>Fastest storage; 8–16 bytes per register; directly operated on by ALU</td></tr>
       <tr><td class="cmd-name">CPU Cache</td><td>SRAM</td><td>Yes</td><td>L1/L2/L3; automatic management by CPU; transparent to software</td></tr>
@@ -847,7 +849,7 @@
 
   <h3>HDD vs SSD Comparison</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Property</th><th>HDD (Hard Disk Drive)</th><th>SSD (Solid State Drive)</th><th>NVMe SSD</th></tr></thead>
+    <thead><tr><th scope="col">Property</th><th scope="col">HDD (Hard Disk Drive)</th><th scope="col">SSD (Solid State Drive)</th><th scope="col">NVMe SSD</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Technology</td><td>Spinning magnetic platters + read/write heads</td><td>NAND flash chips (no moving parts)</td><td>NAND flash via PCIe directly to CPU</td></tr>
       <tr><td class="cmd-name">Speed (Read)</td><td>100–200 MB/s</td><td>500–600 MB/s (SATA limit)</td><td>3,500–7,000 MB/s</td></tr>
@@ -862,7 +864,7 @@
 
   <h3>RAID Levels</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>RAID</th><th>Min Disks</th><th>Redundancy</th><th>Performance</th><th>Use Case</th></tr></thead>
+    <thead><tr><th scope="col">RAID</th><th scope="col">Min Disks</th><th scope="col">Redundancy</th><th scope="col">Performance</th><th scope="col">Use Case</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">RAID 0</td><td>2</td><td>None — 1 disk failure = total loss</td><td>Best read+write (striping)</td><td>Speed only; scratch disks; NOT for valuable data</td></tr>
       <tr><td class="cmd-name">RAID 1</td><td>2</td><td>Survives all-but-1 disk failure (mirror)</td><td>Fast reads, normal writes (mirroring)</td><td>Simple redundancy; OS drives; critical data</td></tr>
@@ -965,7 +967,7 @@
 
   <h3>Architecture Identifiers</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Architecture</th><th>Type</th><th>Bits</th><th>Endianness</th><th>Notes</th></tr></thead>
+    <thead><tr><th scope="col">Architecture</th><th scope="col">Type</th><th scope="col">Bits</th><th scope="col">Endianness</th><th scope="col">Notes</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">x86 (IA-32)</td><td>CISC</td><td>32-bit</td><td>Little-endian</td><td>Up to 4 bytes per instruction. Max 4 GB RAM. Registers: EAX, EBX, ECX, EDX. CISC uses 3-letter register names.</td></tr>
       <tr><td class="cmd-name">x86-64 (AMD64)</td><td>CISC</td><td>64-bit</td><td>Little-endian</td><td>8 bytes per instruction. Supports &gt;4 GB RAM. Extended registers: RAX, RBX, RCX + R8–R15.</td></tr>
@@ -1090,7 +1092,7 @@
 
   <h3>Side-by-Side Comparison</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Property</th><th>Compiled (C)</th><th>Interpreted (Python)</th></tr></thead>
+    <thead><tr><th scope="col">Property</th><th scope="col">Compiled (C)</th><th scope="col">Interpreted (Python)</th></tr></thead>
     <tbody>
       <tr><td class="cmd-name">Translation</td><td>Entire program before execution</td><td>Line-by-line at runtime</td></tr>
       <tr><td class="cmd-name">Output</td><td>Standalone executable binary</td><td>No binary — source runs via interpreter</td></tr>
@@ -1166,7 +1168,7 @@
 
   <h3>Memory Hierarchy (Most Volatile/Fastest → Least Volatile/Slowest)</h3>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="cmd-table">
-    <thead><tr><th>Level</th><th>Name</th><th>Typical Size</th><th>Volatile?</th><th>Speed</th><th>Notes</th></tr></thead>
+    <thead><tr><th scope="col">Level</th><th scope="col">Name</th><th scope="col">Typical Size</th><th scope="col">Volatile?</th><th scope="col">Speed</th><th scope="col">Notes</th></tr></thead>
     <tbody>
       <tr><td>1</td><td class="cmd-name">Registers</td><td>64 bits each</td><td><span class="tag tag-warn">Yes</span></td><td>~0.3 ns</td><td>On-CPU. Fastest storage. Directly operated on by the ALU. Lost instantly on power-off.</td></tr>
       <tr><td>2</td><td class="cmd-name">CPU Cache (L1/L2/L3)</td><td>~8 MB (LLC)</td><td><span class="tag tag-warn">Yes</span></td><td>1–30 ns</td><td>SRAM on-die. Transparent to software. Managed by CPU hardware.</td></tr>
@@ -1274,7 +1276,9 @@ function toggleSidebar() {
   overlay.classList.toggle('active');
 }
 function closeSidebar() {
-  document.querySelector('nav').classList.remove('open');
+  const nav = document.querySelector('nav');
+  if (!nav.classList.contains('open')) return;
+  nav.classList.remove('open');
   document.getElementById('overlay').classList.remove('active');
 }
 // Close sidebar when a section link is clicked on mobile
