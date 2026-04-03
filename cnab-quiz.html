@@ -32,6 +32,7 @@
     font-family: 'Exo 2', sans-serif;
     font-weight: 300;
     min-height: 100vh;
+    padding-top: 46px;
   }
 
   body::before {
@@ -777,8 +778,6 @@
 
   /* ─── MOBILE RESPONSIVE ─── */
   @media (max-width: 768px) {
-    body { padding-top: 46px; }
-
     /* Module cards — 2x2 grid on tablet, 1 col on phone */
     .module-grid { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
     .module-card { padding: 1rem; }
@@ -833,6 +832,11 @@
     .sn-quiz-btn { padding: 0.3rem 0.6rem; font-size: 0.55rem; letter-spacing: 0.06em; }
     .option-btn { font-size: 0.79rem; padding: 0.7rem 0.9rem; }
     .timer-display { font-size: 0.7rem; }
+  }
+
+  @media (min-width: 1024px) {
+    .module-grid { grid-template-columns: repeat(4, 1fr); max-width: 1000px; }
+    #homeScreen { padding: 2.5rem 3rem; }
   }
 
 </style>

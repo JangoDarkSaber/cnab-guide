@@ -220,7 +220,6 @@
   .overlay.active { display: block; }
 
   @media (max-width: 768px) {
-    body { padding-top: 46px; }
     header { padding: 1.2rem 1rem 1rem; }
     h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
     .subtitle { font-size: 0.65rem; }
@@ -281,6 +280,18 @@
     h3 { font-size: 0.68rem; }
     .cmd-table th { font-size: 0.58rem; }
     .cmd-table td { font-size: 0.68rem; }
+  }
+
+  @media (min-width: 1024px) {
+    .layout { grid-template-columns: 250px 1fr; }
+    nav { width: 250px; }
+    main { max-width: 1080px; }
+  }
+
+  @media (min-width: 1440px) {
+    .layout { grid-template-columns: 280px 1fr; }
+    nav { width: 280px; }
+    main { max-width: 1280px; }
   }
 
 </style>
